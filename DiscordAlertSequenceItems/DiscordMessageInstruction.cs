@@ -24,13 +24,13 @@ namespace DrewMcdermott.NINA.DiscordAlert.DiscordAlertTestCategory {
     ///
     /// If the item has some preconditions that should be validated, it shall also extend the IValidatable interface and add the validation logic accordingly.
     /// </summary>
-    [ExportMetadata("Name", "Plugin Template Instruction")]
+    [ExportMetadata("Name", "Discord message")]
     [ExportMetadata("Description", "This item will just show a notification and is just there to show how the plugin system works")]
     [ExportMetadata("Icon", "Discord_logo_SVG")]
     [ExportMetadata("Category", "Discord Alert")]
     [Export(typeof(ISequenceItem))]
     [JsonObject(MemberSerialization.OptIn)]
-    public class DiscordAlertInstruction : SequenceItem {
+    public class DiscordMessageInstruction : SequenceItem {
         /// <summary>
         /// The constructor marked with [ImportingConstructor] will be used to import and construct the object
         /// General device interfaces can be added to the constructor parameters and will be automatically injected on instantiation by the plugin loader
@@ -62,10 +62,10 @@ namespace DrewMcdermott.NINA.DiscordAlert.DiscordAlertTestCategory {
         ///     - IList<IDateTimeProvider>
         /// </remarks>
         [ImportingConstructor]
-        public DiscordAlertInstruction() {
-            Text = Settings.Default.DefaultNotificationMessage;
+        public DiscordMessageInstruction() {
+            Text = String.Empty;
         }
-        public DiscordAlertInstruction(DiscordAlertInstruction copyMe) : this() {
+        public DiscordMessageInstruction(DiscordMessageInstruction copyMe) : this() {
             CopyMetaData(copyMe);
         }
 
@@ -96,7 +96,7 @@ namespace DrewMcdermott.NINA.DiscordAlert.DiscordAlertTestCategory {
         /// </summary>
         /// <returns></returns>
         public override object Clone() {
-            return new DiscordAlertInstruction(this);
+            return new DiscordMessageInstruction(this);
         }
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace DrewMcdermott.NINA.DiscordAlert.DiscordAlertTestCategory {
         /// </summary>
         /// <returns></returns>
         public override string ToString() {
-            return $"Category: {Category}, Item: {nameof(DiscordAlertInstruction)}, Text: {Text}";
+            return $"Category: {Category}, Item: {nameof(DiscordMessageInstruction)}, Text: {Text}";
         }
     }
 }

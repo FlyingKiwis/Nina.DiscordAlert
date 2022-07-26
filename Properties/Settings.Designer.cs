@@ -25,6 +25,18 @@ namespace DrewMcdermott.NINA.DiscordAlert.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DiscordWebhookURL {
+            get {
+                return ((string)(this["DiscordWebhookURL"]));
+            }
+            set {
+                this["DiscordWebhookURL"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool UpdateSettings {
             get {
@@ -32,18 +44,6 @@ namespace DrewMcdermott.NINA.DiscordAlert.Properties {
             }
             set {
                 this["UpdateSettings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("This is a notification")]
-        public string DefaultNotificationMessage {
-            get {
-                return ((string)(this["DefaultNotificationMessage"]));
-            }
-            set {
-                this["DefaultNotificationMessage"] = value;
             }
         }
     }

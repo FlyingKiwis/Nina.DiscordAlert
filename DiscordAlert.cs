@@ -111,12 +111,12 @@ namespace DrewMcdermott.NINA.DiscordAlert {
             return Task.CompletedTask;
         }
 
-        public string DefaultNotificationMessage {
+        public string DiscordWebhookURL {
             get {
-                return Settings.Default.DefaultNotificationMessage;
+                return Settings.Default.DiscordWebhookURL;
             }
             set {
-                Settings.Default.DefaultNotificationMessage = value;
+                Settings.Default.DiscordWebhookURL = value;
                 CoreUtil.SaveSettings(Settings.Default);
                 RaisePropertyChanged();
             }

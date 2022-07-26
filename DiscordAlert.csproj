@@ -268,12 +268,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DiscordAlert.cs" />
-    <Compile Include="DiscordAlertSequenceItems\DiscordAlertTrigger.cs" />
+    <Compile Include="DiscordAlertSequenceItems\DiscordAlertOnErrorTrigger.cs" />
     <Compile Include="Options.xaml.cs">
       <DependentUpon>Options.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DiscordAlertSequenceItems\DiscordAlertInstruction.cs" />
+    <Compile Include="DiscordAlertSequenceItems\DiscordMessageInstruction.cs" />
     <Compile Include="DiscordAlertSequenceItems\DiscordAlertTemplates.xaml.cs">
       <DependentUpon>DiscordAlertTemplates.xaml</DependentUpon>
     </Compile>
@@ -282,6 +282,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Util\DiscordHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

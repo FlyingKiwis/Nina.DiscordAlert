@@ -12,24 +12,31 @@
 
     <!--  The definition of the plugin test instruction style  -->
     <!--  The DataType has to be defined as the instruction in context  -->
-    <DataTemplate DataType="{x:Type local:DiscordAlertInstruction}">
+    <DataTemplate DataType="{x:Type local:DiscordMessageInstruction}">
         <nina:SequenceBlockView>
             <nina:SequenceBlockView.SequenceItemContent>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock VerticalAlignment="Center" Text="Notification Message" />
+                <DockPanel LastChildFill="True">
+                    <TextBlock DockPanel.Dock="Left"  VerticalAlignment="Center" Text="Mention" />
+                    <ComboBox DockPanel.Dock="Left" Margin="5,0,0,0">
+                        <ComboBoxItem IsSelected="True">Nobody</ComboBoxItem>
+                        <ComboBoxItem>@everyone</ComboBoxItem>
+                        <ComboBoxItem>@here</ComboBoxItem>
+                    </ComboBox>
+                    <TextBlock DockPanel.Dock="Left" Margin="5,0,0,0" VerticalAlignment="Center" Text="Message" />
                     <TextBox
+                        DockPanel.Dock="Left"
                         MinWidth="40"
                         Margin="5,0,0,0"
                         Text="{Binding Text}"
-                        TextAlignment="Right" />
-                </StackPanel>
+                        TextAlignment="Left" />
+                </DockPanel>
             </nina:SequenceBlockView.SequenceItemContent>
         </nina:SequenceBlockView>
     </DataTemplate>
 
     <!--  The definition of the test instruction plugin style in the mini format on the imaging tab  -->
     <!--  The Key has to be defined as the fully qualified instruction name and the "_Mini" postfix  -->
-    <DataTemplate x:Key="DrewMcdermott.NINA.DiscordAlert.DiscordAlertTestCategory.DiscordAlertInstruction_Mini">
+    <DataTemplate x:Key="DrewMcdermott.NINA.DiscordAlert.DiscordAlertTestCategory.DiscordMessageInstruction_Mini">
         <mini:MiniSequenceItem>
             <mini:MiniSequenceItem.SequenceItemContent>
                 <StackPanel Orientation="Horizontal">
@@ -44,36 +51,19 @@
         </mini:MiniSequenceItem>
     </DataTemplate>
 
-    <!--  The definition of the plugin test condition style  -->
-    <!--  The DataType has to be defined as the instruction in context  -->
-    <DataTemplate DataType="{x:Type local:DiscordAlertCondition}">
+    <DataTemplate DataType="{x:Type local:DiscordAlertOnErrorTrigger}">
         <nina:SequenceBlockView>
             <nina:SequenceBlockView.SequenceItemContent>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock VerticalAlignment="Center" Text="Is truthy" />
-
-                    <CheckBox
-                        MinWidth="40"
-                        Margin="5,0,0,0"
-                        VerticalAlignment="Center"
-                        IsChecked="{Binding IsTruthy}" />
-                </StackPanel>
+                <DockPanel LastChildFill="False">
+                    <TextBlock DockPanel.Dock="Left"  VerticalAlignment="Center" Text="Mention" />
+                    <ComboBox DockPanel.Dock="Left" Margin="5,0,0,0">
+                        <ComboBoxItem>Nobody</ComboBoxItem>
+                        <ComboBoxItem IsSelected="True">@everyone</ComboBoxItem>
+                        <ComboBoxItem>@here</ComboBoxItem>
+                    </ComboBox>
+                </DockPanel>
             </nina:SequenceBlockView.SequenceItemContent>
         </nina:SequenceBlockView>
     </DataTemplate>
 
-    <!--  The definition of the test condition plugin style in the mini format on the imaging tab  -->
-    <!--  The Key has to be defined as the fully qualified instruction name and the "_Mini" postfix  -->
-    <DataTemplate x:Key="DrewMcdermott.NINA.DiscordAlert.DiscordAlertTestCategory.DiscordAlertCondition_Mini">
-        <mini:MiniSequenceItem>
-            <mini:MiniSequenceItem.SequenceItemContent>
-                <StackPanel Orientation="Horizontal">
-                    <CheckBox
-                        MinWidth="40"
-                        VerticalAlignment="Center"
-                        IsChecked="{Binding IsTruthy}" />
-                </StackPanel>
-            </mini:MiniSequenceItem.SequenceItemContent>
-        </mini:MiniSequenceItem>
-    </DataTemplate>
 </ResourceDictionary>

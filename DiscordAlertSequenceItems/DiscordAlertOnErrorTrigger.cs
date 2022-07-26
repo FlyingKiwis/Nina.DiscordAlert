@@ -24,13 +24,13 @@ namespace DrewMcdermott.NINA.DiscordAlert.DiscordAlertTestCategory {
     ///
     /// If the item has some preconditions that should be validated, it shall also extend the IValidatable interface and add the validation logic accordingly.
     /// </summary>
-    [ExportMetadata("Name", "Plugin Template Trigger")]
+    [ExportMetadata("Name", "Send after NINA Error")]
     [ExportMetadata("Description", "This trigger will show a notification when a random generated number is even on evaluation")]
-    [ExportMetadata("Icon", "Plugin_Test_SVG")]
+    [ExportMetadata("Icon", "Discord_logo_SVG")]
     [ExportMetadata("Category", "Discord Alert")]
     [Export(typeof(ISequenceTrigger))]
     [JsonObject(MemberSerialization.OptIn)]
-    public class DiscordAlertTrigger : SequenceTrigger {
+    public class DiscordAlertOnErrorTrigger : SequenceTrigger {
         /// <summary>
         /// The constructor marked with [ImportingConstructor] will be used to import and construct the object
         /// General device interfaces can be added to the constructor parameters and will be automatically injected on instantiation by the plugin loader
@@ -62,11 +62,11 @@ namespace DrewMcdermott.NINA.DiscordAlert.DiscordAlertTestCategory {
         ///     - IList<IDateTimeProvider>
         /// </remarks>
         [ImportingConstructor]
-        public DiscordAlertTrigger() {
+        public DiscordAlertOnErrorTrigger() {
         }
 
         public override object Clone() {
-            return new DiscordAlertTrigger() {
+            return new DiscordAlertOnErrorTrigger() {
                 Icon = Icon,
                 Name = Name,
                 Category = Category,
@@ -97,17 +97,15 @@ namespace DrewMcdermott.NINA.DiscordAlert.DiscordAlertTestCategory {
         /// <param name="nextItem"></param>
         /// <returns></returns>
         public override bool ShouldTrigger(ISequenceItem previousItem, ISequenceItem nextItem) {
-            return random.Next(0, 1000) % 2 == 0;
+            return true;
         }
-
-        Random random = new Random();
 
         /// <summary>
         /// This string will be used for logging
         /// </summary>
         /// <returns></returns>
         public override string ToString() {
-            return $"Category: {Category}, Item: {nameof(DiscordAlertTrigger)}";
+            return $"Category: {Category}, Item: {nameof(DiscordAlertOnErrorTrigger)}";
         }
     }
 }
