@@ -7,6 +7,9 @@
     <!--  Furthermore the Resource Dictionary has to be exported via code behind export attributes  -->
     <DataTemplate x:Key="Discord Alert_Options">
         <StackPanel Orientation="Vertical">
+            <TextBlock>
+                How to create a webhook: <Hyperlink NavigateUri="https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks">Discord: Intro to Webhooks</Hyperlink>
+            </TextBlock>
             <DockPanel LastChildFill="True">
                 <TextBlock DockPanel.Dock="Left" Text="Discord Webhook URL" />
                 <TextBox DockPanel.Dock="Left" MinWidth="50" Margin="0,0,5,0" Text="{Binding DiscordWebhookURL}" />
