@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace DrewMcdermott.NINA.DiscordAlert.DiscordAlertTestCategory {
+namespace DrewMcdermott.NINA.DiscordAlert.DiscordAlertSequenceItems {
     [Export(typeof(ResourceDictionary))]
     public partial class PluginItemTemplate : ResourceDictionary {
         public PluginItemTemplate() {

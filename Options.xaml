@@ -7,10 +7,10 @@
     <!--  Furthermore the Resource Dictionary has to be exported via code behind export attributes  -->
     <DataTemplate x:Key="Discord Alert_Options">
         <StackPanel Orientation="Vertical">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Discord Webhook URL" />
-                <TextBox MinWidth="50" Text="{Binding DefaultNotificationMessage}" />
-            </StackPanel>
+            <DockPanel LastChildFill="True">
+                <TextBlock DockPanel.Dock="Left" Text="Discord Webhook URL" />
+                <TextBox DockPanel.Dock="Left" MinWidth="50" Margin="0,0,5,0" Text="{Binding DiscordWebhookURL}" />
+            </DockPanel>
         </StackPanel>
     </DataTemplate>
 </ResourceDictionary>

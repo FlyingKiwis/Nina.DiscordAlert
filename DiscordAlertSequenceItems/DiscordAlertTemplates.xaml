@@ -1,8 +1,8 @@
 ﻿<ResourceDictionary
-    x:Class="DrewMcdermott.NINA.DiscordAlert.DiscordAlertTestCategory.PluginItemTemplate"
+    x:Class="DrewMcdermott.NINA.DiscordAlert.DiscordAlertSequenceItems.PluginItemTemplate"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:DrewMcdermott.NINA.DiscordAlert.DiscordAlertTestCategory"
+    xmlns:local="clr-namespace:DrewMcdermott.NINA.DiscordAlert.DiscordAlertSequenceItems"
     xmlns:mini="clr-namespace:NINA.View.Sequencer.MiniSequencer;assembly=NINA.Sequencer"
     xmlns:nina="clr-namespace:NINA.View.Sequencer;assembly=NINA.Sequencer">
     <!--  This geometrygroup defines a custom SVG to be used with the plugin instruction  -->
@@ -16,13 +16,7 @@
         <nina:SequenceBlockView>
             <nina:SequenceBlockView.SequenceItemContent>
                 <DockPanel LastChildFill="True">
-                    <TextBlock DockPanel.Dock="Left"  VerticalAlignment="Center" Text="Mention" />
-                    <ComboBox DockPanel.Dock="Left" Margin="5,0,0,0">
-                        <ComboBoxItem IsSelected="True">Nobody</ComboBoxItem>
-                        <ComboBoxItem>@everyone</ComboBoxItem>
-                        <ComboBoxItem>@here</ComboBoxItem>
-                    </ComboBox>
-                    <TextBlock DockPanel.Dock="Left" Margin="5,0,0,0" VerticalAlignment="Center" Text="Message" />
+                    <TextBlock DockPanel.Dock="Left" VerticalAlignment="Center" Text="Message" />
                     <TextBox
                         DockPanel.Dock="Left"
                         MinWidth="40"
@@ -56,12 +50,20 @@
             <nina:SequenceBlockView.SequenceItemContent>
                 <DockPanel LastChildFill="False">
                     <TextBlock DockPanel.Dock="Left"  VerticalAlignment="Center" Text="Mention" />
-                    <ComboBox DockPanel.Dock="Left" Margin="5,0,0,0">
+                    <ComboBox DockPanel.Dock="Left" Margin="5,0,0,0" SelectedValue="{Binding Mention}">
                         <ComboBoxItem>Nobody</ComboBoxItem>
                         <ComboBoxItem IsSelected="True">@everyone</ComboBoxItem>
                         <ComboBoxItem>@here</ComboBoxItem>
                     </ComboBox>
                 </DockPanel>
+            </nina:SequenceBlockView.SequenceItemContent>
+        </nina:SequenceBlockView>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type local:Error}">
+        <nina:SequenceBlockView>
+            <nina:SequenceBlockView.SequenceItemContent>
+                <TextBlock VerticalAlignment="Center" Text="Error" />
             </nina:SequenceBlockView.SequenceItemContent>
         </nina:SequenceBlockView>
     </DataTemplate>

@@ -1,69 +1,35 @@
 ﻿using Newtonsoft.Json;
 using NINA.Core.Model;
-using NINA.Core.Utility.Notification;
+using NINA.Core.Enum;
 using NINA.Sequencer.Container;
 using NINA.Sequencer.SequenceItem;
 using NINA.Sequencer.Trigger;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using NINA.Core.Utility.Notification;
 
-namespace DrewMcdermott.NINA.DiscordAlert.DiscordAlertTestCategory {
+namespace DrewMcdermott.NINA.DiscordAlert.DiscordAlertSequenceItems {
     /// <summary>
-    /// This Class shows the basic principle on how to add a new Sequence Trigger to the N.I.N.A. sequencer via the plugin interface
-    /// For ease of use this class inherits the abstract SequenceTrigger which already handles most of the running logic, like logging, exception handling etc.
-    /// A complete custom implementation by just implementing ISequenceTrigger is possible too
-    /// The following MetaData can be set to drive the initial values
-    /// --> Name - The name that will be displayed for the item
-    /// --> Description - a brief summary of what the item is doing. It will be displayed as a tooltip on mouseover in the application
-    /// --> Icon - a string to the key value of a Geometry inside N.I.N.A.'s geometry resources
-    ///
-    /// If the item has some preconditions that should be validated, it shall also extend the IValidatable interface and add the validation logic accordingly.
+    /// This is a action that can be used in a sequence to send a discord message after an error occurs during the sequence
     /// </summary>
-    [ExportMetadata("Name", "Send after NINA Error")]
-    [ExportMetadata("Description", "This trigger will show a notification when a random generated number is even on evaluation")]
+    [ExportMetadata("Name", "Send after failure")]
+    [ExportMetadata("Description", "Sends a message to discord after a failure occurs")]
     [ExportMetadata("Icon", "Discord_logo_SVG")]
     [ExportMetadata("Category", "Discord Alert")]
     [Export(typeof(ISequenceTrigger))]
     [JsonObject(MemberSerialization.OptIn)]
     public class DiscordAlertOnErrorTrigger : SequenceTrigger {
-        /// <summary>
-        /// The constructor marked with [ImportingConstructor] will be used to import and construct the object
-        /// General device interfaces can be added to the constructor parameters and will be automatically injected on instantiation by the plugin loader
-        /// </summary>
-        /// <remarks>
-        /// Available interfaces to be injected:
-        ///     - IProfileService,
-        ///     - ICameraMediator,
-        ///     - ITelescopeMediator,
-        ///     - IFocuserMediator,
-        ///     - IFilterWheelMediator,
-        ///     - IGuiderMediator,
-        ///     - IRotatorMediator,
-        ///     - IFlatDeviceMediator,
-        ///     - IWeatherDataMediator,
-        ///     - IImagingMediator,
-        ///     - IApplicationStatusMediator,
-        ///     - INighttimeCalculator,
-        ///     - IPlanetariumFactory,
-        ///     - IImageHistoryVM,
-        ///     - IDeepSkyObjectSearchVM,
-        ///     - IDomeMediator,
-        ///     - IImageSaveMediator,
-        ///     - ISwitchMediator,
-        ///     - ISafetyMonitorMediator,
-        ///     - IApplicationMediator
-        ///     - IApplicationResourceDictionary
-        ///     - IFramingAssistantVM
-        ///     - IList<IDateTimeProvider>
-        /// </remarks>
+       
         [ImportingConstructor]
         public DiscordAlertOnErrorTrigger() {
         }
+
+        [JsonProperty]
+        public string Mention { get; set; } = "Nobody";
+
+        private ISequenceItem _failedItem;
 
         public override object Clone() {
             return new DiscordAlertOnErrorTrigger() {
@@ -74,36 +40,34 @@ namespace DrewMcdermott.NINA.DiscordAlert.DiscordAlertTestCategory {
             };
         }
 
-        /// <summary>
-        /// The actual running logic for when the trigger should run
-        /// </summary>
-        /// <param name="context"></param>
-        /// <param name="progress"></param>
-        /// <param name="token"></param>
-        /// <returns></returns>
         public override Task Execute(ISequenceContainer context, IProgress<ApplicationStatus> progress, CancellationToken token) {
-            Notification.ShowSuccess("Trigger was fired");
+            Notification.ShowInformation(_failedItem.ToString());
+            Util.DiscordHelper.SendMessage("Failure", _failedItem, token);
             return Task.CompletedTask;
         }
 
-        /// <summary>
-        /// This method will be evaluated to see if the trigger should be executed.
-        /// When true - the Execute method will be called
-        /// Skipped otherwise
-        ///
-        /// For this example the trigger will fire when the random number generator generates an even number
-        /// </summary>
-        /// <param name="previousItem"></param>
-        /// <param name="nextItem"></param>
-        /// <returns></returns>
-        public override bool ShouldTrigger(ISequenceItem previousItem, ISequenceItem nextItem) {
+        public override bool ShouldTrigger(ISequenceItem previousItem, ISequenceItem nextItem) 
+        {
+            return false;
+        }
+
+        public override bool ShouldTriggerAfter(ISequenceItem previousItem, ISequenceItem nextItem) 
+        {
+            return ShouldTriggerInternal(previousItem, nextItem);
+        }
+
+        private bool ShouldTriggerInternal(ISequenceItem previousItem, ISequenceItem nextItem) 
+        {
+            if (previousItem == null)
+                return false;
+
+            if (previousItem.Status != SequenceEntityStatus.FAILED)
+                return false;
+
+            _failedItem = previousItem;
             return true;
         }
 
-        /// <summary>
-        /// This string will be used for logging
-        /// </summary>
-        /// <returns></returns>
         public override string ToString() {
             return $"Category: {Category}, Item: {nameof(DiscordAlertOnErrorTrigger)}";
         }
