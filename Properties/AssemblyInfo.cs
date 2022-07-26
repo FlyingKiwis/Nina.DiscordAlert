@@ -7,8 +7,8 @@ using System.Runtime.InteropServices;
 
 // [MANDATORY] The assembly versioning
 //Should be incremented for each new release build of a plugin
-[assembly: AssemblyVersion("1.0.0.1")]
-[assembly: AssemblyFileVersion("1.0.0.1")]
+[assembly: AssemblyVersion("0.0.1.0")]
+[assembly: AssemblyFileVersion("0.0.1.0")]
 
 // [MANDATORY] The name of your plugin
 [assembly: AssemblyTitle("Discord Alert")]
@@ -27,7 +27,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyMetadata("MinimumApplicationVersion", "2.0.0.9001")]
 
 // The license your plugin code is using
-[assembly: AssemblyMetadata("License", "MPL-2.0")]
+[assembly: AssemblyMetadata("License", "MIT")]
 // The url to the license
 [assembly: AssemblyMetadata("LicenseURL", "https://www.mozilla.org/en-US/MPL/2.0/")]
 // The repository where your pluggin is hosted

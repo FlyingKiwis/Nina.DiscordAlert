@@ -30,10 +30,8 @@ namespace DrewMcdermott.NINA.DiscordAlert.DiscordAlertSequenceItems {
         [JsonProperty]
         public string Text { get; set; }
 
-        public override Task Execute(IProgress<ApplicationStatus> progress, CancellationToken token) {
-            DiscordHelper.SendMessage(Text, this, token);
-
-            return Task.CompletedTask;
+        public override async Task Execute(IProgress<ApplicationStatus> progress, CancellationToken token) {
+            await DiscordHelper.SendMessage(MessageType.Information, Text, this, token);
         }
 
         public override object Clone() {

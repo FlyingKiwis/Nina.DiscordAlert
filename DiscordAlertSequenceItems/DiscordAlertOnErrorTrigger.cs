@@ -40,10 +40,8 @@ namespace DrewMcdermott.NINA.DiscordAlert.DiscordAlertSequenceItems {
             };
         }
 
-        public override Task Execute(ISequenceContainer context, IProgress<ApplicationStatus> progress, CancellationToken token) {
-            Notification.ShowInformation(_failedItem.ToString());
-            Util.DiscordHelper.SendMessage("Failure", _failedItem, token);
-            return Task.CompletedTask;
+        public override async Task Execute(ISequenceContainer context, IProgress<ApplicationStatus> progress, CancellationToken token) {
+            await Util.DiscordHelper.SendMessage(Util.MessageType.Error, String.Empty, _failedItem, token, Mention);
         }
 
         public override bool ShouldTrigger(ISequenceItem previousItem, ISequenceItem nextItem) 
