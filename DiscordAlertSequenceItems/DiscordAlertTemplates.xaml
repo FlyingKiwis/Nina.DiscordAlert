@@ -48,13 +48,14 @@
     <DataTemplate DataType="{x:Type local:DiscordAlertOnErrorTrigger}">
         <nina:SequenceBlockView>
             <nina:SequenceBlockView.SequenceItemContent>
-                <DockPanel LastChildFill="False">
-                    <TextBlock DockPanel.Dock="Left"  VerticalAlignment="Center" Text="Mention" />
-                    <ComboBox DockPanel.Dock="Left" Margin="5,0,0,0" SelectedValue="{Binding Mention}">
-                        <ComboBoxItem>Nobody</ComboBoxItem>
-                        <ComboBoxItem IsSelected="True">@everyone</ComboBoxItem>
-                        <ComboBoxItem>@here</ComboBoxItem>
-                    </ComboBox>
+                <DockPanel LastChildFill="True">
+                    <TextBlock DockPanel.Dock="Left" VerticalAlignment="Center" Text="Message" />
+                    <TextBox
+                        DockPanel.Dock="Left"
+                        MinWidth="40"
+                        Margin="5,0,0,0"
+                        Text="{Binding Text}"
+                        TextAlignment="Left" />
                 </DockPanel>
             </nina:SequenceBlockView.SequenceItemContent>
         </nina:SequenceBlockView>

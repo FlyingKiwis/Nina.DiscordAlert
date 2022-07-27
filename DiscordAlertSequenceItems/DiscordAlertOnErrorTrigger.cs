@@ -9,6 +9,8 @@ using System.ComponentModel.Composition;
 using System.Threading;
 using System.Threading.Tasks;
 using NINA.Core.Utility.Notification;
+using System.Windows.Controls;
+using System.Collections.Generic;
 
 namespace DrewMcdermott.NINA.DiscordAlert.DiscordAlertSequenceItems {
     /// <summary>
@@ -21,13 +23,13 @@ namespace DrewMcdermott.NINA.DiscordAlert.DiscordAlertSequenceItems {
     [Export(typeof(ISequenceTrigger))]
     [JsonObject(MemberSerialization.OptIn)]
     public class DiscordAlertOnErrorTrigger : SequenceTrigger {
-       
+
         [ImportingConstructor]
         public DiscordAlertOnErrorTrigger() {
         }
 
         [JsonProperty]
-        public string Mention { get; set; } = "Nobody";
+        public string Text { get; set; } = "@everyone";
 
         private ISequenceItem _failedItem;
 

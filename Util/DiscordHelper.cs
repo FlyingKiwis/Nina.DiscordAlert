@@ -24,19 +24,12 @@ namespace DrewMcdermott.NINA.DiscordAlert.Util {
         private static DiscordWebhookClient _webhookClient;
         private static Exception _webhookException;
 
-        public static async Task SendMessage(MessageType type, string message, ISequenceItem sequenceItem, CancellationToken cancelToken, string mention = null) {
+        public static async Task SendMessage(MessageType type, string message, ISequenceItem sequenceItem, CancellationToken cancelToken) {
 
             if (_webhookClient == null)
-                throw new ArgumentException("Discord Webhook URL could not be resolved", _webhookException);
+                throw new ArgumentException("Issue occured while initializing webhook client", _webhookException);
 
             var embed = new EmbedBuilder();
-            var author = new EmbedAuthorBuilder();
-            author.WithName("NINA");
-            author.WithIconUrl("https://cdn.discordapp.com/icons/436650817295089664/cfdc7c368259a3fc8a550379ec399307.webp?size=96");
-
-            if (!string.IsNullOrEmpty(message)) {
-                embed.WithDescription(message);
-            }
 
             var target = sequenceItem.TargetContainer();
             if (target != null) {
@@ -64,7 +57,7 @@ namespace DrewMcdermott.NINA.DiscordAlert.Util {
             if (cancelToken.IsCancellationRequested)
                 return;
 
-            await _webhookClient.SendMessageAsync(text: mention, embeds: embeds);
+            await _webhookClient.SendMessageAsync(text: message, embeds: embeds);
         }
     }
 }
