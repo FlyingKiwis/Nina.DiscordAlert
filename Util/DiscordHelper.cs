@@ -33,7 +33,7 @@ namespace DrewMcdermott.NINA.DiscordAlert.Util {
 
             var target = sequenceItem.TargetContainer();
             if (target != null) {
-                embed.AddField("Target", target.Name);
+                embed.AddField("Target", target.Target.TargetName);
             }
 
             var sequence = sequenceItem.RootContainer();

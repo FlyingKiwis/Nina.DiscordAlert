@@ -43,7 +43,7 @@ namespace DrewMcdermott.NINA.DiscordAlert.DiscordAlertSequenceItems {
         }
 
         public override async Task Execute(ISequenceContainer context, IProgress<ApplicationStatus> progress, CancellationToken token) {
-            await Util.DiscordHelper.SendMessage(Util.MessageType.Error, String.Empty, _failedItem, token, Mention);
+            await Util.DiscordHelper.SendMessage(Util.MessageType.Error, Text, _failedItem, token);
         }
 
         public override bool ShouldTrigger(ISequenceItem previousItem, ISequenceItem nextItem) 
