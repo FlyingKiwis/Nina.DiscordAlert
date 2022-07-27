@@ -1,4 +1,4 @@
-﻿using DrewMcdermott.NINA.DiscordAlert.Util;
+﻿using NINA.DiscordAlert.Util;
 using Newtonsoft.Json;
 using NINA.Core.Model;
 using NINA.Sequencer.SequenceItem;
@@ -7,7 +7,7 @@ using System.ComponentModel.Composition;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DrewMcdermott.NINA.DiscordAlert.DiscordAlertSequenceItems {
+namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
     /// <summary>
     /// Sends a discord message when this sequence item is reached
     /// </summary>

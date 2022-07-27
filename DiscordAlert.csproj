@@ -8,8 +8,8 @@
     <ProjectGuid>{127A1813-EC67-4792-8FF7-1196DEB8501F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DrewMcdermott.NINA.DiscordAlert</RootNamespace>
-    <AssemblyName>DrewMcdermott.NINA.DiscordAlert</AssemblyName>
+    <RootNamespace>NINA.DiscordAlert</RootNamespace>
+    <AssemblyName>Discord Alert</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <FileAlignment>512</FileAlignment>
@@ -354,6 +354,10 @@ if not exist "%25localappdata%25\NINA\Plugin\$(TargetName)" (
 
 echo "Copying $(PlatformName) $(TargetFileName)"
 xcopy "$(TargetPath)" "%25localappdata%25\NINA\Plugins\$(TargetName)" /h/i/c/k/e/r/y
+
+xcopy "Discord.Net.Core.dll" "%25localappdata%25\NINA\Plugins\$(TargetName)" /h/i/c/k/e/r/y
+xcopy "Discord.Net.Rest.dll" "%25localappdata%25\NINA\Plugins\$(TargetName)" /h/i/c/k/e/r/y
+xcopy "Discord.Net.Webhook.dll" "%25localappdata%25\NINA\Plugins\$(TargetName)" /h/i/c/k/e/r/y
 		</PostBuildEvent>
   </PropertyGroup>
   <Import Project="packages\Google.Protobuf.Tools.3.18.1\build\Google.Protobuf.Tools.targets" Condition="Exists('packages\Google.Protobuf.Tools.3.18.1\build\Google.Protobuf.Tools.targets')" />

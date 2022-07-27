@@ -8,13 +8,10 @@ using System;
 using System.ComponentModel.Composition;
 using System.Threading;
 using System.Threading.Tasks;
-using NINA.Core.Utility.Notification;
-using System.Windows.Controls;
-using System.Collections.Generic;
 
-namespace DrewMcdermott.NINA.DiscordAlert.DiscordAlertSequenceItems {
+namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
     /// <summary>
-    /// This is a action that can be used in a sequence to send a discord message after an error occurs during the sequence
+    /// This is a trigger action that can be used in a sequence to send a discord message after an error occurs during the sequence
     /// </summary>
     [ExportMetadata("Name", "Send after failure")]
     [ExportMetadata("Description", "Sends a message to discord after a failure occurs")]

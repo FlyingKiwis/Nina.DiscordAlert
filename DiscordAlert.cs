@@ -1,4 +1,4 @@
-﻿using DrewMcdermott.NINA.DiscordAlert.Properties;
+﻿using NINA.DiscordAlert.Properties;
 using NINA.Core.Model;
 using NINA.Core.Utility;
 using NINA.Image.ImageData;
@@ -16,9 +16,9 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using Settings = DrewMcdermott.NINA.DiscordAlert.Properties.Settings;
+using Settings = NINA.DiscordAlert.Properties.Settings;
 
-namespace DrewMcdermott.NINA.DiscordAlert {
+namespace NINA.DiscordAlert {
     /// <summary>
     /// Plugin Base
     /// </summary>

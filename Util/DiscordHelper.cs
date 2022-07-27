@@ -6,7 +6,7 @@ using Discord;
 using System.Collections.Generic;
 using System;
 
-namespace DrewMcdermott.NINA.DiscordAlert.Util {
+namespace NINA.DiscordAlert.Util {
     public class DiscordHelper 
     {
         static DiscordHelper() 

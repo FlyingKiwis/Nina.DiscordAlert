@@ -6,13 +6,17 @@ using System.ComponentModel.Composition;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DrewMcdermott.NINA.DiscordAlert.DiscordAlertSequenceItems {
+namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
 
-    [ExportMetadata("Name", "ERROR")]
-    [ExportMetadata("Description", "This causes an error")]
-    [ExportMetadata("Category", "Discord Alert")]
-    [Export(typeof(ISequenceItem))]
-    [JsonObject(MemberSerialization.OptIn)]
+    /// <summary>
+    /// A test method for causing an error.  To enable uncomment the below lines
+    /// </summary>
+
+    //[ExportMetadata("Name", "ERROR")]
+    //[ExportMetadata("Description", "This causes an error")]
+    //[ExportMetadata("Category", "Discord Alert")]
+    //[Export(typeof(ISequenceItem))]
+    //[JsonObject(MemberSerialization.OptIn)]
     public class Error : SequenceItem {
 
         [ImportingConstructor]

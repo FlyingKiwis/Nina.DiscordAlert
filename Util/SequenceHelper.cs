@@ -1,12 +1,7 @@
 ﻿using NINA.Sequencer.Container;
 using NINA.Sequencer.SequenceItem;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DrewMcdermott.NINA.DiscordAlert.Util {
+namespace NINA.DiscordAlert.Util {
     public static class SequenceHelper {
 
         public static ISequenceContainer RootContainer(this ISequenceContainer container)
