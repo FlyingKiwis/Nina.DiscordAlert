@@ -1,6 +1,7 @@
 ﻿using NINA.Sequencer.SequenceItem;
 using System.Threading;
 using System.Threading.Tasks;
+using Discord.Webhook;
 using Discord;
 using System.Collections.Generic;
 using System;
@@ -8,13 +9,25 @@ using System;
 namespace NINA.DiscordAlert.Util {
     public class DiscordHelper 
     {
+        static DiscordHelper() 
+        {
+            var url = Properties.Settings.Default.DiscordWebhookURL;
+            try {
+                _webhookClient = new DiscordWebhookClient(url);
+            }
+            catch (Exception ex) { 
+                _webhookClient = null;
+                _webhookException = ex;
+            }
+        }
+
+        private static DiscordWebhookClient _webhookClient;
+        private static Exception _webhookException;
+
         public static async Task SendMessage(MessageType type, string message, ISequenceItem sequenceItem, CancellationToken cancelToken) {
 
-            var client = DiscordResources.Client;
-
-            if(client == null) {
-                throw new ArgumentNullException("Discord client error");
-            }
+            if (_webhookClient == null)
+                throw new ArgumentException("Issue occured while initializing webhook client", _webhookException);
 
             var embed = new EmbedBuilder();
 
@@ -44,7 +57,7 @@ namespace NINA.DiscordAlert.Util {
             if (cancelToken.IsCancellationRequested)
                 return;
 
-            await client.SendMessageAsync(text: message, embeds: embeds);
+            await _webhookClient.SendMessageAsync(text: message, embeds: embeds);
         }
     }
 }
