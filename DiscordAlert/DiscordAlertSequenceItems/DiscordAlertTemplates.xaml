@@ -60,13 +60,4 @@
             </nina:SequenceBlockView.SequenceItemContent>
         </nina:SequenceBlockView>
     </DataTemplate>
-
-    <DataTemplate DataType="{x:Type local:Error}">
-        <nina:SequenceBlockView>
-            <nina:SequenceBlockView.SequenceItemContent>
-                <TextBlock VerticalAlignment="Center" Text="Error" />
-            </nina:SequenceBlockView.SequenceItemContent>
-        </nina:SequenceBlockView>
-    </DataTemplate>
-
 </ResourceDictionary>

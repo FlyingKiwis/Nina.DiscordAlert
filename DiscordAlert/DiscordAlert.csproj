@@ -56,8 +56,8 @@
     <Reference Include="AvalonDock, Version=4.60.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
       <HintPath>packages\Dirkster.AvalonDock.4.60.0\lib\net40\AvalonDock.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>packages\Castle.Core.4.4.1\lib\net45\Castle.Core.dll</HintPath>
+    <Reference Include="Castle.Core, Version=5.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>packages\Castle.Core.5.0.0\lib\net462\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Core.AsyncInterceptor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=e33b67d3bb5581e4, processorArchitecture=MSIL">
       <HintPath>packages\Castle.Core.AsyncInterceptor.2.0.0\lib\net45\Castle.Core.AsyncInterceptor.dll</HintPath>
@@ -287,7 +287,6 @@
   <ItemGroup>
     <Compile Include="DiscordAlert.cs" />
     <Compile Include="DiscordAlertSequenceItems\DiscordAlertOnErrorTrigger.cs" />
-    <Compile Include="DiscordAlertSequenceItems\Error.cs" />
     <Compile Include="Options.xaml.cs">
       <DependentUpon>Options.xaml</DependentUpon>
     </Compile>
@@ -302,7 +301,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Util\DiscordHelper.cs" />
+    <Compile Include="Util\DiscordResources.cs" />
+    <Compile Include="Util\DiscordWebhookClient.cs" />
     <Compile Include="Util\FailureHelper.cs" />
+    <Compile Include="Util\IDiscordWebhookClient.cs" />
     <Compile Include="Util\MessageType.cs" />
     <Compile Include="Util\SequenceHelper.cs" />
   </ItemGroup>
@@ -324,6 +326,7 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\Accord.3.8.0\build\Accord.targets" Condition="Exists('packages\Accord.3.8.0\build\Accord.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

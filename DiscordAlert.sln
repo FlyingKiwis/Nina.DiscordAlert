@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscordAlert", "DiscordAlert.csproj", "{127A1813-EC67-4792-8FF7-1196DEB8501F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscordAlert", "DiscordAlert\DiscordAlert.csproj", "{127A1813-EC67-4792-8FF7-1196DEB8501F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiscordAlertTests", "DiscordAlertTests\DiscordAlertTests.csproj", "{5AFF2FB9-6799-4274-AF53-4B8808B63488}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,11 +17,15 @@ Global
 		{127A1813-EC67-4792-8FF7-1196DEB8501F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{127A1813-EC67-4792-8FF7-1196DEB8501F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{127A1813-EC67-4792-8FF7-1196DEB8501F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5AFF2FB9-6799-4274-AF53-4B8808B63488}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AFF2FB9-6799-4274-AF53-4B8808B63488}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AFF2FB9-6799-4274-AF53-4B8808B63488}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AFF2FB9-6799-4274-AF53-4B8808B63488}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {32C75ABD-7FD5-4E9A-90F3-E764A138501B}
+		SolutionGuid = {148A9915-67CE-4934-ACC6-8CCDDBC82CD6}
 	EndGlobalSection
 EndGlobal
