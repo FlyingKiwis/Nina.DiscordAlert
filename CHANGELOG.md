@@ -9,3 +9,7 @@
 ## 0.0.3
 - Added unit tests
 - Fixed: links not working on options page.
+
+## 1.0.0
+- Just a version number change
+- Released
