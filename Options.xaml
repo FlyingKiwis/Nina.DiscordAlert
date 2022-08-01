@@ -8,7 +8,12 @@
     <DataTemplate x:Key="Discord Alert_Options">
         <StackPanel Orientation="Vertical">
             <TextBlock>
-                How to create a webhook: <Hyperlink NavigateUri="https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks">Discord: Intro to Webhooks</Hyperlink>
+                How to create a webhook: 
+                    <Hyperlink Name="DiscordWebhookInfoLink" NavigateUri="https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks" RequestNavigate="DiscordWebhookInfoLink_RequestNavigate">
+                        <Hyperlink.Inlines>
+                            <Run Text="Discord: Intro to Webhooks"/>
+                        </Hyperlink.Inlines>
+                    </Hyperlink>
             </TextBlock>
             <DockPanel LastChildFill="True" Margin="0,5,0,0">
                 <TextBlock DockPanel.Dock="Left" VerticalAlignment="Center" Text="Discord Webhook URL" />
