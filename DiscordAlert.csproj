@@ -287,7 +287,6 @@
   <ItemGroup>
     <Compile Include="DiscordAlert.cs" />
     <Compile Include="DiscordAlertSequenceItems\DiscordAlertOnErrorTrigger.cs" />
-    <Compile Include="DiscordAlertSequenceItems\Error.cs" />
     <Compile Include="Options.xaml.cs">
       <DependentUpon>Options.xaml</DependentUpon>
     </Compile>
