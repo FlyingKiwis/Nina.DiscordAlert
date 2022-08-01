@@ -9,7 +9,7 @@
         <StackPanel Orientation="Vertical">
             <TextBlock>
                 How to create a webhook: 
-                    <Hyperlink Name="DiscordWebhookInfoLink" NavigateUri="https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks" RequestNavigate="DiscordWebhookInfoLink_RequestNavigate">
+                    <Hyperlink Name="DiscordWebhookInfoLink" NavigateUri="https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks" RequestNavigate="Hyperlink_RequestNavigate">
                         <Hyperlink.Inlines>
                             <Run Text="Discord: Intro to Webhooks"/>
                         </Hyperlink.Inlines>
@@ -19,6 +19,11 @@
                 <TextBlock DockPanel.Dock="Left" VerticalAlignment="Center" Text="Discord Webhook URL" />
                 <TextBox DockPanel.Dock="Left" VerticalAlignment="Center" MinWidth="50" Margin="5,0,0,0" Text="{Binding DiscordWebhookURL}" />
             </DockPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,40,0,0">
+                <TextBlock>
+                    I'm actively developing this plugin and open to suggestions!  Please feel free to add suggestions or report bugs <Hyperlink NavigateUri="https://github.com/FlyingKiwis/Nina.DiscordAlert/issues" RequestNavigate="Hyperlink_RequestNavigate">here</Hyperlink>.  Thanks!
+                </TextBlock>
+            </StackPanel>
         </StackPanel>
     </DataTemplate>
 </ResourceDictionary>

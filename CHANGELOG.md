@@ -2,3 +2,10 @@
 
 ## 0.0.1
 - Initial beta release
+
+## 0.0.2
+- Skipped
+
+## 0.0.3
+- Added unit tests
+- Fixed: links not working on options page.

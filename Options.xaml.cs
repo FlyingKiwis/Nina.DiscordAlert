@@ -11,7 +11,7 @@ namespace NINA.DiscordAlert {
             InitializeComponent();
         }
 
-        private void DiscordWebhookInfoLink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e) {
+        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e) {
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;
         }
