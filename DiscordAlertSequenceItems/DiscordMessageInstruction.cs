@@ -12,7 +12,7 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
     /// Sends a discord message when this sequence item is reached
     /// </summary>
     [ExportMetadata("Name", "Discord message")]
-    [ExportMetadata("Description", "This item will just show a notification and is just there to show how the plugin system works")]
+    [ExportMetadata("Description", "Sends a message to discord")]
     [ExportMetadata("Icon", "Discord_logo_SVG")]
     [ExportMetadata("Category", "Discord Alert")]
     [Export(typeof(ISequenceItem))]

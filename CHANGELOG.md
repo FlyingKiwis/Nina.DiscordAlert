@@ -13,3 +13,6 @@
 ## 1.0.0
 - Just a version number change
 - Released
+
+## 1.0.1
+- Minor text fixes
