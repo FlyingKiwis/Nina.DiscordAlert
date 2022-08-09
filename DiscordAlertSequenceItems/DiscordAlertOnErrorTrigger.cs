@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using NINA.Core.Model;
-using NINA.Core.Enum;
 using NINA.Sequencer.Container;
 using NINA.Sequencer.SequenceItem;
 using NINA.Sequencer.Trigger;
@@ -8,6 +7,8 @@ using System;
 using System.ComponentModel.Composition;
 using System.Threading;
 using System.Threading.Tasks;
+using NINA.DiscordAlert.Util;
+using NINA.Sequencer.Utility;
 
 namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
     /// <summary>
@@ -23,12 +24,14 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
 
         [ImportingConstructor]
         public DiscordAlertOnErrorTrigger() {
+            _failureMonitor = Resources.SequenceFailureMonitorFactory.CreateSequenceFailureMonitor(this.Parent);
+            _failureMonitor.OnFailure += FailureMonitor_OnFailure;
         }
 
         [JsonProperty]
         public string Text { get; set; } = "@everyone";
 
-        private ISequenceItem _failedItem;
+        private ISequenceFailureMonitor _failureMonitor;
 
         public override object Clone() {
             return new DiscordAlertOnErrorTrigger() {
@@ -39,34 +42,25 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
             };
         }
 
-        public override async Task Execute(ISequenceContainer context, IProgress<ApplicationStatus> progress, CancellationToken token) {
-            await Util.DiscordHelper.SendMessage(Util.MessageType.Error, Text, _failedItem, token);
+        private async void FailureMonitor_OnFailure(object sender, SequenceFailureEventArgs e) {
+            await DiscordHelper.SendMessage(MessageType.Error, Text, e.Entity, CancellationToken.None, e.Exception);
         }
 
-        public override bool ShouldTrigger(ISequenceItem previousItem, ISequenceItem nextItem) 
-        {
-            return false;
-        }
-
-        public override bool ShouldTriggerAfter(ISequenceItem previousItem, ISequenceItem nextItem) 
-        {
-            return ShouldTriggerInternal(previousItem, nextItem);
-        }
-
-        private bool ShouldTriggerInternal(ISequenceItem previousItem, ISequenceItem nextItem) 
-        {
-            if (previousItem == null)
-                return false;
-
-            if (previousItem.Status != SequenceEntityStatus.FAILED)
-                return false;
-
-            _failedItem = previousItem;
-            return true;
+        public override void Teardown() {
+            base.Teardown();
+            _failureMonitor?.Dispose();
         }
 
         public override string ToString() {
             return $"Category: {Category}, Item: {nameof(DiscordAlertOnErrorTrigger)}";
+        }
+
+        public override bool ShouldTrigger(ISequenceItem previousItem, ISequenceItem nextItem) {
+            return false;
+        }
+
+        public override Task Execute(ISequenceContainer context, IProgress<ApplicationStatus> progress, CancellationToken token) {
+            return Task.CompletedTask;
         }
     }
 }

@@ -7,8 +7,8 @@ using System.Runtime.InteropServices;
 
 // [MANDATORY] The assembly versioning
 //Should be incremented for each new release build of a plugin
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.1.0.0")]
+[assembly: AssemblyFileVersion("1.1.0.0")]
 
 // [MANDATORY] The name of your plugin
 [assembly: AssemblyTitle("Discord Alert")]
@@ -24,7 +24,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Copyright © 2022 Drew McDermott")]
 
 // The minimum Version of N.I.N.A. that this plugin is compatible with
-[assembly: AssemblyMetadata("MinimumApplicationVersion", "2.0.0.9001")]
+[assembly: AssemblyMetadata("MinimumApplicationVersion", "2.0.1.2012")]
 
 // The license your plugin code is using
 [assembly: AssemblyMetadata("License", "MPL-2.0")]
@@ -42,7 +42,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyMetadata("Tags", "")]
 
 //[Optional] A link that will show a log of all changes in between your plugin's versions
-[assembly: AssemblyMetadata("ChangelogURL", "https://github.com/FlyingKiwis/Nina.DiscordAlert/CHANGELOG.md")]
+[assembly: AssemblyMetadata("ChangelogURL", "https://github.com/FlyingKiwis/Nina.DiscordAlert/blob/main/CHANGELOG.md")]
 
 //[Optional] The url to a featured logo that will be displayed in the plugin list next to the name
 [assembly: AssemblyMetadata("FeaturedImageURL", "")]
