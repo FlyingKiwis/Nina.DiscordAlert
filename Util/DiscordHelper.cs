@@ -4,13 +4,14 @@ using System.Threading.Tasks;
 using Discord;
 using System.Collections.Generic;
 using System;
+using NINA.Sequencer;
 
 namespace NINA.DiscordAlert.Util {
     public class DiscordHelper 
     {
-        public static async Task SendMessage(MessageType type, string message, ISequenceItem sequenceItem, CancellationToken cancelToken) {
+        public static async Task SendMessage(MessageType type, string message, ISequenceEntity sequenceItem, CancellationToken cancelToken) {
 
-            var client = DiscordResources.Client;
+            var client = Resources.Client;
 
             if(client == null) {
                 throw new ArgumentNullException("Discord client error");

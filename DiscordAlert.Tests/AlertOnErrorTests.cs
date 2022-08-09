@@ -54,7 +54,7 @@ namespace DiscordAlert.Tests
             var alertOnError = new DiscordAlertOnErrorTrigger();
             alertOnError.ShouldTriggerAfter(sequenceItem.Object, null);
             var cancelSource = new CancellationTokenSource();
-            DiscordResources.SetWebsocketClient(mockWebhookClient.Object);
+            Resources.SetWebsocketClient(mockWebhookClient.Object);
 
             await alertOnError.Execute(Mock.Of<ISequenceContainer>(), Mock.Of<System.IProgress<ApplicationStatus>>(), cancelSource.Token);
 

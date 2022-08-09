@@ -301,12 +301,16 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Util\DiscordHelper.cs" />
-    <Compile Include="Util\DiscordResources.cs" />
+    <Compile Include="Util\ISequenceFailureMonitorFactory.cs" />
+    <Compile Include="Util\Resources.cs" />
     <Compile Include="Util\DiscordWebhookClient.cs" />
     <Compile Include="Util\FailureHelper.cs" />
+    <Compile Include="Util\SequenceFailureMonitor.cs" />
     <Compile Include="Util\IDiscordWebhookClient.cs" />
+    <Compile Include="Util\ISequenceFailureMonitor.cs" />
     <Compile Include="Util\MessageType.cs" />
-    <Compile Include="Util\SequenceHelper.cs" />
+    <Compile Include="Util\SequenceFailureMonitorFactory.cs" />
+    <Compile Include="Util\SequenceExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
