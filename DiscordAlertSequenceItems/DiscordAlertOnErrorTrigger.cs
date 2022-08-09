@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using NINA.Core.Model;
-using NINA.Core.Enum;
 using NINA.Sequencer.Container;
 using NINA.Sequencer.SequenceItem;
 using NINA.Sequencer.Trigger;
@@ -32,7 +31,6 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
         [JsonProperty]
         public string Text { get; set; } = "@everyone";
 
-        private ISequenceItem _failedItem;
         private ISequenceFailureMonitor _failureMonitor;
 
         public override object Clone() {
@@ -44,15 +42,12 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
             };
         }
 
-        private async void FailureMonitor_OnFailure(object sender, SequenceEntityFailureEventArgs e) {
-
-            await DiscordHelper.SendMessage(MessageType.Error, Text, e.Entity, CancellationToken.None);
-
+        private async void FailureMonitor_OnFailure(object sender, SequenceFailureEventArgs e) {
+            await DiscordHelper.SendMessage(MessageType.Error, Text, e.Entity, CancellationToken.None, e.Exception);
         }
 
         public override void Teardown() {
             base.Teardown();
-
             _failureMonitor?.Dispose();
         }
 

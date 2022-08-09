@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace NINA.DiscordAlert.Util {
     public class SequenceFailureMonitor : ISequenceFailureMonitor {
 
-        public event EventHandler<SequenceEntityFailureEventArgs> OnFailure;
+        public event EventHandler<SequenceFailureEventArgs> OnFailure;
 
         private ISequenceRootContainer _sequenceRootContainer;
 
@@ -39,7 +39,7 @@ namespace NINA.DiscordAlert.Util {
         }
 
         private Task SequenceRootContainer_FailureEvent(object sender, SequenceEntityFailureEventArgs args) {
-            OnFailure?.Invoke(sender, args);
+            OnFailure?.Invoke(sender, new SequenceFailureEventArgs(args.Entity, args.Exception));
             return Task.CompletedTask;
         }
     }

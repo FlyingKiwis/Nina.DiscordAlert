@@ -9,6 +9,9 @@ using NINA.DiscordAlert.Util;
 using System.Collections.Generic;
 using Discord;
 using System.Threading.Tasks;
+using NINA.Sequencer;
+using NINA.Sequencer.Utility;
+using System;
 
 namespace DiscordAlert.Tests
 {
@@ -16,50 +19,44 @@ namespace DiscordAlert.Tests
     public class AlertOnErrorTests
     {
         [Test]
-        public void ShouldTriggerAfter_FailedSequenceItem_ResturnTrue() {
-            var sequenceItem = new Mock<ISequenceItem>();
-            sequenceItem.Setup(o => o.Status).Returns(NINA.Core.Enum.SequenceEntityStatus.FAILED);
+        public void OnFailureFired_GivenFailedItem_SendsDiscordMessage() {
+            var mockFailureFactory = new Mock<ISequenceFailureMonitorFactory>();
+            var mockFailure = new Mock<ISequenceFailureMonitor>();
+            mockFailureFactory.Setup(o => o.CreateSequenceFailureMonitor(It.IsAny<ISequenceItem>())).Returns(mockFailure.Object);
+            var mockDiscordClient = new Mock<IDiscordWebhookClient>();
+            Resources.SetWebsocketClient(mockDiscordClient.Object);
+            Resources.SetSequenceFailureMonitorFactory(mockFailureFactory.Object);
             var alertOnError = new DiscordAlertOnErrorTrigger();
+            var mockSequenceEntity = new Mock<ISequenceEntity>();
+            mockSequenceEntity.Setup(o => o.Name).Returns("Failure Item");
+            mockDiscordClient.Setup(o => o.SendSimpleMessageAsync(It.IsAny<string>(), It.IsAny<IEnumerable<Embed>>()))
+                .Callback((string text, IEnumerable<Embed> embeds) => HandleSendMessage(text, embeds, alertOnError.Text, "Failure Item", "Test exception"));
 
-            var result = alertOnError.ShouldTriggerAfter(sequenceItem.Object, null);
-
-            Assert.IsTrue(result);
+            mockFailure.Raise(o => o.OnFailure += null, new SequenceFailureEventArgs(mockSequenceEntity.Object, new Exception("Test exception")));            
         }
 
-        [Test]
-        public void ShouldTriggerAfter_FinishedSequenceItem_ResturnFalse() {
-            var sequenceItem = new Mock<ISequenceItem>();
-            sequenceItem.Setup(o => o.Status).Returns(NINA.Core.Enum.SequenceEntityStatus.FINISHED);
-            var alertOnError = new DiscordAlertOnErrorTrigger();
+        private void HandleSendMessage(string actualText, IEnumerable<Embed> actualEmbeds, string expectedText, string expectedEntityName, string expectedIssue) 
+        {
+            Assert.AreEqual(expectedText, actualText);
 
-            var result = alertOnError.ShouldTriggerAfter(sequenceItem.Object, null);
+            var fieldMatches = 0;
+            foreach (var embed in actualEmbeds) {
+                foreach (var field in embed.Fields) {
+                    if (field.Name == "Failing Step") {
+                        Assert.AreEqual(expectedEntityName, field.Value);
+                        fieldMatches++;
+                    }
 
-            Assert.IsFalse(result);
-        }
+                    if(field.Name == "Issues") {
+                        Assert.IsTrue(field.Value.Contains(expectedIssue));
+                        fieldMatches++;
+                    }
+                }
+            }
 
-        [Test]
-        public void ShouldTriggerAfter_NullSequenceItem_ResturnFalse() {
-            var alertOnError = new DiscordAlertOnErrorTrigger();
-
-            var result = alertOnError.ShouldTriggerAfter(null, null);
-
-            Assert.IsFalse(result);
-        }
-
-        [Test]
-        public async Task Execute_GivenFailedSequence_SendsDiscordMessage() {
-            var mockWebhookClient = new Mock<IDiscordWebhookClient>();
-            var sequenceItem = new Mock<ISequenceItem>();
-            sequenceItem.Setup(o => o.Status).Returns(NINA.Core.Enum.SequenceEntityStatus.FAILED);
-            var alertOnError = new DiscordAlertOnErrorTrigger();
-            alertOnError.ShouldTriggerAfter(sequenceItem.Object, null);
-            var cancelSource = new CancellationTokenSource();
-            Resources.SetWebsocketClient(mockWebhookClient.Object);
-
-            await alertOnError.Execute(Mock.Of<ISequenceContainer>(), Mock.Of<System.IProgress<ApplicationStatus>>(), cancelSource.Token);
-
-            mockWebhookClient.Verify(o => o.SendMessageAsync(It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<IEnumerable<Embed>>(), It.IsAny<string>(),
-                It.IsAny<string>(), It.IsAny<RequestOptions>(), It.IsAny<AllowedMentions>(), It.IsAny<MessageComponent>(), It.IsAny<MessageFlags>(), It.IsAny<ulong?>()), Times.Once);
+            if(fieldMatches != 2) {
+                Assert.Fail("Not all expected fields were in the embed");
+            }
         }
     }
 }

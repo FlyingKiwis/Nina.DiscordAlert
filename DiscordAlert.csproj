@@ -305,6 +305,7 @@
     <Compile Include="Util\Resources.cs" />
     <Compile Include="Util\DiscordWebhookClient.cs" />
     <Compile Include="Util\FailureHelper.cs" />
+    <Compile Include="Util\SequenceFailureEventArgs.cs" />
     <Compile Include="Util\SequenceFailureMonitor.cs" />
     <Compile Include="Util\IDiscordWebhookClient.cs" />
     <Compile Include="Util\ISequenceFailureMonitor.cs" />

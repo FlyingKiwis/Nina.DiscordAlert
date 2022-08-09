@@ -29,7 +29,7 @@
             _client = client;
         }
 
-        public static void SetSequenceFailureMonitor(ISequenceFailureMonitorFactory failureMonitor) {
+        public static void SetSequenceFailureMonitorFactory(ISequenceFailureMonitorFactory failureMonitor) {
             _failureMonitorFactory = failureMonitor;
         }
     }
