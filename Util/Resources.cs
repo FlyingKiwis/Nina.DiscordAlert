@@ -1,4 +1,7 @@
-﻿namespace NINA.DiscordAlert.Util {
+﻿using NINA.DiscordAlert.DiscordWebhook;
+using NINA.DiscordAlert.SequenceFailureMonitor;
+
+namespace NINA.DiscordAlert.Util {
     public static class Resources 
     {
         public static IDiscordWebhookClient Client { 
