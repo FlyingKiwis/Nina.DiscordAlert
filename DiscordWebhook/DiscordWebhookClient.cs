@@ -1,11 +1,8 @@
 ﻿using Discord;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace NINA.DiscordAlert.Util {
+namespace NINA.DiscordAlert.DiscordWebhook {
     public class DiscordWebhookClient : IDiscordWebhookClient {
         public DiscordWebhookClient(string url) {
             _discordWebhookClient = new Discord.Webhook.DiscordWebhookClient(url);

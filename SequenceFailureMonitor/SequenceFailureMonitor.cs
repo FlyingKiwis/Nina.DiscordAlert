@@ -4,7 +4,7 @@ using NINA.Sequencer.Utility;
 using System;
 using System.Threading.Tasks;
 
-namespace NINA.DiscordAlert.Util {
+namespace NINA.DiscordAlert.SequenceFailureMonitor {
     public class SequenceFailureMonitor : ISequenceFailureMonitor {
 
         public event EventHandler<SequenceFailureEventArgs> OnFailure;

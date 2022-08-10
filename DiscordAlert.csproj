@@ -300,17 +300,17 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Util\DiscordHelper.cs" />
-    <Compile Include="Util\ISequenceFailureMonitorFactory.cs" />
+    <Compile Include="DiscordWebhook\DiscordHelper.cs" />
+    <Compile Include="SequenceFailureMonitor\ISequenceFailureMonitorFactory.cs" />
     <Compile Include="Util\Resources.cs" />
-    <Compile Include="Util\DiscordWebhookClient.cs" />
+    <Compile Include="DiscordWebhook\DiscordWebhookClient.cs" />
     <Compile Include="Util\FailureHelper.cs" />
-    <Compile Include="Util\SequenceFailureEventArgs.cs" />
-    <Compile Include="Util\SequenceFailureMonitor.cs" />
-    <Compile Include="Util\IDiscordWebhookClient.cs" />
-    <Compile Include="Util\ISequenceFailureMonitor.cs" />
-    <Compile Include="Util\MessageType.cs" />
-    <Compile Include="Util\SequenceFailureMonitorFactory.cs" />
+    <Compile Include="SequenceFailureMonitor\SequenceFailureEventArgs.cs" />
+    <Compile Include="SequenceFailureMonitor\SequenceFailureMonitor.cs" />
+    <Compile Include="DiscordWebhook\IDiscordWebhookClient.cs" />
+    <Compile Include="SequenceFailureMonitor\ISequenceFailureMonitor.cs" />
+    <Compile Include="DiscordWebhook\MessageType.cs" />
+    <Compile Include="SequenceFailureMonitor\SequenceFailureMonitorFactory.cs" />
     <Compile Include="Util\SequenceExtensions.cs" />
   </ItemGroup>
   <ItemGroup>

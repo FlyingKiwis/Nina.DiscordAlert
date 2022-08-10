@@ -5,8 +5,9 @@ using Discord;
 using System.Collections.Generic;
 using System;
 using NINA.Sequencer;
+using NINA.DiscordAlert.Util;
 
-namespace NINA.DiscordAlert.Util {
+namespace NINA.DiscordAlert.DiscordWebhook {
     public class DiscordHelper 
     {
         public static async Task SendMessage(MessageType type, string message, ISequenceEntity sequenceItem, CancellationToken cancelToken, Exception exception = null) {

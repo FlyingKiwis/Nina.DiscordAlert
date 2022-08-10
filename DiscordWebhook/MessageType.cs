@@ -1,4 +1,4 @@
-﻿namespace NINA.DiscordAlert.Util {
+﻿namespace NINA.DiscordAlert.DiscordWebhook {
     public enum MessageType 
     {
         Information,
