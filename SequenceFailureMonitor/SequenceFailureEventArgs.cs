@@ -1,7 +1,7 @@
 ﻿using NINA.Sequencer;
 using System;
 
-namespace NINA.DiscordAlert.Util {
+namespace NINA.DiscordAlert.SequenceFailureMonitor {
     public class SequenceFailureEventArgs : EventArgs
     {
         public ISequenceEntity Entity { get; }
