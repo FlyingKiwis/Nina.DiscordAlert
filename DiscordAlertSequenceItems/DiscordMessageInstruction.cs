@@ -6,6 +6,7 @@ using System;
 using System.ComponentModel.Composition;
 using System.Threading;
 using System.Threading.Tasks;
+using NINA.DiscordAlert.DiscordWebhook;
 
 namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
     /// <summary>

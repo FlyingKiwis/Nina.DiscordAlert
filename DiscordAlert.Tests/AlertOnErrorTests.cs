@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 using NINA.Sequencer;
 using NINA.Sequencer.Utility;
 using System;
+using NINA.DiscordAlert.SequenceFailureMonitor;
+using NINA.DiscordAlert.DiscordWebhook;
 
 namespace DiscordAlert.Tests
 {

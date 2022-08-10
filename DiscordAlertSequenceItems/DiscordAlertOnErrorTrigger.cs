@@ -8,7 +8,8 @@ using System.ComponentModel.Composition;
 using System.Threading;
 using System.Threading.Tasks;
 using NINA.DiscordAlert.Util;
-using NINA.Sequencer.Utility;
+using NINA.DiscordAlert.SequenceFailureMonitor;
+using NINA.DiscordAlert.DiscordWebhook;
 
 namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
     /// <summary>
