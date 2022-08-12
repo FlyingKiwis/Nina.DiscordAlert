@@ -21,7 +21,6 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
 
         [ImportingConstructor]
         public DiscordMessageInstruction() {
-            Text = String.Empty;
         }
         public DiscordMessageInstruction(DiscordMessageInstruction copyMe) : this() {
             CopyMetaData(copyMe);
@@ -35,7 +34,13 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
         }
 
         public override object Clone() {
-            return new DiscordMessageInstruction(this);
+            return new DiscordMessageInstruction(this) {
+                Icon = Icon,
+                Name = Name,
+                Category = Category,
+                Description = Description,
+                Text = Text
+            };
         }
 
         public override string ToString() {
