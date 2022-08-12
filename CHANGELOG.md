@@ -19,3 +19,6 @@
 
 ## 1.1.0
 - Target Nina 2.0.1
+
+## 1.1.1 / 1.0.2
+- Fix saving of instructions
