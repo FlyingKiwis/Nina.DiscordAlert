@@ -39,7 +39,8 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
                 Icon = Icon,
                 Name = Name,
                 Category = Category,
-                Description = Description
+                Description = Description,
+                Text = Text
             };
         }
 
