@@ -1,0 +1,42 @@
+﻿{
+    "ChangelogURL": "https://github.com/FlyingKiwis/Nina.DiscordAlert/blob/main/CHANGELOG.md",
+    "Tags": [
+        "Discord",
+        "Alert",
+        "Message",
+        "Broadcast",
+        "Webhook"
+    ],
+    "Name": "Discord Alert",
+    "Version": {
+        "Minor": "1",
+        "Build": "0",
+        "Patch": "2",
+        "Major": "1"
+    },
+    "Author": "Drew McDermott",
+    "MinimumApplicationVersion": {
+        "Minor": "0",
+        "Build": "2012",
+        "Patch": "1",
+        "Major": "2"
+    },
+    "Descriptions": {
+        "FeaturedImageURL": "",
+        "LongDescription": "# Discord Alert\r\n\r\nThis is a plugin for [NINA](https://nighttime-imaging.eu) to allow for in-sequence messages sent to a discord server via webhook\r\n\r\nSee more about [Discord\u0027s Webhooks here](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)\r\n\r\n# Added sequence items\r\n\r\n- Discord message - Will send a message when that point in the sequence is reached\r\n- Send after failure - Triggered action, send a discord message after a detected failure.\r\n\r\n# Suggestion Welcome\r\n\r\nI\u0027m open to suggestions, please submit one via [GitHub\u0027s issue tracker](https://github.com/FlyingKiwis/Nina.DiscordAlert/issues).\r\n\r\n# Contact\r\n\r\nI\u0027m in the NINA discord server as Kiwi🥝\r\n\r\n# 3rd Party Licences\r\n\r\n- [Discord.Net](https://github.com/discord-net/Discord.Net/blob/dev/LICENSE) is licensed under the MIT license",
+        "ScreenshotURL": "",
+        "ShortDescription": "Sends alerts to discord",
+        "AltScreenshotURL": ""
+    },
+    "Identifier": "bbca7e0a-b89f-4e7c-92f1-0d5b24db6911",
+    "LicenseURL": "https://www.mozilla.org/en-US/MPL/2.0/",
+    "Repository": "https://github.com/FlyingKiwis/Nina.DiscordAlert",
+    "Homepage": "https://github.com/FlyingKiwis/Nina.DiscordAlert",
+    "Installer": {
+        "ChecksumType": "SHA256",
+        "URL": "/releases/download/v1.1.2/Discord_Alert-1.1.2.zip",
+        "Checksum": "167063D7A562CACFAE84BEFAACA3274660F49B4C153446FC270434956F6986BF",
+        "Type": "ARCHIVE"
+    },
+    "License": "MPL-2.0"
+}
