@@ -1,4 +1,5 @@
-﻿using NINA.Sequencer.Container;
+﻿using NINA.Sequencer;
+using NINA.Sequencer.Container;
 using NINA.Sequencer.SequenceItem;
 
 namespace NINA.DiscordAlert.SequenceFailureMonitor {
@@ -7,5 +8,7 @@ namespace NINA.DiscordAlert.SequenceFailureMonitor {
         ISequenceFailureMonitor CreateSequenceFailureMonitor(ISequenceRootContainer container);
 
         ISequenceFailureMonitor CreateSequenceFailureMonitor(ISequenceItem item);
+
+        ISequenceFailureMonitor CreateSequenceFailureMonitor(ISequenceEntity item);
     }
 }

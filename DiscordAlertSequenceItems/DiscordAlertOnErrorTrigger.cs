@@ -25,8 +25,7 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
 
         [ImportingConstructor]
         public DiscordAlertOnErrorTrigger() {
-            _failureMonitor = Resources.SequenceFailureMonitorFactory.CreateSequenceFailureMonitor(this.Parent);
-            _failureMonitor.OnFailure += FailureMonitor_OnFailure;
+
         }
 
         [JsonProperty]
@@ -46,6 +45,15 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
 
         private async void FailureMonitor_OnFailure(object sender, SequenceFailureEventArgs e) {
             await DiscordHelper.SendMessage(MessageType.Error, Text, e.Entity, CancellationToken.None, e.Exception);
+        }
+
+        public override void Initialize() {
+            base.Initialize();
+
+            _failureMonitor = Resources.SequenceFailureMonitorFactory.CreateSequenceFailureMonitor(this);
+            if (_failureMonitor != null) {
+                _failureMonitor.OnFailure += FailureMonitor_OnFailure;
+            }
         }
 
         public override void Teardown() {
