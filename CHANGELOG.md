@@ -21,6 +21,7 @@
 - Target Nina 2.0.1
 
 ## 1.1.1 (Nina 2.0.1) / 1.0.2 (Nina 2.0.0)
-- Fix saving of instructions
+- Fix saving of text
 
-
+## 1.1.2
+- Fix alert for NINA 2.0.1 HF1

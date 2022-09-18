@@ -7,8 +7,8 @@ using System.Runtime.InteropServices;
 
 // [MANDATORY] The assembly versioning
 //Should be incremented for each new release build of a plugin
-[assembly: AssemblyVersion("1.1.1.0")]
-[assembly: AssemblyFileVersion("1.1.1.0")]
+[assembly: AssemblyVersion("1.1.2.0")]
+[assembly: AssemblyFileVersion("1.1.2.0")]
 
 // [MANDATORY] The name of your plugin
 [assembly: AssemblyTitle("Discord Alert")]
@@ -51,7 +51,28 @@ using System.Runtime.InteropServices;
 //[Optional] An additional url to an example example screenshot of your plugin in action
 [assembly: AssemblyMetadata("AltScreenshotURL", "")]
 //[Optional] An in-depth description of your plugin
-[assembly: AssemblyMetadata("LongDescription", @"")]
+[assembly: AssemblyMetadata("LongDescription", @"# Discord Alert
+
+This is a plugin for [NINA](https://nighttime-imaging.eu) to allow for in-sequence messages sent to a discord server via webhook
+
+See more about [Discord's Webhooks here](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)
+
+# Added sequence items
+
+- Discord message - Will send a message when that point in the sequence is reached
+- Send after failure - Triggered action, send a discord message after a detected failure.
+
+# Suggestion Welcome
+
+I'm open to suggestions, please submit one via [GitHub's issue tracker](https://github.com/FlyingKiwis/Nina.DiscordAlert/issues).
+
+# Contact
+
+I'm in the NINA discord server as Kiwi🥝
+
+# 3rd Party Licences
+
+- [Discord.Net](https://github.com/discord-net/Discord.Net/blob/dev/LICENSE) is licensed under the MIT license")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
 // to COM components.  If you need to access a type in this assembly from
