@@ -112,7 +112,7 @@ if($createArchive) {
     $checksum = Get-FileHash $file
 }
 
-$installerUrl = $rep + "/releases/download/v" + $pluginVersion[0] + "." + $pluginVersion[1] + "." + $pluginVersion[2] + "/" + $zipFile;
+$installerUrl = $repo + "/releases/download/v" + $pluginVersion[0] + "." + $pluginVersion[1] + "." + $pluginVersion[2] + "/" + $zipFile;
 
 
 #Installer property gen
