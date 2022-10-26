@@ -13,10 +13,7 @@ namespace NINA.DiscordAlert.SequenceFailureMonitor {
         }
 
         public ISequenceFailureMonitor CreateSequenceFailureMonitor(ISequenceEntity item) {
-            if (item.Parent == null)
-                return null;
-
-            return new SequenceFailureMonitor(item.Parent);
+            return new SequenceFailureMonitor(item);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using NINA.Core.Utility;
+using NINA.Sequencer;
 using NINA.Sequencer.Container;
 using NINA.Sequencer.SequenceItem;
 using NINA.Sequencer.Utility;
@@ -13,14 +14,25 @@ namespace NINA.DiscordAlert.SequenceFailureMonitor {
         private ISequenceRootContainer _sequenceRootContainer;
 
         public SequenceFailureMonitor(ISequenceRootContainer container) {
-
             SetRootContainer(container);
-
         }
 
         public SequenceFailureMonitor(ISequenceItem item) {
+            if(item.Parent == null) 
+            {
+                throw new ArgumentException($"{nameof(item)} does not have a parent");
+            }
 
             var root = ItemUtility.GetRootContainer(item.Parent);
+            SetRootContainer(root);
+        }
+
+        public SequenceFailureMonitor(ISequenceEntity entity) {
+            if (entity.Parent == null) {
+                throw new ArgumentException($"{nameof(entity)} does not have a parent");
+            }
+
+            var root = ItemUtility.GetRootContainer(entity.Parent);
             SetRootContainer(root);
         }
 
