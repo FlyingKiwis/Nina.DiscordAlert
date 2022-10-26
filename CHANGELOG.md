@@ -25,3 +25,6 @@
 
 ## 1.1.2
 - Fix alert for NINA 2.0.1 HF1
+
+## 1.1.3
+- Okay actually fix alert for NINA 2.0.1, for real this time
