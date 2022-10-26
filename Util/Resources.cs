@@ -1,5 +1,6 @@
 ﻿using NINA.DiscordAlert.DiscordWebhook;
 using NINA.DiscordAlert.SequenceFailureMonitor;
+using NINA.Core.Utility;
 
 namespace NINA.DiscordAlert.Util {
     public static class Resources 
@@ -29,10 +30,12 @@ namespace NINA.DiscordAlert.Util {
         private static ISequenceFailureMonitorFactory _failureMonitorFactory;
 
         public static void SetWebsocketClient(IDiscordWebhookClient client) {
+            Logger.Debug(string.Empty);
             _client = client;
         }
 
         public static void SetSequenceFailureMonitorFactory(ISequenceFailureMonitorFactory failureMonitor) {
+            Logger.Debug(string.Empty);
             _failureMonitorFactory = failureMonitor;
         }
     }

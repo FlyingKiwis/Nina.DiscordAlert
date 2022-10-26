@@ -1,16 +1,18 @@
-﻿using NINA.Sequencer.SequenceItem;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Discord;
 using System.Collections.Generic;
 using System;
 using NINA.Sequencer;
 using NINA.DiscordAlert.Util;
+using NINA.Core.Utility;
 
 namespace NINA.DiscordAlert.DiscordWebhook {
     public class DiscordHelper 
     {
         public static async Task SendMessage(MessageType type, string message, ISequenceEntity sequenceItem, CancellationToken cancelToken, Exception exception = null) {
+
+            Logger.Debug($"Type={type} Message={message} Entity={sequenceItem}");
 
             var client = Resources.Client;
 
@@ -50,6 +52,8 @@ namespace NINA.DiscordAlert.DiscordWebhook {
                 return;
 
             await client.SendSimpleMessageAsync(text: message, embeds: embeds);
+
+            Logger.Debug($"Sent message: {message}");
         }
     }
 }

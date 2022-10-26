@@ -33,6 +33,7 @@ namespace NINA.DiscordAlert {
                 return Settings.Default.DiscordWebhookURL;
             }
             set {
+                Logger.Debug($"Set discord webhook URL={value}");
                 Settings.Default.DiscordWebhookURL = value;
                 CoreUtil.SaveSettings(Settings.Default);
                 RaisePropertyChanged();

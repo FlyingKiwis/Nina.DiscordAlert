@@ -1,5 +1,5 @@
 ﻿using NINA.Sequencer;
-using NINA.Sequencer.SequenceItem;
+using NINA.Core.Utility;
 using NINA.Sequencer.Validations;
 using System.Collections.Generic;
 
@@ -8,7 +8,8 @@ namespace NINA.DiscordAlert.Util {
     {
         public static IList<string> GetReasons(ISequenceEntity sequenceItem) 
         {
-            if(sequenceItem is IValidatable validatable && validatable.Issues.Count > 0) 
+            Logger.Debug($"Entity={sequenceItem}");
+            if (sequenceItem is IValidatable validatable && validatable.Issues.Count > 0) 
             {
                 return validatable.Issues;
             }
