@@ -9,6 +9,7 @@ namespace NINA.DiscordAlert.Util {
             get 
             {
                 if(_client == null) {
+                    Logger.Debug("Create discord client");
                     _client = new DiscordWebhookClient(Properties.Settings.Default.DiscordWebhookURL);
                 }
 
@@ -19,7 +20,8 @@ namespace NINA.DiscordAlert.Util {
         public static ISequenceFailureMonitorFactory SequenceFailureMonitorFactory {
             get {
                 if (_failureMonitorFactory == null) {
-                    var monitor = new SequenceFailureMonitorFactory();
+                    Logger.Debug("Create failure monitor");
+                    _failureMonitorFactory = new SequenceFailureMonitorFactory();
                 }
 
                 return _failureMonitorFactory;

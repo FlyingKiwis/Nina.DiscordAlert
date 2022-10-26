@@ -1,4 +1,7 @@
 ﻿using NINA.Core.Utility;
+using NINA.DiscordAlert.DiscordWebhook;
+using NINA.DiscordAlert.SequenceFailureMonitor;
+using NINA.DiscordAlert.Util;
 using NINA.Plugin;
 using NINA.Plugin.Interfaces;
 using System.ComponentModel;
@@ -35,6 +38,7 @@ namespace NINA.DiscordAlert {
             set {
                 Logger.Debug($"Set discord webhook URL={value}");
                 Settings.Default.DiscordWebhookURL = value;
+                Resources.SetWebsocketClient(new DiscordWebhookClient(DiscordWebhookURL));
                 CoreUtil.SaveSettings(Settings.Default);
                 RaisePropertyChanged();
             }
