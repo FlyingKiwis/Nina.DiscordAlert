@@ -1,6 +1,6 @@
-﻿using NINA.DiscordAlert.Util;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using NINA.Core.Model;
+using NINA.Core.Utility;
 using NINA.Sequencer.SequenceItem;
 using System;
 using System.ComponentModel.Composition;
@@ -31,6 +31,7 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
         public string Text { get; set; }
 
         public override async Task Execute(IProgress<ApplicationStatus> progress, CancellationToken token) {
+            Logger.Debug($"Sending Message - Text={Text}  Entity={this}");
             await DiscordHelper.SendMessage(MessageType.Information, Text, this, token);
         }
 

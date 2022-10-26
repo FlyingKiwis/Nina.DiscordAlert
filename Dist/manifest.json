@@ -34,7 +34,7 @@
     "Homepage": "https://github.com/FlyingKiwis/Nina.DiscordAlert",
     "Installer": {
         "ChecksumType": "SHA256",
-        "URL": "/releases/download/v1.1.2/Discord_Alert-1.1.2.zip",
+        "URL": "https://github.com/FlyingKiwis/Nina.DiscordAlert/releases/download/v1.1.2/Discord_Alert-1.1.2.zip",
         "Checksum": "167063D7A562CACFAE84BEFAACA3274660F49B4C153446FC270434956F6986BF",
         "Type": "ARCHIVE"
     },

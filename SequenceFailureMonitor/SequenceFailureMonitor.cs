@@ -1,4 +1,5 @@
-﻿using NINA.Sequencer.Container;
+﻿using NINA.Core.Utility;
+using NINA.Sequencer.Container;
 using NINA.Sequencer.SequenceItem;
 using NINA.Sequencer.Utility;
 using System;
@@ -39,6 +40,8 @@ namespace NINA.DiscordAlert.SequenceFailureMonitor {
         }
 
         private Task SequenceRootContainer_FailureEvent(object sender, SequenceEntityFailureEventArgs args) {
+            Logger.Error($"Failure event occured: Entity={args.Entity}", args.Exception);
+
             OnFailure?.Invoke(sender, new SequenceFailureEventArgs(args.Entity, args.Exception));
             return Task.CompletedTask;
         }

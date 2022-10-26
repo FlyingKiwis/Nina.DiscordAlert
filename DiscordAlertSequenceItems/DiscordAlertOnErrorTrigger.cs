@@ -3,6 +3,7 @@ using NINA.Core.Model;
 using NINA.Sequencer.Container;
 using NINA.Sequencer.SequenceItem;
 using NINA.Sequencer.Trigger;
+using NINA.Core.Utility;
 using System;
 using System.ComponentModel.Composition;
 using System.Threading;
@@ -44,21 +45,26 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
         }
 
         private async void FailureMonitor_OnFailure(object sender, SequenceFailureEventArgs e) {
+            Logger.Debug($"Entity={e.Entity} Exception={e.Exception}");
             await DiscordHelper.SendMessage(MessageType.Error, Text, e.Entity, CancellationToken.None, e.Exception);
         }
 
-        public override void Initialize() {
-            base.Initialize();
-
+        public override void SequenceBlockInitialize() {
+            
             _failureMonitor = Resources.SequenceFailureMonitorFactory.CreateSequenceFailureMonitor(this);
             if (_failureMonitor != null) {
                 _failureMonitor.OnFailure += FailureMonitor_OnFailure;
+                Logger.Debug("Attached Failure Monitor");
             }
+
+            base.SequenceBlockInitialize();
         }
 
-        public override void Teardown() {
-            base.Teardown();
+        public override void SequenceBlockTeardown() 
+        {
+            Logger.Debug(string.Empty);
             _failureMonitor?.Dispose();
+            base.SequenceBlockTeardown();
         }
 
         public override string ToString() {
