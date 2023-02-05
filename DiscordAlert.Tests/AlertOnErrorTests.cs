@@ -37,6 +37,22 @@ namespace DiscordAlert.Tests
             mockFailure.Raise(o => o.OnFailure += null, new SequenceFailureEventArgs(mockSequenceEntity.Object, new Exception("Test exception")));            
         }
 
+        [Test]
+        public void OnFailureFired_DiscordException_Handled() {
+            var mockFailureFactory = new Mock<ISequenceFailureMonitorFactory>();
+            var mockFailure = new Mock<ISequenceFailureMonitor>();
+            mockFailureFactory.Setup(o => o.CreateSequenceFailureMonitor(It.IsAny<ISequenceItem>())).Returns(mockFailure.Object);
+            var mockDiscordClient = new Mock<IDiscordWebhookClient>();
+            Resources.SetWebsocketClient(mockDiscordClient.Object);
+            Resources.SetSequenceFailureMonitorFactory(mockFailureFactory.Object);
+            var alertOnError = new DiscordAlertOnErrorTrigger();
+            var mockSequenceEntity = new Mock<ISequenceEntity>();
+            mockSequenceEntity.Setup(o => o.Name).Returns("Failure Item");
+            mockDiscordClient.Setup(o => o.SendSimpleMessageAsync(It.IsAny<string>(), It.IsAny<IEnumerable<Embed>>())).Throws(new Exception("TEST"));
+
+            Assert.DoesNotThrow(() => mockFailure.Raise(o => o.OnFailure += null, new SequenceFailureEventArgs(mockSequenceEntity.Object, new Exception("Test exception"))));      
+        }
+
         private void HandleSendMessage(string actualText, IEnumerable<Embed> actualEmbeds, string expectedText, string expectedEntityName, string expectedIssue) 
         {
             Assert.AreEqual(expectedText, actualText);
