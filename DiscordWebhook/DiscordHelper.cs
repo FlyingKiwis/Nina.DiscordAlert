@@ -23,12 +23,12 @@ namespace NINA.DiscordAlert.DiscordWebhook {
             var embed = new EmbedBuilder();
 
             var target = sequenceItem.TargetContainer();
-            if (target != null) {
+            if (target?.Target?.TargetName != null) {
                 embed.AddField("Target", target.Target.TargetName);
             }
 
             var sequence = sequenceItem.RootContainer();
-            if (sequence != null) {
+            if (sequence?.Name != null) {
                 embed.AddField("Sequence Name", sequence.Name);
             }
 
@@ -37,7 +37,9 @@ namespace NINA.DiscordAlert.DiscordWebhook {
             } else if (type == MessageType.Error) {
                 embed.Color = Color.Red;
 
-                embed.AddField("Failing Step", sequenceItem.Name);
+                if (sequenceItem?.Name != null) {
+                    embed.AddField("Failing Step", sequenceItem.Name);
+                }
 
                 var issues = FailureHelper.GetReasons(sequenceItem);
                 if (exception != null) {

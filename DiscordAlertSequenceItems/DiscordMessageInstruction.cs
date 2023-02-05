@@ -31,8 +31,12 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
         public string Text { get; set; }
 
         public override async Task Execute(IProgress<ApplicationStatus> progress, CancellationToken token) {
-            Logger.Debug($"Sending Message - Text={Text}  Entity={this}");
-            await DiscordHelper.SendMessage(MessageType.Information, Text, this, token);
+            try {
+                Logger.Debug($"Sending Message - Text={Text}  Entity={this}");
+                await DiscordHelper.SendMessage(MessageType.Information, Text, this, token);
+            } catch (Exception ex) {
+                Logger.Error(ex);
+            }
         }
 
         public override object Clone() {

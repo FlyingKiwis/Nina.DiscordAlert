@@ -45,8 +45,12 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
         }
 
         private async void FailureMonitor_OnFailure(object sender, SequenceFailureEventArgs e) {
-            Logger.Debug($"Entity={e.Entity} Exception={e.Exception}");
-            await DiscordHelper.SendMessage(MessageType.Error, Text, e.Entity, CancellationToken.None, e.Exception);
+            try {
+                Logger.Debug($"Entity={e.Entity} Exception={e.Exception}");
+                await DiscordHelper.SendMessage(MessageType.Error, Text, e.Entity, CancellationToken.None, e.Exception);
+            } catch (Exception ex) {
+                Logger.Error(ex);
+            }
         }
 
         public override void SequenceBlockInitialize() {
