@@ -58,7 +58,7 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
             _failureMonitor = Resources.SequenceFailureMonitorFactory.CreateSequenceFailureMonitor(this);
             if (_failureMonitor != null) {
                 _failureMonitor.OnFailure += FailureMonitor_OnFailure;
-                Logger.Debug("Attached Failure Monitor");
+                Logger.Info("Attached Failure Monitor");
             }
 
             base.SequenceBlockInitialize();
@@ -67,7 +67,14 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
         public override void SequenceBlockTeardown() 
         {
             Logger.Debug(string.Empty);
-            _failureMonitor?.Dispose();
+            if (_failureMonitor != null) {
+                try {
+                    _failureMonitor.Dispose();
+                } catch { }
+                _failureMonitor.OnFailure -= FailureMonitor_OnFailure;
+                Logger.Info("Removed & disposed Failure Monitor");
+            }
+            
             base.SequenceBlockTeardown();
         }
 
