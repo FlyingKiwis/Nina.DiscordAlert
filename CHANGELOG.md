@@ -28,3 +28,6 @@
 
 ## 1.1.3
 - Okay actually fix alert for NINA 2.0.1, for real this time
+
+## 1.1.4
+- Stability improvements
