@@ -2,12 +2,18 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using NINA.Core.Utility;
+using System;
 
 namespace NINA.DiscordAlert.DiscordWebhook {
     public class DiscordWebhookClient : IDiscordWebhookClient {
         public DiscordWebhookClient(string url) {
             Logger.Debug($"URL={url}");
-            _discordWebhookClient = new Discord.Webhook.DiscordWebhookClient(url);
+            try {
+                _discordWebhookClient = new Discord.Webhook.DiscordWebhookClient(url);
+            }
+            catch (Exception ex) {
+                Logger.Error("Error attempting to create discord client", ex);
+            }
         }
 
         private Discord.Webhook.DiscordWebhookClient _discordWebhookClient;
