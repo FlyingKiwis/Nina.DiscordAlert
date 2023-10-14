@@ -302,7 +302,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DiscordAlert.csproj">
+    <ProjectReference Include="..\DiscordAlert\DiscordAlert.csproj">
       <Project>{127a1813-ec67-4792-8ff7-1196deb8501f}</Project>
       <Name>DiscordAlert</Name>
     </ProjectReference>
