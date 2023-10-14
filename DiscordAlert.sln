@@ -1,11 +1,11 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscordAlert.Tests", "DiscordAlert.Tests\DiscordAlert.Tests.csproj", "{54A0BF23-65CC-4105-BAAC-9D7987727706}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiscordAlert.Tests", "DiscordAlert.Tests\DiscordAlert.Tests.csproj", "{54A0BF23-65CC-4105-BAAC-9D7987727706}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscordAlert", "DiscordAlert\DiscordAlert.csproj", "{127A1813-EC67-4792-8FF7-1196DEB8501F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiscordAlert", "DiscordAlert\DiscordAlert.csproj", "{127A1813-EC67-4792-8FF7-1196DEB8501F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
