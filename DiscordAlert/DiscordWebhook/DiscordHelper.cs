@@ -15,9 +15,17 @@ namespace NINA.DiscordAlert.DiscordWebhook {
             Logger.Debug($"Type={type} Message={message} Entity={sequenceItem}");
 
             var client = Resources.Client;
+            var imageSaveMonitor = Resources.ImageSaveMonitor;
 
             if(client == null) {
                 throw new ArgumentNullException("Discord client error");
+            }
+
+            var image = imageSaveMonitor.LastImage;
+
+            if(image != null) {
+                message = imageSaveMonitor.ReplacePlaceholders(message, image);
+                Logger.Debug($"Message converted to={message}");
             }
 
             var embed = new EmbedBuilder();

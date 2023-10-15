@@ -7,6 +7,8 @@ using System.ComponentModel.Composition;
 using System.Threading;
 using System.Threading.Tasks;
 using NINA.DiscordAlert.DiscordWebhook;
+using NINA.WPF.Base.Interfaces.Mediator;
+using NINA.WPF.Base.Mediator;
 
 namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
     /// <summary>
@@ -21,7 +23,8 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
     public class DiscordMessageInstruction : SequenceItem {
 
         [ImportingConstructor]
-        public DiscordMessageInstruction() {
+        public DiscordMessageInstruction() 
+        {
         }
         public DiscordMessageInstruction(DiscordMessageInstruction copyMe) : this() {
             CopyMetaData(copyMe);
@@ -30,8 +33,11 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
         [JsonProperty]
         public string Text { get; set; }
 
+        private IImageSaveMediator _imageSaveMediator;
+
         public override async Task Execute(IProgress<ApplicationStatus> progress, CancellationToken token) {
             try {
+                
                 Logger.Debug($"Sending Message - Text={Text}  Entity={this}");
                 await DiscordHelper.SendMessage(MessageType.Information, Text, this, token);
             } catch (Exception ex) {
