@@ -34,7 +34,7 @@
         "AltScreenshotURL": ""
     },
     "Installer": {
-        "URL": null,
+        "URL": "https://github.com/FlyingKiwis/Nina.DiscordAlert/releases/download/v2.0.0/Discord.Alert.2.0.0.0.zip",
         "Type": "ARCHIVE",
         "Checksum": "025B868AECB4008FEAA829721AEF53DA35F42ACD412EFC842E357E9F0641D4E3",
         "ChecksumType": "SHA256"

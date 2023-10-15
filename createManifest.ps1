@@ -174,6 +174,8 @@ if($createArchive) {
     $checksum = Get-FileHash $file
 }
 
+$installerUrl = "$($repo)/releases/download/v$($manifest["Version"].Major).$($manifest["Version"].Minor).$($manifest["Version"].Patch)/$($zipFile -replace '\s','.')";
+
 ############################################################################################################################################
 # END Create a zip archive if parameter is given and use that checksum instead
 ############################################################################################################################################
