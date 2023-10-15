@@ -4,17 +4,17 @@ using NINA.Core.Utility;
 using NINA.DiscordAlert.Images;
 
 namespace NINA.DiscordAlert.Util {
-    public static class Resources 
+    public static class Factories 
     {
-        public static IDiscordWebhookClient Client { 
+        public static IDiscordWebhookClientFactory DiscordClientFactory { 
             get 
             {
-                if(_client == null) {
+                if(_discordClientFactory == null) {
                     Logger.Debug("Create discord client");
-                    _client = new DiscordWebhookClient(Properties.Settings.Default.DiscordWebhookURL);
+                    _discordClientFactory = new DiscordWebhookClientFactory();
                 }
 
-                return _client;
+                return _discordClientFactory;
             } 
         }
 
@@ -29,21 +29,24 @@ namespace NINA.DiscordAlert.Util {
             }
         }
 
-        public static IImageSaveMonitor ImageSaveMonitor {
-            get 
-            {
-                return _imageSaveMonitor;
+        public static IImageSaveMonitorFactory ImageSaveMonitorFactory {
+            get {
+                if (_imageSaveMonitorFactory == null) {
+                    Logger.Debug("Create failure monitor");
+                    _imageSaveMonitorFactory = new ImageSaveMonitorFactory();
+                }
+
+                return _imageSaveMonitorFactory;
             }
         }
 
-        private static IDiscordWebhookClient _client;
+        private static IDiscordWebhookClientFactory _discordClientFactory;
         private static ISequenceFailureMonitorFactory _failureMonitorFactory;
-        private static IImageSaveMonitor _imageSaveMonitor;
+        private static IImageSaveMonitorFactory _imageSaveMonitorFactory;
 
-
-        public static void SetWebsocketClient(IDiscordWebhookClient client) {
+        public static void SetDiscordClientFactory(IDiscordWebhookClientFactory discordClientFactory) {
             Logger.Debug(string.Empty);
-            _client = client;
+            _discordClientFactory = discordClientFactory;
         }
 
         public static void SetSequenceFailureMonitorFactory(ISequenceFailureMonitorFactory failureMonitor) {
@@ -51,9 +54,9 @@ namespace NINA.DiscordAlert.Util {
             _failureMonitorFactory = failureMonitor;
         }
 
-        public static void SetImageSaveMonitor(IImageSaveMonitor imageSaveMonitor) {
+        public static void SetImageSaveMonitorFactory(IImageSaveMonitorFactory imageSaveMonitorFactory) {
             Logger.Debug(string.Empty);
-            _imageSaveMonitor = imageSaveMonitor;
+            _imageSaveMonitorFactory = imageSaveMonitorFactory;
         }
     }
 }

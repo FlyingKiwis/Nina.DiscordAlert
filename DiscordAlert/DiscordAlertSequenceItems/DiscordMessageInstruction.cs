@@ -9,12 +9,14 @@ using System.Threading.Tasks;
 using NINA.DiscordAlert.DiscordWebhook;
 using NINA.WPF.Base.Interfaces.Mediator;
 using NINA.WPF.Base.Mediator;
+using NINA.DiscordAlert.Images;
+using NINA.DiscordAlert.Util;
 
 namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
     /// <summary>
     /// Sends a discord message when this sequence item is reached
     /// </summary>
-    [ExportMetadata("Name", "Discord message")]
+    [ExportMetadata("Name", "Discord: Send message")]
     [ExportMetadata("Description", "Sends a message to discord")]
     [ExportMetadata("Icon", "Discord_logo_SVG")]
     [ExportMetadata("Category", "Discord Alert")]
@@ -22,9 +24,11 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
     [JsonObject(MemberSerialization.OptIn)]
     public class DiscordMessageInstruction : SequenceItem {
 
+
         [ImportingConstructor]
         public DiscordMessageInstruction() 
         {
+        
         }
         public DiscordMessageInstruction(DiscordMessageInstruction copyMe) : this() {
             CopyMetaData(copyMe);
@@ -32,8 +36,6 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
 
         [JsonProperty]
         public string Text { get; set; }
-
-        private IImageSaveMediator _imageSaveMediator;
 
         public override async Task Execute(IProgress<ApplicationStatus> progress, CancellationToken token) {
             try {

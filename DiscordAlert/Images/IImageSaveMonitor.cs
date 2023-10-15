@@ -2,10 +2,9 @@
 using System;
 
 namespace NINA.DiscordAlert.Images {
-    public interface IImageSaveMonitor 
+    public interface IImageSaveMonitor : IDisposable
     {
-        ImageSavedEventArgs LastImage { get; }
-        event EventHandler<ImageSavedEventArgs> ImageSaved;
-        string ReplacePlaceholders(string textWithPlaceholders, ImageSavedEventArgs image);
+        ISavedImageContainer LastImage { get; }
+        event EventHandler<ISavedImageContainer> ImageSaved;
     }
 }

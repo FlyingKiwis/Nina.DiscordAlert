@@ -4,15 +4,15 @@ using NINA.Sequencer.SequenceItem;
 
 namespace NINA.DiscordAlert.SequenceFailureMonitor {
     public class SequenceFailureMonitorFactory : ISequenceFailureMonitorFactory {
-        public ISequenceFailureMonitor CreateSequenceFailureMonitor(ISequenceRootContainer container) {
+        public ISequenceFailureMonitor Create(ISequenceRootContainer container) {
             return new SequenceFailureMonitor(container);
         }
 
-        public ISequenceFailureMonitor CreateSequenceFailureMonitor(ISequenceItem item) {
+        public ISequenceFailureMonitor Create(ISequenceItem item) {
             return new SequenceFailureMonitor(item);
         }
 
-        public ISequenceFailureMonitor CreateSequenceFailureMonitor(ISequenceEntity item) {
+        public ISequenceFailureMonitor Create(ISequenceEntity item) {
             return new SequenceFailureMonitor(item);
         }
     }

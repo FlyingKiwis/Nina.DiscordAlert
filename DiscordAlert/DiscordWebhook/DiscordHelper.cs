@@ -6,33 +6,28 @@ using System;
 using NINA.Sequencer;
 using NINA.DiscordAlert.Util;
 using NINA.Core.Utility;
+using NINA.DiscordAlert.Images;
 
 namespace NINA.DiscordAlert.DiscordWebhook {
     public class DiscordHelper 
     {
-        public static async Task SendMessage(MessageType type, string message, ISequenceEntity sequenceItem, CancellationToken cancelToken, Exception exception = null) {
+        public static async Task SendMessage(MessageType type, string message, ISequenceEntity sequenceItem, CancellationToken cancelToken, ISavedImageContainer lastSavedImage = null, Exception exception = null) {
 
             Logger.Debug($"Type={type} Message={message} Entity={sequenceItem}");
 
-            var client = Resources.Client;
-            var imageSaveMonitor = Resources.ImageSaveMonitor;
+            var client = Factories.DiscordClientFactory.Create();
 
             if(client == null) {
                 throw new ArgumentNullException("Discord client error");
             }
 
-            if (imageSaveMonitor != null) {
-
-                var image = imageSaveMonitor.LastImage;
-
-                if (image != null) {
-                    message = imageSaveMonitor.ReplacePlaceholders(message, image);
-                    Logger.Debug($"Message converted to={message}");
-                }
+            if (lastSavedImage != null) {
+                message = lastSavedImage.FillPlaceholders(message);
+                Logger.Debug($"Message converted to={message}");
             }
             else
             {
-                Logger.Warning("No image save monitor");
+                Logger.Debug("No image");
             }
 
             var embed = new EmbedBuilder();
@@ -69,6 +64,7 @@ namespace NINA.DiscordAlert.DiscordWebhook {
                 return;
 
             await client.SendSimpleMessageAsync(text: message, embeds: embeds);
+            client.Dispose();
 
             Logger.Debug($"Sent message: {message}");
         }

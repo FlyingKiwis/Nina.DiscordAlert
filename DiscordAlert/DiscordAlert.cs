@@ -1,11 +1,8 @@
 ﻿using NINA.Core.Utility;
 using NINA.DiscordAlert.DiscordWebhook;
-using NINA.DiscordAlert.SequenceFailureMonitor;
-using NINA.DiscordAlert.Images;
 using NINA.DiscordAlert.Util;
 using NINA.Plugin;
 using NINA.Plugin.Interfaces;
-using NINA.WPF.Base.Interfaces.Mediator;
 using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Runtime.CompilerServices;
@@ -20,14 +17,12 @@ namespace NINA.DiscordAlert {
     public class DiscordAlert : PluginBase, INotifyPropertyChanged {
 
         [ImportingConstructor]
-        public DiscordAlert(IImageSaveMediator imageSaveMediator) {
+        public DiscordAlert() {
             if (Settings.Default.UpdateSettings) {
                 Settings.Default.Upgrade();
                 Settings.Default.UpdateSettings = false;
                 CoreUtil.SaveSettings(Settings.Default);
             }
-            var monitor = new ImageSaveMonitor(imageSaveMediator);
-            Resources.SetImageSaveMonitor(monitor);
         }
 
         public override Task Teardown() {
@@ -41,7 +36,6 @@ namespace NINA.DiscordAlert {
             set {
                 Logger.Debug($"Set discord webhook URL={value}");
                 Settings.Default.DiscordWebhookURL = value;
-                Resources.SetWebsocketClient(new DiscordWebhookClient(DiscordWebhookURL));
                 CoreUtil.SaveSettings(Settings.Default);
                 RaisePropertyChanged();
             }

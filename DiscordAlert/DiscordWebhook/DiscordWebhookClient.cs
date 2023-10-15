@@ -27,5 +27,13 @@ namespace NINA.DiscordAlert.DiscordWebhook {
             Logger.Debug(string.Empty);
             await SendMessageAsync(text: text, embeds: embeds);
         }
+
+        public void Dispose() {
+            try {
+                _discordWebhookClient?.Dispose();
+            } catch { 
+                _discordWebhookClient = null;
+            }
+        }
     }
 }
