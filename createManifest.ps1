@@ -1,109 +1,171 @@
+#
+# Set paths
+#
+
 $file = "$env:USERPROFILE\AppData\Local\NINA\Plugins\Discord Alert\Discord Alert.dll";
 $createArchive = 1;
 $includeAll = 1;
+$appendVersionToArchive = 1;
 $repo = "https://github.com/FlyingKiwis/Nina.DiscordAlert";
+$outdir = "Dist/";
 
 Write-Output "Generating manifest from assembly"
 Write-Output $file
 Write-Output "-------------"
 Write-Output "-------------"
 
-$installerType = "DLL"
+############################################################################################################################################
+# START Read Metadata out of assembly
+############################################################################################################################################
 
-$bytes = [System.IO.File]::ReadAllBytes($file)
-$assembly = [Reflection.Assembly]::Load($bytes)
-
-$meta = [reflection.customattributedata]::GetCustomAttributes($assembly)
-$manifest = @{
-    Descriptions = @{}
+$manifest = [ordered]@{
+    Name = ""
+    Identifier = ""
+    Version = @{}
+    Author = ""
+    Homepage = ""
+    Repository = ""
+    License = ""
+    LicenseURL = ""
+    ChangelogURL = ""
+    Tags = @()
+    MinimumApplicationVersion = @{}
+    Descriptions = [ordered]@{
+        ShortDescription = ""
+        LongDescription = ""
+        FeaturedImageURL = ""
+        ScreenshotURL = ""
+        AltScreenshotURL = ""
+    }
+    Installer = @{}
 }
 
-#Read Metadata out of assembly
-foreach($val in $meta) {
-	if($val.AttributeType -like "System.Reflection.AssemblyTitleAttribute") {
-		$manifest["Name"] = $val.ConstructorArguments[0].Value
+$stream = [System.IO.File]::OpenRead($file)
+$peReader = [System.Reflection.PortableExecutable.PEReader]::new($stream, [System.Reflection.PortableExecutable.PEStreamOptions]::LeaveOpen -bor [System.Reflection.PortableExecutable.PEStreamOptions]::PrefetchMetadata)
+$metadataReader = [System.Reflection.Metadata.PEReaderExtensions]::GetMetadataReader($peReader)
+$assemblyDefinition = $metadataReader.GetAssemblyDefinition()
+$assemblyCustomAttributes = $assemblyDefinition.GetCustomAttributes()
+$metadataCustomAttributes = $assemblyCustomAttributes | % {$metadataReader.GetCustomAttribute($_)}
+foreach ($attribute in $metadataCustomAttributes) {
+
+    $ctor = $metadataReader.GetMemberReference([System.Reflection.Metadata.MemberReferenceHandle]$attribute.Constructor)
+    $attrType = $metadataReader.GetTypeReference([System.Reflection.Metadata.TypeReferenceHandle]$ctor.Parent)
+    $attrName = $metadataReader.GetString($attrType.Name)
+    $attrBlob = $metadataReader.GetBlobReader($attribute.Value)
+
+    $attrBlob.ReadSerializedString();
+
+    if($attrName -like "AssemblyTitleAttribute") {
+        $attrVal = $attrBlob.ReadSerializedString()
+		$manifest["Name"] = $attrVal
 	}
-	if($val.AttributeType -like "System.Runtime.InteropServices.GuidAttribute") {
-		$manifest["Identifier"] = $val.ConstructorArguments[0].Value
+	if($attrName -like "GuidAttribute") {
+        $attrVal = $attrBlob.ReadSerializedString()
+		$manifest["Identifier"] = $attrVal
 	}
-	if($val.AttributeType -like "System.Reflection.AssemblyFileVersionAttribute") {
-        $pluginVersion = $val.ConstructorArguments[0].Value.Split(".");
-		$manifest["Version"] = @{
-            Major = $pluginVersion[0]
-            Minor = $pluginVersion[1]
-            Patch = $pluginVersion[2]
-            Build = $pluginVersion[3]
-        }
-	}
-	if($val.AttributeType -like "System.Reflection.AssemblyCompanyAttribute") {
-		$manifest["Author"] = $val.ConstructorArguments[0].Value
-	}
-	if($val.AttributeType -like "System.Reflection.AssemblyMetadataAttribute" -And $val.ConstructorArguments[0].Value -like "Homepage" ) {
-		$manifest["Homepage"] = $val.ConstructorArguments[1].Value
-	}
-	if($val.AttributeType -like "System.Reflection.AssemblyMetadataAttribute" -And $val.ConstructorArguments[0].Value -like "Repository" ) {
-		$manifest["Repository"] = $val.ConstructorArguments[1].Value
-	}
-	if($val.AttributeType -like "System.Reflection.AssemblyMetadataAttribute" -And $val.ConstructorArguments[0].Value -like "License" ) {
-		$manifest["License"] = $val.ConstructorArguments[1].Value
-	}
-	if($val.AttributeType -like "System.Reflection.AssemblyMetadataAttribute" -And $val.ConstructorArguments[0].Value -like "LicenseURL" ) {
-		$manifest["LicenseURL"] = $val.ConstructorArguments[1].Value
-	}
-	if($val.AttributeType -like "System.Reflection.AssemblyMetadataAttribute" -And $val.ConstructorArguments[0].Value -like "ChangelogURL" ) {
-		$manifest["ChangelogURL"] = $val.ConstructorArguments[1].Value
-	}
-	if($val.AttributeType -like "System.Reflection.AssemblyMetadataAttribute" -And $val.ConstructorArguments[0].Value -like "Tags" ) {
-        $manifest["Tags"] = $val.ConstructorArguments[1].Value.Split(",");
-	}
-	if($val.AttributeType -like "System.Reflection.AssemblyMetadataAttribute" -And $val.ConstructorArguments[0].Value -like "MinimumApplicationVersion" ) {
-        $version = $val.ConstructorArguments[1].Value.Split(".");
-		$manifest["MinimumApplicationVersion"] = @{
+	if($attrName -like "AssemblyFileVersionAttribute") {
+        $attrVal = $attrBlob.ReadSerializedString()
+        $version = $attrVal.Split(".")
+		$manifest["Version"] = [ordered]@{
             Major = $version[0]
             Minor = $version[1]
             Patch = $version[2]
             Build = $version[3]
         }
 	}
-	if($val.AttributeType -like "System.Reflection.AssemblyDescriptionAttribute") {
-		$manifest["Descriptions"]["ShortDescription"] = $val.ConstructorArguments[0].Value
+	if($attrName -like "AssemblyCompanyAttribute") {
+        $attrVal = $attrBlob.ReadSerializedString()
+		$manifest["Author"] = $attrVal
 	}
-	if($val.AttributeType -like "System.Reflection.AssemblyMetadataAttribute" -And $val.ConstructorArguments[0].Value -like "LongDescription" ) {
-		$manifest["Descriptions"]["LongDescription"] = $val.ConstructorArguments[1].Value
+	if($attrName -like "AssemblyDescriptionAttribute") {
+        $attrVal = $attrBlob.ReadSerializedString()
+		$manifest["Descriptions"]["ShortDescription"] = $attrVal
 	}
-	if($val.AttributeType -like "System.Reflection.AssemblyMetadataAttribute" -And $val.ConstructorArguments[0].Value -like "FeaturedImageURL" ) {
-		$manifest["Descriptions"]["FeaturedImageURL"] = $val.ConstructorArguments[1].Value
-	}
-	if($val.AttributeType -like "System.Reflection.AssemblyMetadataAttribute" -And $val.ConstructorArguments[0].Value -like "ScreenshotURL" ) {
-		$manifest["Descriptions"]["ScreenshotURL"] = $val.ConstructorArguments[1].Value
-	}
-	if($val.AttributeType -like "System.Reflection.AssemblyMetadataAttribute" -And $val.ConstructorArguments[0].Value -like "AltScreenshotURL" ) {
-		$manifest["Descriptions"]["AltScreenshotURL"] = $val.ConstructorArguments[1].Value
-	}
+
+    if($attrName -like "AssemblyMetadataAttribute") {
+        $attrKey = $attrBlob.ReadSerializedString()
+        $attrVal = $attrBlob.ReadSerializedString()
+
+        if($attrKey -like "Homepage" ) {
+            $manifest["Homepage"] = $attrVal
+        }
+        if($attrKey -like "Repository" ) {
+            $manifest["Repository"] = $attrVal
+        }
+        if($attrKey -like "License" ) {
+            $manifest["License"] = $attrVal
+        }
+        if($attrKey -like "LicenseURL" ) {
+            $manifest["LicenseURL"] = $attrVal
+        }
+        if($attrKey -like "ChangelogURL" ) {
+            $manifest["ChangelogURL"] = $attrVal
+        }
+        if($attrKey -like "Tags" ) {
+            $manifest["Tags"] = $attrVal.Split(",");
+        }
+        if($attrKey -like "MinimumApplicationVersion" ) {
+            $version = $attrVal.Split(".");
+            $manifest["MinimumApplicationVersion"] = [ordered]@{
+                Major = $version[0]
+                Minor = $version[1]
+                Patch = $version[2]
+                Build = $version[3]
+            }
+        }
+        if($attrKey -like "LongDescription" ) {
+            $manifest["Descriptions"]["LongDescription"] = $attrVal
+        }
+        if($attrKey -like "FeaturedImageURL" ) {
+            $manifest["Descriptions"]["FeaturedImageURL"] = $attrVal
+        }
+        if($attrKey -like "ScreenshotURL" ) {
+            $manifest["Descriptions"]["ScreenshotURL"] = $attrVal
+        }
+        if($attrKey -like "AltScreenshotURL" ) {
+            $manifest["Descriptions"]["AltScreenshotURL"] = $attrVal
+        }
+    }
 }
 
-## Create a zip archive if parameter is given and use that checksum instead
+$stream.Close();
+$stream.Dispose();
+
+############################################################################################################################################
+# END Read Metadata out of assembly
+############################################################################################################################################
+
+$installerType = "DLL"
+
+############################################################################################################################################
+# START Create a zip archive if parameter is given and use that checksum instead
+############################################################################################################################################
+
 if($createArchive) {
     Write-Output "Creating zip archive"
     $installerType = "ARCHIVE"
 	
     if(!$archiveName) {
         $archiveName = [io.path]::GetFileNameWithoutExtension($file)
+        if($appendVersionToArchive) {
+            $archiveName = "$($archiveName).$($manifest["Version"].Major).$($manifest["Version"].Minor).$($manifest["Version"].Patch).$($manifest["Version"].Build)"
+            echo "Archive name: $($archiveName)"
+        } 
+        
     }
-    $zipfile = ($archiveName -replace '\s','_') + "-" + $pluginVersion[0] + "." + $pluginVersion[1] + "." + $pluginVersion[2]  + ".zip"
+	$zipfile = $archiveName + ".zip"
 
     if(Test-Path $zipfile) {
         Remove-Item $zipfile
     }
-
 	$compressFiles = $file
 	
 	if($includeAll) {
 		$compressFiles = [System.IO.Path]::GetDirectoryName($file) + "\*"
 	}
 	
-	$zipFilePath = "Dist\" + $zipfile
-    Compress-Archive -Path $compressFiles -Destination $zipFilePath -Force
+	$zipFilePath = $outdir + $zipfile
+    Compress-Archive -Path $compressFiles -Destination $zipFilePath
     Write-Output "-------------"
     Write-Output "-------------"
     $checksum = Get-FileHash $zipFilePath
@@ -112,12 +174,53 @@ if($createArchive) {
     $checksum = Get-FileHash $file
 }
 
-$installerUrl = $repo + "/releases/download/v" + $pluginVersion[0] + "." + $pluginVersion[1] + "." + $pluginVersion[2] + "/" + $zipFile;
+############################################################################################################################################
+# END Create a zip archive if parameter is given and use that checksum instead
+############################################################################################################################################
+
+############################################################################################################################################
+# START Upload to bitbucket
+############################################################################################################################################
+
+#Upload to bitbucket
+if($uploadToBitbucket) {
+    $fileToUpload = $zipfile
+    if([string]::IsNullOrEmpty($zipfile)) {
+        $fileToUpload = $file
+    }
+
+    echo "File to upload: $($fileToUpload)"
+
+    # https://support.atlassian.com/bitbucket-cloud/docs/deploy-build-artifacts-to-bitbucket-downloads/
+    $uri = "https://api.bitbucket.org/2.0/repositories/$($bitbucketRepositoryOwner)/$($bitbucketRepository)/downloads"
+    $installerUrl = "https://bitbucket.org/$($bitbucketRepositoryOwner)/$($bitbucketRepository)/downloads/$($fileToUpload)"
+
+    $pair = ($bitbucketUserName + ':' + $bitbucketPassword)
+    $encodedCreds = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes($pair))
+    $basicAuthValue = ('Basic {0}' -f $encodedCreds)
+    $headers = @{
+      Authorization = $basicAuthValue
+    }
+
+    $Form = @{
+        files = Get-Item -Path $fileToUpload
+    }
+
+    echo "Uploading the file $($fileToUpload) to $($uri)"    
+    Invoke-RestMethod -Method POST -URI $uri -Form $Form -Headers $headers -ContentType "multipart/form-data" -TransferEncoding "chunked"
+    
+}
+
+############################################################################################################################################
+# END Upload to bitbucket
+############################################################################################################################################
 
 
-#Installer property gen
+############################################################################################################################################
+# START Create Installer Property and generate final manifest
+############################################################################################################################################
 
-$manifest["Installer"] = @{
+$manifest["Installer"] = [ordered]@{
     URL = $installerUrl
     Type = $installerType
     Checksum = $checksum.Hash
@@ -140,9 +243,14 @@ function Format-Json([Parameter(Mandatory, ValueFromPipeline)][String] $json) {
         $line
     }) -Join "`n"
 }
+$outManifest = $outdir + "manifest.json"
 $json = ConvertTo-Json $manifest | Format-Json 
-$json | Out-File "Dist\manifest.json" -Encoding Utf8
+$json | Out-File $outManifest -Encoding Utf8
+Write-Output "--------------------------"
+Write-Output "Manifest JSON start"
+Write-Output "--------------------------"
 Write-Output $json
-Write-Output "-------------"
-Write-Output "-------------"
+Write-Output "--------------------------"
+Write-Output "Manifest JSON end"
+Write-Output "--------------------------"
 Write-Output "Manifest JSON created"
