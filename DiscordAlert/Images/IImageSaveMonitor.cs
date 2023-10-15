@@ -1,7 +1,7 @@
 ﻿using NINA.WPF.Base.Interfaces.Mediator;
 using System;
 
-namespace NINA.DiscordAlert.ImageSaveMonitor {
+namespace NINA.DiscordAlert.Images {
     public interface IImageSaveMonitor 
     {
         ImageSavedEventArgs LastImage { get; }

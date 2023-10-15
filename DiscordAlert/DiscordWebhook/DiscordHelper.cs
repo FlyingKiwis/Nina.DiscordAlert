@@ -21,11 +21,18 @@ namespace NINA.DiscordAlert.DiscordWebhook {
                 throw new ArgumentNullException("Discord client error");
             }
 
-            var image = imageSaveMonitor.LastImage;
+            if (imageSaveMonitor != null) {
 
-            if(image != null) {
-                message = imageSaveMonitor.ReplacePlaceholders(message, image);
-                Logger.Debug($"Message converted to={message}");
+                var image = imageSaveMonitor.LastImage;
+
+                if (image != null) {
+                    message = imageSaveMonitor.ReplacePlaceholders(message, image);
+                    Logger.Debug($"Message converted to={message}");
+                }
+            }
+            else
+            {
+                Logger.Warning("No image save monitor");
             }
 
             var embed = new EmbedBuilder();

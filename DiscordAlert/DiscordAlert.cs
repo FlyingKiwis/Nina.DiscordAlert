@@ -1,6 +1,7 @@
 ﻿using NINA.Core.Utility;
 using NINA.DiscordAlert.DiscordWebhook;
 using NINA.DiscordAlert.SequenceFailureMonitor;
+using NINA.DiscordAlert.Images;
 using NINA.DiscordAlert.Util;
 using NINA.Plugin;
 using NINA.Plugin.Interfaces;
@@ -18,8 +19,6 @@ namespace NINA.DiscordAlert {
     [Export(typeof(IPluginManifest))]
     public class DiscordAlert : PluginBase, INotifyPropertyChanged {
 
-        private IImageSaveMediator _imageSaveMediator;
-
         [ImportingConstructor]
         public DiscordAlert(IImageSaveMediator imageSaveMediator) {
             if (Settings.Default.UpdateSettings) {
@@ -27,8 +26,8 @@ namespace NINA.DiscordAlert {
                 Settings.Default.UpdateSettings = false;
                 CoreUtil.SaveSettings(Settings.Default);
             }
-
-            
+            var monitor = new ImageSaveMonitor(imageSaveMediator);
+            Resources.SetImageSaveMonitor(monitor);
         }
 
         public override Task Teardown() {

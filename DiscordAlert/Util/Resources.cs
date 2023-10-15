@@ -1,7 +1,7 @@
 ﻿using NINA.DiscordAlert.DiscordWebhook;
 using NINA.DiscordAlert.SequenceFailureMonitor;
 using NINA.Core.Utility;
-using NINA.DiscordAlert.ImageSaveMonitor;
+using NINA.DiscordAlert.Images;
 
 namespace NINA.DiscordAlert.Util {
     public static class Resources 

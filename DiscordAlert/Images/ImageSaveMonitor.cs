@@ -1,10 +1,9 @@
 ﻿using NINA.Core.Model;
 using NINA.Core.Utility;
-using NINA.Image.ImageData;
 using NINA.WPF.Base.Interfaces.Mediator;
 using System;
 
-namespace NINA.DiscordAlert.ImageSaveMonitor {
+namespace NINA.DiscordAlert.Images {
     public class ImageSaveMonitor : IImageSaveMonitor {
 
         public ImageSavedEventArgs LastImage { get; private set; }
@@ -20,13 +19,14 @@ namespace NINA.DiscordAlert.ImageSaveMonitor {
 
         private void ImageSaveMediator_ImageSaved(object sender, ImageSavedEventArgs e)
         {
-            Logger.Debug($"New image saved={e.PathToImage}");
+            Logger.Debug($"New image saved={e?.PathToImage.ToString() ?? "none"}");
             LastImage = e;
             ImageSaved?.Invoke(sender, e);
         }
 
         public string ReplacePlaceholders(string textWithPlaceholders, ImageSavedEventArgs image) 
         {
+            Logger.Debug($"Replacing placeholders.  Image={image?.PathToImage.ToString() ?? "none"}");
             var patterns = GetImagePatterns(image);
             return patterns.GetImageFileString(textWithPlaceholders);
         }
