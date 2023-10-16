@@ -1,5 +1,4 @@
-﻿using NINA.Core.Enum;
-using NINA.Image.ImageData;
+﻿using NINA.Image.ImageData;
 using NINA.Image.Interfaces;
 using NINA.WPF.Base.Interfaces.Mediator;
 using System;

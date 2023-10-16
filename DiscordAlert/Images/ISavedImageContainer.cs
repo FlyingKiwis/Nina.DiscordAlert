@@ -1,5 +1,4 @@
-﻿using NINA.Core.Enum;
-using NINA.Image.ImageData;
+﻿using NINA.Image.ImageData;
 using NINA.Image.Interfaces;
 using System;
 using System.Windows.Media.Imaging;

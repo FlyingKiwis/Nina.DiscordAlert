@@ -7,10 +7,6 @@ using System.ComponentModel.Composition;
 using System.Threading;
 using System.Threading.Tasks;
 using NINA.DiscordAlert.DiscordWebhook;
-using NINA.WPF.Base.Interfaces.Mediator;
-using NINA.WPF.Base.Mediator;
-using NINA.DiscordAlert.Images;
-using NINA.DiscordAlert.Util;
 
 namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
     /// <summary>

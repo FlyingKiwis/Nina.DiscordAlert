@@ -11,8 +11,6 @@ using System.Threading.Tasks;
 using NINA.DiscordAlert.Util;
 using NINA.DiscordAlert.SequenceFailureMonitor;
 using NINA.DiscordAlert.DiscordWebhook;
-using NINA.DiscordAlert.Images;
-using NINA.WPF.Base.Interfaces.Mediator;
 
 namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
     /// <summary>

@@ -2,7 +2,6 @@
 using NINA.Core.Model;
 using NINA.DiscordAlert.DiscordWebhook;
 using NINA.DiscordAlert.Images;
-using NINA.DiscordAlert.SequenceFailureMonitor;
 using NINA.DiscordAlert.Util;
 using NINA.Sequencer.Container;
 using NINA.Sequencer.SequenceItem;

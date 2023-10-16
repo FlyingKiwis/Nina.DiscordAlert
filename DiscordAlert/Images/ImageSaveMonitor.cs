@@ -1,5 +1,4 @@
-﻿using NINA.Core.Model;
-using NINA.Core.Utility;
+﻿using NINA.Core.Utility;
 using NINA.WPF.Base.Interfaces.Mediator;
 using System;
 

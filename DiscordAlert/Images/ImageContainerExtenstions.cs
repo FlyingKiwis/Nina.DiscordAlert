@@ -1,7 +1,5 @@
 ﻿using NINA.Core.Model;
 using NINA.Core.Utility;
-using NINA.Image.ImageData;
-using NINA.Image.Interfaces;
 using System;
 
 namespace NINA.DiscordAlert.Images {

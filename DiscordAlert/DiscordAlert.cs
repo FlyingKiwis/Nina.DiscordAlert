@@ -1,6 +1,4 @@
 ﻿using NINA.Core.Utility;
-using NINA.DiscordAlert.DiscordWebhook;
-using NINA.DiscordAlert.Util;
 using NINA.Plugin;
 using NINA.Plugin.Interfaces;
 using System.ComponentModel;

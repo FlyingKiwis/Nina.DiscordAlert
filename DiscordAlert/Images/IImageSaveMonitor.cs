@@ -1,5 +1,4 @@
-﻿using NINA.WPF.Base.Interfaces.Mediator;
-using System;
+﻿using System;
 
 namespace NINA.DiscordAlert.Images {
     public interface IImageSaveMonitor : IDisposable

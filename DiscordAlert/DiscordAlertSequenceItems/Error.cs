@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using NINA.Core.Model;
+﻿using NINA.Core.Model;
 using NINA.Sequencer.SequenceItem;
 using System;
 using System.ComponentModel.Composition;
