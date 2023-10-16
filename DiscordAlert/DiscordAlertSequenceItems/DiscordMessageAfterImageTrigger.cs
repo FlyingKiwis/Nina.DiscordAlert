@@ -107,11 +107,14 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
             {
                 if (cancelToken.IsCancellationRequested)
                     return;
+                try {
+                    var render = await RenderImage(e, new PrepareImageParameters(autoStretch: true, detectStars: false));
+                    var image = render.Image.Resize(2560);
 
-                var render = await RenderImage(e, new PrepareImageParameters(autoStretch: true, detectStars: false));
-                var image = render.Image.Resize(2560);
-
-                await DiscordHelper.SendMessage(MessageType.Information, Text, this, cancelToken, e, image);
+                    await DiscordHelper.SendMessage(MessageType.Information, Text, this, cancelToken, e, image);
+                } catch (Exception ex) {
+                    Logger.Error(ex);
+                }
             }
             else {
 

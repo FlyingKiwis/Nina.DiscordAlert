@@ -9,17 +9,16 @@ using NINA.Sequencer;
 using System;
 using NINA.DiscordAlert.SequenceFailureMonitor;
 using NINA.DiscordAlert.DiscordWebhook;
-using NINA.WPF.Base.Interfaces.Mediator;
 
 namespace DiscordAlert.Tests {
     [TestFixture]
-    public class AlertOnErrorTests
+    public class DiscordAlertOnErrorTriggerTests
     {
         [Test]
         public void OnFailureFired_GivenFailedItem_SendsDiscordMessage() {
             var mockFailureFactory = new Mock<ISequenceFailureMonitorFactory>();
             var mockFailure = new Mock<ISequenceFailureMonitor>();
-            mockFailureFactory.Setup(o => o.Create(It.IsAny<ISequenceItem>())).Returns(mockFailure.Object);
+            mockFailureFactory.Setup(o => o.Create(It.IsAny<ISequenceEntity>())).Returns(mockFailure.Object);
             var mockDiscordClientFactory = new Mock<IDiscordWebhookClientFactory>();
             var mockDiscordClient = new Mock<IDiscordWebhookClient>();
             mockDiscordClientFactory.Setup(o => o.Create()).Returns(mockDiscordClient.Object);
@@ -31,7 +30,10 @@ namespace DiscordAlert.Tests {
             mockDiscordClient.Setup(o => o.SendSimpleMessageAsync(It.IsAny<string>(), It.IsAny<IEnumerable<Embed>>()))
                 .Callback((string text, IEnumerable<Embed> embeds) => HandleSendMessage(text, embeds, alertOnError.Text, "Failure Item", "Test exception"));
 
-            mockFailure.Raise(o => o.OnFailure += null, new SequenceFailureEventArgs(mockSequenceEntity.Object, new Exception("Test exception")));            
+            alertOnError.SequenceBlockInitialize();
+            mockFailure.Raise(o => o.OnFailure += null, new SequenceFailureEventArgs(mockSequenceEntity.Object, new Exception("Test exception")));
+
+            mockDiscordClient.Verify(o => o.SendSimpleMessageAsync(It.IsAny<string>(), It.IsAny<IEnumerable<Embed>>()), Times.Once);
         }
 
         [Test]
@@ -50,6 +52,23 @@ namespace DiscordAlert.Tests {
             mockDiscordClient.Setup(o => o.SendSimpleMessageAsync(It.IsAny<string>(), It.IsAny<IEnumerable<Embed>>())).Throws(new Exception("TEST"));
 
             Assert.DoesNotThrow(() => mockFailure.Raise(o => o.OnFailure += null, new SequenceFailureEventArgs(mockSequenceEntity.Object, new Exception("Test exception"))));      
+        }
+
+        [Test]
+        public void SequenceBlockTeardown_MockedFailureMonitor_FailureMonitorIsDisposed() {
+            var mockFailureFactory = new Mock<ISequenceFailureMonitorFactory>();
+            var mockFailure = new Mock<ISequenceFailureMonitor>();
+            mockFailureFactory.Setup(o => o.Create(It.IsAny<ISequenceEntity>())).Returns(mockFailure.Object);
+            var mockDiscordClientFactory = new Mock<IDiscordWebhookClientFactory>();
+            var mockDiscordClient = new Mock<IDiscordWebhookClient>();
+            mockDiscordClientFactory.Setup(o => o.Create()).Returns(mockDiscordClient.Object);
+            Factories.SetSequenceFailureMonitorFactory(mockFailureFactory.Object);
+            var alertOnError = new DiscordAlertOnErrorTrigger();
+
+            alertOnError.SequenceBlockInitialize();
+            alertOnError.SequenceBlockTeardown();
+
+            mockFailure.Verify(o => o.Dispose(), Times.Once);
         }
 
         private void HandleSendMessage(string actualText, IEnumerable<Embed> actualEmbeds, string expectedText, string expectedEntityName, string expectedIssue) 

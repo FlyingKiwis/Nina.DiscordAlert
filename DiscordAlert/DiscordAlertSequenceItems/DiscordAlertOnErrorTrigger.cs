@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using NINA.DiscordAlert.Util;
 using NINA.DiscordAlert.SequenceFailureMonitor;
 using NINA.DiscordAlert.DiscordWebhook;
+using System.Diagnostics.CodeAnalysis;
 
 namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
     /// <summary>
@@ -32,16 +33,6 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
         public string Text { get; set; } = "@everyone";
 
         private ISequenceFailureMonitor _failureMonitor;
-
-        public override object Clone() {
-            return new DiscordAlertOnErrorTrigger() {
-                Icon = Icon,
-                Name = Name,
-                Category = Category,
-                Description = Description,
-                Text = Text
-            };
-        }
 
         private async void FailureMonitor_OnFailure(object sender, SequenceFailureEventArgs e) {
             try {
@@ -77,16 +68,30 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
             base.SequenceBlockTeardown();
         }
 
-        public override string ToString() {
-            return $"Category: {Category}, Item: {nameof(DiscordAlertOnErrorTrigger)}";
+        [ExcludeFromCodeCoverage]
+        public override object Clone() {
+            return new DiscordAlertOnErrorTrigger() {
+                Icon = Icon,
+                Name = Name,
+                Category = Category,
+                Description = Description,
+                Text = Text
+            };
         }
 
+        [ExcludeFromCodeCoverage]
         public override bool ShouldTrigger(ISequenceItem previousItem, ISequenceItem nextItem) {
             return false;
         }
 
+        [ExcludeFromCodeCoverage]
         public override Task Execute(ISequenceContainer context, IProgress<ApplicationStatus> progress, CancellationToken token) {
             return Task.CompletedTask;
+        }
+
+        [ExcludeFromCodeCoverage]
+        public override string ToString() {
+            return $"Category: {Category}, Item: {nameof(DiscordAlertOnErrorTrigger)}";
         }
     }
 }
