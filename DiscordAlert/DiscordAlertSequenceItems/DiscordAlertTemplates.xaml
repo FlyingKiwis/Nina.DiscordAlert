@@ -60,4 +60,20 @@
             </nina:SequenceBlockView.SequenceItemContent>
         </nina:SequenceBlockView>
     </DataTemplate>
+
+    <DataTemplate DataType="{x:Type local:DiscordMessageAfterImageTrigger}">
+        <nina:SequenceBlockView>
+            <nina:SequenceBlockView.SequenceItemContent>
+                <DockPanel LastChildFill="True">
+                    <TextBlock DockPanel.Dock="Left" VerticalAlignment="Center" Text="Message" />
+                    <TextBox
+                    DockPanel.Dock="Left"
+                    MinWidth="40"
+                    Margin="5,0,0,0"
+                    Text="{Binding Text}"
+                    TextAlignment="Left" />
+                </DockPanel>
+            </nina:SequenceBlockView.SequenceItemContent>
+        </nina:SequenceBlockView>
+    </DataTemplate>
 </ResourceDictionary>

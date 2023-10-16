@@ -20,12 +20,35 @@ namespace NINA.DiscordAlert.DiscordWebhook {
 
         public async Task SendMessageAsync(string text = null, bool isTTS = false, IEnumerable<Embed> embeds = null, string username = null, string avatarUrl = null, RequestOptions options = null, AllowedMentions allowedMentions = null, MessageComponent components = null, MessageFlags flags = MessageFlags.None, ulong? threadId = null) {
             Logger.Debug(string.Empty);
-            await _discordWebhookClient.SendMessageAsync(text, isTTS, embeds, username, avatarUrl, options, allowedMentions, components, flags, threadId);
+            try {
+                await _discordWebhookClient.SendMessageAsync(text, isTTS, embeds, username, avatarUrl, options, allowedMentions, components, flags, threadId);
+            }
+            catch (Exception ex) {
+                Logger.Error($"Failed to send message", ex);
+            }
         }
 
         public async Task SendSimpleMessageAsync(string text = null, IEnumerable<Embed> embeds = null) {
             Logger.Debug(string.Empty);
             await SendMessageAsync(text: text, embeds: embeds);
+        }
+
+        public void Dispose() {
+            try {
+                _discordWebhookClient?.Dispose();
+            } catch { 
+                _discordWebhookClient = null;
+            }
+        }
+
+        public async Task SendFileAsync(string filename, string text = null, IEnumerable<Embed> embeds = null) {
+            Logger.Debug(string.Empty);
+            try {
+                await _discordWebhookClient.SendFileAsync(filePath: filename, text: text, embeds: embeds);
+            }
+            catch (Exception ex) {
+                Logger.Error($"Failed to send message", ex);
+            }
         }
     }
 }

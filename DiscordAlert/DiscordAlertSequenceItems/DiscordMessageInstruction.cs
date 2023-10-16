@@ -12,7 +12,7 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
     /// <summary>
     /// Sends a discord message when this sequence item is reached
     /// </summary>
-    [ExportMetadata("Name", "Discord message")]
+    [ExportMetadata("Name", "Discord: Send message")]
     [ExportMetadata("Description", "Sends a message to discord")]
     [ExportMetadata("Icon", "Discord_logo_SVG")]
     [ExportMetadata("Category", "Discord Alert")]
@@ -20,8 +20,11 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
     [JsonObject(MemberSerialization.OptIn)]
     public class DiscordMessageInstruction : SequenceItem {
 
+
         [ImportingConstructor]
-        public DiscordMessageInstruction() {
+        public DiscordMessageInstruction() 
+        {
+        
         }
         public DiscordMessageInstruction(DiscordMessageInstruction copyMe) : this() {
             CopyMetaData(copyMe);
@@ -32,6 +35,7 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
 
         public override async Task Execute(IProgress<ApplicationStatus> progress, CancellationToken token) {
             try {
+                
                 Logger.Debug($"Sending Message - Text={Text}  Entity={this}");
                 await DiscordHelper.SendMessage(MessageType.Information, Text, this, token);
             } catch (Exception ex) {

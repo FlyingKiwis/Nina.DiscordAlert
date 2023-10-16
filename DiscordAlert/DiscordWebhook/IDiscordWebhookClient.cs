@@ -1,15 +1,15 @@
 ﻿using Discord;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace NINA.DiscordAlert.DiscordWebhook {
-    public interface IDiscordWebhookClient 
+    public interface IDiscordWebhookClient : IDisposable
     {
         Task SendMessageAsync(string text = null, bool isTTS = false, IEnumerable<Embed> embeds = null, string username = null, string avatarUrl = null, RequestOptions options = null, AllowedMentions allowedMentions = null, MessageComponent components = null, MessageFlags flags = MessageFlags.None, ulong? threadId = null);
 
         Task SendSimpleMessageAsync(string text = null, IEnumerable<Embed> embeds = null);
+
+        Task SendFileAsync(string filename, string text = null, IEnumerable<Embed> embeds = null);
     }
 }

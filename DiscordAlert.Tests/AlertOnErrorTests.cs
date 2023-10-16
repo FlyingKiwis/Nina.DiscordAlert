@@ -2,21 +2,16 @@
 using Moq;
 using NINA.Sequencer.SequenceItem;
 using NINA.DiscordAlert.DiscordAlertSequenceItems;
-using NINA.Sequencer.Container;
-using NINA.Core.Model;
-using System.Threading;
 using NINA.DiscordAlert.Util;
 using System.Collections.Generic;
 using Discord;
-using System.Threading.Tasks;
 using NINA.Sequencer;
-using NINA.Sequencer.Utility;
 using System;
 using NINA.DiscordAlert.SequenceFailureMonitor;
 using NINA.DiscordAlert.DiscordWebhook;
+using NINA.WPF.Base.Interfaces.Mediator;
 
-namespace DiscordAlert.Tests
-{
+namespace DiscordAlert.Tests {
     [TestFixture]
     public class AlertOnErrorTests
     {
@@ -24,10 +19,12 @@ namespace DiscordAlert.Tests
         public void OnFailureFired_GivenFailedItem_SendsDiscordMessage() {
             var mockFailureFactory = new Mock<ISequenceFailureMonitorFactory>();
             var mockFailure = new Mock<ISequenceFailureMonitor>();
-            mockFailureFactory.Setup(o => o.CreateSequenceFailureMonitor(It.IsAny<ISequenceItem>())).Returns(mockFailure.Object);
+            mockFailureFactory.Setup(o => o.Create(It.IsAny<ISequenceItem>())).Returns(mockFailure.Object);
+            var mockDiscordClientFactory = new Mock<IDiscordWebhookClientFactory>();
             var mockDiscordClient = new Mock<IDiscordWebhookClient>();
-            Resources.SetWebsocketClient(mockDiscordClient.Object);
-            Resources.SetSequenceFailureMonitorFactory(mockFailureFactory.Object);
+            mockDiscordClientFactory.Setup(o => o.Create()).Returns(mockDiscordClient.Object);
+            Factories.SetDiscordClientFactory(mockDiscordClientFactory.Object);
+            Factories.SetSequenceFailureMonitorFactory(mockFailureFactory.Object);
             var alertOnError = new DiscordAlertOnErrorTrigger();
             var mockSequenceEntity = new Mock<ISequenceEntity>();
             mockSequenceEntity.Setup(o => o.Name).Returns("Failure Item");
@@ -41,10 +38,12 @@ namespace DiscordAlert.Tests
         public void OnFailureFired_DiscordException_Handled() {
             var mockFailureFactory = new Mock<ISequenceFailureMonitorFactory>();
             var mockFailure = new Mock<ISequenceFailureMonitor>();
-            mockFailureFactory.Setup(o => o.CreateSequenceFailureMonitor(It.IsAny<ISequenceItem>())).Returns(mockFailure.Object);
+            mockFailureFactory.Setup(o => o.Create(It.IsAny<ISequenceItem>())).Returns(mockFailure.Object);
+            var mockDiscordClientFactory = new Mock<IDiscordWebhookClientFactory>();
             var mockDiscordClient = new Mock<IDiscordWebhookClient>();
-            Resources.SetWebsocketClient(mockDiscordClient.Object);
-            Resources.SetSequenceFailureMonitorFactory(mockFailureFactory.Object);
+            mockDiscordClientFactory.Setup(o => o.Create()).Returns(mockDiscordClient.Object);
+            Factories.SetDiscordClientFactory(mockDiscordClientFactory.Object);
+            Factories.SetSequenceFailureMonitorFactory(mockFailureFactory.Object);
             var alertOnError = new DiscordAlertOnErrorTrigger();
             var mockSequenceEntity = new Mock<ISequenceEntity>();
             mockSequenceEntity.Setup(o => o.Name).Returns("Failure Item");

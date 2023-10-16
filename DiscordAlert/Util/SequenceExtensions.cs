@@ -1,6 +1,5 @@
 ﻿using NINA.Sequencer;
 using NINA.Sequencer.Container;
-using NINA.Sequencer.SequenceItem;
 
 namespace NINA.DiscordAlert.Util {
     public static class SequenceExtensions {

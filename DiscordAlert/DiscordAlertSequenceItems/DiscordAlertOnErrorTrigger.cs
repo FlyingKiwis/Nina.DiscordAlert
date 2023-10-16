@@ -16,7 +16,7 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
     /// <summary>
     /// This is a trigger action that can be used in a sequence to send a discord message after an error occurs during the sequence
     /// </summary>
-    [ExportMetadata("Name", "Send after failure")]
+    [ExportMetadata("Name", "Discord: Send after failure")]
     [ExportMetadata("Description", "Sends a message to discord after a failure occurs")]
     [ExportMetadata("Icon", "Discord_logo_SVG")]
     [ExportMetadata("Category", "Discord Alert")]
@@ -26,7 +26,6 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
 
         [ImportingConstructor]
         public DiscordAlertOnErrorTrigger() {
-
         }
 
         [JsonProperty]
@@ -47,7 +46,7 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
         private async void FailureMonitor_OnFailure(object sender, SequenceFailureEventArgs e) {
             try {
                 Logger.Debug($"Entity={e.Entity} Exception={e.Exception}");
-                await DiscordHelper.SendMessage(MessageType.Error, Text, e.Entity, CancellationToken.None, e.Exception);
+                await DiscordHelper.SendMessage(MessageType.Error, Text, e.Entity, CancellationToken.None, exception: e.Exception);
             } catch (Exception ex) {
                 Logger.Error(ex);
             }
@@ -55,7 +54,7 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
 
         public override void SequenceBlockInitialize() {
             
-            _failureMonitor = Resources.SequenceFailureMonitorFactory.CreateSequenceFailureMonitor(this);
+            _failureMonitor = Factories.SequenceFailureMonitorFactory.Create(this);
             if (_failureMonitor != null) {
                 _failureMonitor.OnFailure += FailureMonitor_OnFailure;
                 Logger.Info("Attached Failure Monitor");

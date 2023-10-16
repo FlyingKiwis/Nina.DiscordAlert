@@ -5,10 +5,10 @@ using NINA.Sequencer.SequenceItem;
 namespace NINA.DiscordAlert.SequenceFailureMonitor {
     public interface ISequenceFailureMonitorFactory 
     {
-        ISequenceFailureMonitor CreateSequenceFailureMonitor(ISequenceRootContainer container);
+        ISequenceFailureMonitor Create(ISequenceRootContainer container);
 
-        ISequenceFailureMonitor CreateSequenceFailureMonitor(ISequenceItem item);
+        ISequenceFailureMonitor Create(ISequenceItem item);
 
-        ISequenceFailureMonitor CreateSequenceFailureMonitor(ISequenceEntity item);
+        ISequenceFailureMonitor Create(ISequenceEntity item);
     }
 }
