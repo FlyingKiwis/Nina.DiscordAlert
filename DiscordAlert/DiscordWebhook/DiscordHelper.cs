@@ -7,11 +7,14 @@ using NINA.Sequencer;
 using NINA.DiscordAlert.Util;
 using NINA.Core.Utility;
 using NINA.DiscordAlert.Images;
+using System.Windows.Media.Imaging;
+using System.IO;
+using Google.Protobuf.WellKnownTypes;
 
 namespace NINA.DiscordAlert.DiscordWebhook {
     public class DiscordHelper 
     {
-        public static async Task SendMessage(MessageType type, string message, ISequenceEntity sequenceItem, CancellationToken cancelToken, ISavedImageContainer lastSavedImage = null, Exception exception = null) {
+        public static async Task SendMessage(MessageType type, string message, ISequenceEntity sequenceItem, CancellationToken cancelToken, ISavedImageContainer lastSavedImage = null, BitmapSource attachedImage = null, Exception exception = null) {
 
             Logger.Debug($"Type={type} Message={message} Entity={sequenceItem}");
 
@@ -21,16 +24,15 @@ namespace NINA.DiscordAlert.DiscordWebhook {
                 throw new ArgumentNullException("Discord client error");
             }
 
+            var embed = new EmbedBuilder();
+
             if (lastSavedImage != null) {
                 message = lastSavedImage.FillPlaceholders(message);
                 Logger.Debug($"Message converted to={message}");
-            }
-            else
-            {
+
+            } else {
                 Logger.Debug("No image");
             }
-
-            var embed = new EmbedBuilder();
 
             var target = sequenceItem.TargetContainer();
             if (target?.Target?.TargetName != null) {
@@ -57,13 +59,25 @@ namespace NINA.DiscordAlert.DiscordWebhook {
                 }
                 embed.AddField("Issues", string.Join("\n\n", issues));
             }
-
-            var embeds = new List<Embed> { embed.Build() };
+            
+            embed.Timestamp = DateTime.UtcNow;
 
             if (cancelToken.IsCancellationRequested)
                 return;
 
-            await client.SendSimpleMessageAsync(text: message, embeds: embeds);
+            if (attachedImage != null) {
+                using (var tempFile = new TemporaryImageFile(attachedImage)) 
+                {
+                    embed.ImageUrl = $"attachment://{Path.GetFileName(tempFile.Filename)}";
+                    var embeds = new List<Embed> { embed.Build() };
+                    await client.SendFileAsync(tempFile.Filename, text: message, embeds: embeds);
+                }
+            }
+            else 
+            {
+                var embeds = new List<Embed> { embed.Build() };
+                await client.SendSimpleMessageAsync(text: message, embeds: embeds);
+            }
             client.Dispose();
 
             Logger.Debug($"Sent message: {message}");

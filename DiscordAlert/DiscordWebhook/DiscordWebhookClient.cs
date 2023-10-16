@@ -35,5 +35,10 @@ namespace NINA.DiscordAlert.DiscordWebhook {
                 _discordWebhookClient = null;
             }
         }
+
+        public async Task SendFileAsync(string filename, string text = null, IEnumerable<Embed> embeds = null) {
+            Logger.Debug(string.Empty);
+            await _discordWebhookClient.SendFileAsync(filePath: filename, text: text, embeds:embeds);
+        }
     }
 }

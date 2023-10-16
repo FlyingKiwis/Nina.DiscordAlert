@@ -16,6 +16,8 @@ using NINA.Image.Interfaces;
 using NINA.Core.Utility;
 using NINA.Sequencer.Interfaces;
 using System.Collections.Concurrent;
+using NINA.Equipment.Interfaces.Mediator;
+using NINA.Profile.Interfaces;
 
 namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
     /// <summary>
@@ -28,24 +30,28 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
     [Export(typeof(ISequenceTrigger))]
     [JsonObject(MemberSerialization.OptIn)]
     public class DiscordMessageAfterImageTrigger : SequenceTrigger {
-        private readonly IImageSaveMediator _imgageMediator;
+        private readonly IImageSaveMediator _imageSaveMediator;
         private readonly IImageDataFactory _imageDataFactory;
+        private readonly IImagingMediator _imagingMediator;
+        private readonly IProfileService _profileService;
         private readonly IImageSaveMonitor _imageMonitor;
         private readonly ConcurrentQueue<CancellationToken> _triggerQueue = new ConcurrentQueue<CancellationToken>();
         private bool _enabled = false;
 
         [ImportingConstructor]
-        public DiscordMessageAfterImageTrigger(IImageSaveMediator imageSaveMediator, IImageDataFactory imageDataFactory) {
-            _imgageMediator = imageSaveMediator;
+        public DiscordMessageAfterImageTrigger(IImageSaveMediator imageSaveMediator, IImagingMediator imagingMediator, IImageDataFactory imageDataFactory, IProfileService profileService) {
+            _imageSaveMediator = imageSaveMediator;
             _imageDataFactory = imageDataFactory;
-            _imageMonitor = Factories.ImageSaveMonitorFactory.Create(_imgageMediator);
+            _imagingMediator = imagingMediator;
+            _profileService = profileService;
+            _imageMonitor = Factories.ImageSaveMonitorFactory.Create(_imageSaveMediator);
         }
 
         [JsonProperty]
         public string Text { get; set; } = "";
 
         public override object Clone() {
-            return new DiscordMessageAfterImageTrigger(_imgageMediator, _imageDataFactory) {
+            return new DiscordMessageAfterImageTrigger(_imageSaveMediator, _imagingMediator, _imageDataFactory, _profileService) {
                 Icon = Icon,
                 Name = Name,
                 Category = Category,
@@ -103,7 +109,10 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
                 if (cancelToken.IsCancellationRequested)
                     return;
 
-                await DiscordHelper.SendMessage(MessageType.Information, Text, this, cancelToken, e);
+                var render = await RenderImage(e, new PrepareImageParameters(autoStretch: true, detectStars: false));
+                var image = render.Image.Resize(2560);
+
+                await DiscordHelper.SendMessage(MessageType.Information, Text, this, cancelToken, e, image);
             }
             else {
 
@@ -113,6 +122,18 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
                     _imageMonitor.ImageSaved -= ImageMonitor_ImageSaved;
                 }
             }
+        }
+
+        public async Task<IRenderedImage> RenderImage(ISavedImageContainer image, PrepareImageParameters imageParameters) {
+            if (image == null) {
+                throw new ArgumentNullException(nameof(image));
+            }
+
+            var imageData = await _imageDataFactory.CreateFromFile(image.PathToImage.AbsolutePath, (int)_profileService.ActiveProfile.CameraSettings.BitDepth, image.IsBayered, _profileService.ActiveProfile.CameraSettings.RawConverter);
+            imageData.SetImageStatistics(image.Statistics);
+            imageData.StarDetectionAnalysis = image.StarDetectionAnalysis;
+            var rendered = await _imagingMediator.PrepareImage(imageData, imageParameters, CancellationToken.None);
+            return rendered;
         }
     }
 }
