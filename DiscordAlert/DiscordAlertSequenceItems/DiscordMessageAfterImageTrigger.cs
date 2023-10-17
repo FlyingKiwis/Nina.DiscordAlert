@@ -17,6 +17,7 @@ using NINA.Sequencer.Interfaces;
 using System.Collections.Concurrent;
 using NINA.Equipment.Interfaces.Mediator;
 using NINA.Profile.Interfaces;
+using System.Diagnostics.CodeAnalysis;
 
 namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
     /// <summary>
@@ -33,8 +34,7 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
         private readonly IImageDataFactory _imageDataFactory;
         private readonly IImagingMediator _imagingMediator;
         private readonly IProfileService _profileService;
-        private readonly IImageSaveMonitor _imageMonitor;
-        private readonly ConcurrentQueue<CancellationToken> _triggerQueue = new ConcurrentQueue<CancellationToken>();
+        private readonly ConcurrentQueue<ExecuteDetails> _triggerQueue = new ConcurrentQueue<ExecuteDetails>();
         private bool _enabled = false;
 
         [ImportingConstructor]
@@ -43,38 +43,24 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
             _imageDataFactory = imageDataFactory;
             _imagingMediator = imagingMediator;
             _profileService = profileService;
-            _imageMonitor = Factories.ImageSaveMonitorFactory.Create(_imageSaveMediator);
         }
 
         [JsonProperty]
         public string Text { get; set; } = "";
 
-        public override object Clone() {
-            return new DiscordMessageAfterImageTrigger(_imageSaveMediator, _imagingMediator, _imageDataFactory, _profileService) {
-                Icon = Icon,
-                Name = Name,
-                Category = Category,
-                Description = Description,
-                Text = Text
-            };
-        }
-
         public override void SequenceBlockInitialize() {
             Logger.Debug(string.Empty);
 
-            _imageMonitor.ImageSaved -= ImageMonitor_ImageSaved;
-            _imageMonitor.ImageSaved += ImageMonitor_ImageSaved;
+            _imageSaveMediator.ImageSaved -= ImageMonitor_ImageSaved;
+            _imageSaveMediator.ImageSaved += ImageMonitor_ImageSaved;
             base.SequenceBlockInitialize();
         }
 
+        [ExcludeFromCodeCoverage]
         public override void SequenceBlockTeardown() {
             Logger.Debug(string.Empty);
             _enabled = false;
             base.SequenceBlockTeardown();
-        }
-
-        public override string ToString() {
-            return $"Category: {Category}, Item: {nameof(DiscordMessageAfterImageTrigger)}";
         }
 
         public override bool ShouldTrigger(ISequenceItem previousItem, ISequenceItem nextItem) 
@@ -89,53 +75,58 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
         }
 
         public override async Task Execute(ISequenceContainer context, IProgress<ApplicationStatus> progress, CancellationToken token) {
-            try {
-
-                Logger.Debug(string.Empty);
-                if (_enabled) {
-                    _triggerQueue.Enqueue(token);
-                }
-            }
-            catch (Exception ex) {
-                Logger.Error(ex);
+            Logger.Debug(string.Empty);
+            if (_enabled) {
+                _triggerQueue.Enqueue(new ExecuteDetails(context, progress, token));
             }
         }
 
-        private async void ImageMonitor_ImageSaved(object sender, ISavedImageContainer e) 
+        private async void ImageMonitor_ImageSaved(object sender, ImageSavedEventArgs e) 
         {
-            if(_triggerQueue.TryDequeue(out var cancelToken)) 
+            if(_triggerQueue.TryDequeue(out var executeDetails)) 
             {
-                if (cancelToken.IsCancellationRequested)
+                if (executeDetails.Token.IsCancellationRequested)
                     return;
                 try {
-                    var render = await RenderImage(e, new PrepareImageParameters(autoStretch: true, detectStars: false));
+                    var render = await RenderImage(e.ToContainer(), new PrepareImageParameters(autoStretch: true, detectStars: false));
                     var image = render.Image.Resize(2560);
 
-                    await DiscordHelper.SendMessage(MessageType.Information, Text, this, cancelToken, e, image);
+                    await Helpers.Discord.SendMessage(MessageType.Information, Text, executeDetails.Context, executeDetails.Token, e.ToContainer(), image);
                 } catch (Exception ex) {
                     Logger.Error(ex);
                 }
             }
-            else {
-
+            else 
+            {
                 if(!_enabled) 
                 {
-                    Logger.Debug("Disposed");
-                    _imageMonitor.ImageSaved -= ImageMonitor_ImageSaved;
+                    _imageSaveMediator.ImageSaved -= ImageMonitor_ImageSaved;
                 }
             }
         }
 
-        public async Task<IRenderedImage> RenderImage(ISavedImageContainer image, PrepareImageParameters imageParameters) {
-            if (image == null) {
-                throw new ArgumentNullException(nameof(image));
-            }
-
+        private async Task<IRenderedImage> RenderImage(ISavedImageContainer image, PrepareImageParameters imageParameters) {
             var imageData = await _imageDataFactory.CreateFromFile(image.PathToImage.AbsolutePath, (int)_profileService.ActiveProfile.CameraSettings.BitDepth, image.IsBayered, _profileService.ActiveProfile.CameraSettings.RawConverter);
             imageData.SetImageStatistics(image.Statistics);
             imageData.StarDetectionAnalysis = image.StarDetectionAnalysis;
             var rendered = await _imagingMediator.PrepareImage(imageData, imageParameters, CancellationToken.None);
             return rendered;
+        }
+
+        [ExcludeFromCodeCoverage]
+        public override object Clone() {
+            return new DiscordMessageAfterImageTrigger(_imageSaveMediator, _imagingMediator, _imageDataFactory, _profileService) {
+                Icon = Icon,
+                Name = Name,
+                Category = Category,
+                Description = Description,
+                Text = Text
+            };
+        }
+
+        [ExcludeFromCodeCoverage]
+        public override string ToString() {
+            return $"Category: {Category}, Item: {nameof(DiscordMessageAfterImageTrigger)}";
         }
     }
 }

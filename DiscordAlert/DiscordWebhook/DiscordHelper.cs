@@ -11,8 +11,8 @@ using System.Windows.Media.Imaging;
 using System.IO;
 
 namespace NINA.DiscordAlert.DiscordWebhook {
-    public class DiscordHelper {
-        public static async Task SendMessage(MessageType type, string message, ISequenceEntity sequenceItem, CancellationToken cancelToken, ISavedImageContainer lastSavedImage = null, BitmapSource attachedImage = null, Exception exception = null) {
+    public class DiscordHelper : IDiscordHelper {
+        public async Task SendMessage(MessageType type, string message, ISequenceEntity sequenceItem, CancellationToken cancelToken, ISavedImageContainer lastSavedImage = null, BitmapSource attachedImage = null, Exception exception = null) {
 
             Logger.Debug($"Type={type} Message={message} Entity={sequenceItem}");
 
@@ -71,7 +71,7 @@ namespace NINA.DiscordAlert.DiscordWebhook {
                 }
             } else {
                 var embeds = new List<Embed> { embed.Build() };
-                await client.SendSimpleMessageAsync(text: message, embeds: embeds);
+                await client.SendMessageAsync(text: message, embeds: embeds);
             }
             client.Dispose();
 

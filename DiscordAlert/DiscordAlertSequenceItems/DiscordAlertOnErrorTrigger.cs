@@ -37,7 +37,7 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
         private async void FailureMonitor_OnFailure(object sender, SequenceFailureEventArgs e) {
             try {
                 Logger.Debug($"Entity={e.Entity} Exception={e.Exception}");
-                await DiscordHelper.SendMessage(MessageType.Error, Text, e.Entity, CancellationToken.None, exception: e.Exception);
+                await Helpers.Discord.SendMessage(MessageType.Error, Text, e.Entity, CancellationToken.None, exception: e.Exception);
             } catch (Exception ex) {
                 Logger.Error(ex);
             }

@@ -23,7 +23,7 @@ namespace NINA.DiscordAlert.Images {
             IsBayered = isBayered;
         }
 
-        public SavedImageContainer(ImageSavedEventArgs args) 
+        public SavedImageContainer(WPF.Base.Interfaces.Mediator.ImageSavedEventArgs args) 
         {
             MetaData = args.MetaData;
             Image = args.Image;

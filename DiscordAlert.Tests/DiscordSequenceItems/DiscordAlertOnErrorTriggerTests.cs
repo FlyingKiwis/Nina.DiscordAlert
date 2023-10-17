@@ -9,6 +9,10 @@ using NINA.Sequencer;
 using System;
 using NINA.DiscordAlert.SequenceFailureMonitor;
 using NINA.DiscordAlert.DiscordWebhook;
+using MessageType = NINA.DiscordAlert.DiscordWebhook.MessageType;
+using System.Threading;
+using NINA.DiscordAlert.Images;
+using System.Windows.Media.Imaging;
 
 namespace DiscordAlert.Tests {
     [TestFixture]
@@ -19,21 +23,19 @@ namespace DiscordAlert.Tests {
             var mockFailureFactory = new Mock<ISequenceFailureMonitorFactory>();
             var mockFailure = new Mock<ISequenceFailureMonitor>();
             mockFailureFactory.Setup(o => o.Create(It.IsAny<ISequenceEntity>())).Returns(mockFailure.Object);
-            var mockDiscordClientFactory = new Mock<IDiscordWebhookClientFactory>();
-            var mockDiscordClient = new Mock<IDiscordWebhookClient>();
-            mockDiscordClientFactory.Setup(o => o.Create()).Returns(mockDiscordClient.Object);
-            Factories.SetDiscordClientFactory(mockDiscordClientFactory.Object);
             Factories.SetSequenceFailureMonitorFactory(mockFailureFactory.Object);
+            var mockDiscordHelper = new Mock<IDiscordHelper>();
+            Helpers.SetDiscordHelper(mockDiscordHelper.Object);
             var alertOnError = new DiscordAlertOnErrorTrigger();
             var mockSequenceEntity = new Mock<ISequenceEntity>();
             mockSequenceEntity.Setup(o => o.Name).Returns("Failure Item");
-            mockDiscordClient.Setup(o => o.SendSimpleMessageAsync(It.IsAny<string>(), It.IsAny<IEnumerable<Embed>>()))
-                .Callback((string text, IEnumerable<Embed> embeds) => HandleSendMessage(text, embeds, alertOnError.Text, "Failure Item", "Test exception"));
+
+            var exception = new Exception("Test exception");
 
             alertOnError.SequenceBlockInitialize();
-            mockFailure.Raise(o => o.OnFailure += null, new SequenceFailureEventArgs(mockSequenceEntity.Object, new Exception("Test exception")));
+            mockFailure.Raise(o => o.OnFailure += null, new SequenceFailureEventArgs(mockSequenceEntity.Object, exception));
 
-            mockDiscordClient.Verify(o => o.SendSimpleMessageAsync(It.IsAny<string>(), It.IsAny<IEnumerable<Embed>>()), Times.Once);
+            mockDiscordHelper.Verify(o => o.SendMessage(MessageType.Error, It.IsAny<string>(), mockSequenceEntity.Object, It.IsAny<CancellationToken>(), null, null, exception), Times.Once);
         }
 
         [Test]
@@ -44,12 +46,13 @@ namespace DiscordAlert.Tests {
             var mockDiscordClientFactory = new Mock<IDiscordWebhookClientFactory>();
             var mockDiscordClient = new Mock<IDiscordWebhookClient>();
             mockDiscordClientFactory.Setup(o => o.Create()).Returns(mockDiscordClient.Object);
-            Factories.SetDiscordClientFactory(mockDiscordClientFactory.Object);
             Factories.SetSequenceFailureMonitorFactory(mockFailureFactory.Object);
+            var mockDiscordHelper = new Mock<IDiscordHelper>();
+            Helpers.SetDiscordHelper(mockDiscordHelper.Object);
             var alertOnError = new DiscordAlertOnErrorTrigger();
             var mockSequenceEntity = new Mock<ISequenceEntity>();
             mockSequenceEntity.Setup(o => o.Name).Returns("Failure Item");
-            mockDiscordClient.Setup(o => o.SendSimpleMessageAsync(It.IsAny<string>(), It.IsAny<IEnumerable<Embed>>())).Throws(new Exception("TEST"));
+            mockDiscordHelper.Setup(o => o.SendMessage(It.IsAny<MessageType>(), It.IsAny<string>(), It.IsAny<ISequenceEntity>(), It.IsAny<CancellationToken>(), It.IsAny<ISavedImageContainer>(), It.IsAny<BitmapSource>(), It.IsAny<Exception>())).Throws(new Exception("TEST"));
 
             Assert.DoesNotThrow(() => mockFailure.Raise(o => o.OnFailure += null, new SequenceFailureEventArgs(mockSequenceEntity.Object, new Exception("Test exception"))));      
         }
@@ -71,28 +74,5 @@ namespace DiscordAlert.Tests {
             mockFailure.Verify(o => o.Dispose(), Times.Once);
         }
 
-        private void HandleSendMessage(string actualText, IEnumerable<Embed> actualEmbeds, string expectedText, string expectedEntityName, string expectedIssue) 
-        {
-            Assert.AreEqual(expectedText, actualText);
-
-            var fieldMatches = 0;
-            foreach (var embed in actualEmbeds) {
-                foreach (var field in embed.Fields) {
-                    if (field.Name == "Failing Step") {
-                        Assert.AreEqual(expectedEntityName, field.Value);
-                        fieldMatches++;
-                    }
-
-                    if(field.Name == "Issues") {
-                        Assert.IsTrue(field.Value.Contains(expectedIssue));
-                        fieldMatches++;
-                    }
-                }
-            }
-
-            if(fieldMatches != 2) {
-                Assert.Fail("Not all expected fields were in the embed");
-            }
-        }
     }
 }

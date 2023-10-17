@@ -7,6 +7,7 @@ using System.ComponentModel.Composition;
 using System.Threading;
 using System.Threading.Tasks;
 using NINA.DiscordAlert.DiscordWebhook;
+using NINA.DiscordAlert.Util;
 
 namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
     /// <summary>
@@ -37,7 +38,7 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
             try {
                 
                 Logger.Debug($"Sending Message - Text={Text}  Entity={this}");
-                await DiscordHelper.SendMessage(MessageType.Information, Text, this, token);
+                await Helpers.Discord.SendMessage(MessageType.Information, Text, this, token);
             } catch (Exception ex) {
                 Logger.Error(ex);
             }

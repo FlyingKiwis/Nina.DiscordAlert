@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using NINA.Core.Utility;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace NINA.DiscordAlert.DiscordWebhook {
+    [ExcludeFromCodeCoverage(Justification = "This class is a passthrough to the actual discord client")]
     public class DiscordWebhookClient : IDiscordWebhookClient {
         public DiscordWebhookClient(string url) {
             Logger.Debug($"URL={url}");
@@ -28,19 +30,6 @@ namespace NINA.DiscordAlert.DiscordWebhook {
             }
         }
 
-        public async Task SendSimpleMessageAsync(string text = null, IEnumerable<Embed> embeds = null) {
-            Logger.Debug(string.Empty);
-            await SendMessageAsync(text: text, embeds: embeds);
-        }
-
-        public void Dispose() {
-            try {
-                _discordWebhookClient?.Dispose();
-            } catch { 
-                _discordWebhookClient = null;
-            }
-        }
-
         public async Task SendFileAsync(string filename, string text = null, IEnumerable<Embed> embeds = null) {
             Logger.Debug(string.Empty);
             try {
@@ -48,6 +37,14 @@ namespace NINA.DiscordAlert.DiscordWebhook {
             }
             catch (Exception ex) {
                 Logger.Error($"Failed to send message", ex);
+            }
+        }
+
+        public void Dispose() {
+            try {
+                _discordWebhookClient?.Dispose();
+            } catch {
+                _discordWebhookClient = null;
             }
         }
     }
