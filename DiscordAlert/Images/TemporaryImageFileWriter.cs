@@ -3,10 +3,10 @@ using System.IO;
 using System.Windows.Media.Imaging;
 
 namespace NINA.DiscordAlert.Images {
-    public class TemporaryImageFile : IDisposable {
+    public class TemporaryImageFileWriter : IDisposable {
         public string Filename { get; }
 
-        public TemporaryImageFile(BitmapSource image) 
+        public TemporaryImageFileWriter(BitmapSource image) 
         {
             var encoder = new PngBitmapEncoder();
             encoder.Frames.Add(BitmapFrame.Create(image));
@@ -16,6 +16,7 @@ namespace NINA.DiscordAlert.Images {
                 encoder.Save(fileStream);
             }
         }
+
         public void Dispose() {
             if (File.Exists(Filename)) { 
                 File.Delete(Filename); 

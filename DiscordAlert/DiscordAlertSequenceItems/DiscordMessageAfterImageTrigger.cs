@@ -18,6 +18,7 @@ using System.Collections.Concurrent;
 using NINA.Equipment.Interfaces.Mediator;
 using NINA.Profile.Interfaces;
 using System.Diagnostics.CodeAnalysis;
+using NINA.Image.ImageData;
 
 namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
     /// <summary>
@@ -90,8 +91,15 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
                 try {
                     var render = await RenderImage(e.ToContainer(), new PrepareImageParameters(autoStretch: true, detectStars: false));
                     var image = render.Image.Resize(2560);
+                    
+                    ImagePatterns patterns = null;
+                    if(render.RawImageData is BaseImageData imageData) {
+                        patterns = imageData.GetImagePatterns();
+                    }
 
-                    await Helpers.Discord.SendMessage(MessageType.Information, Text, executeDetails.Context, executeDetails.Token, e.ToContainer(), image);
+                    var discordImage = new DiscordImageDetails(image, patterns);  
+
+                    await Helpers.Discord.SendMessage(MessageType.Information, Text, executeDetails.Context, executeDetails.Token, image: discordImage);
                 } catch (Exception ex) {
                     Logger.Error(ex);
                 }
@@ -109,6 +117,7 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
             var imageData = await _imageDataFactory.CreateFromFile(image.PathToImage.AbsolutePath, (int)_profileService.ActiveProfile.CameraSettings.BitDepth, image.IsBayered, _profileService.ActiveProfile.CameraSettings.RawConverter);
             imageData.SetImageStatistics(image.Statistics);
             imageData.StarDetectionAnalysis = image.StarDetectionAnalysis;
+            
             var rendered = await _imagingMediator.PrepareImage(imageData, imageParameters, CancellationToken.None);
             return rendered;
         }

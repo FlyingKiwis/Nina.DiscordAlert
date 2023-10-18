@@ -7,6 +7,6 @@ using System;
 
 namespace NINA.DiscordAlert.DiscordWebhook {
     public interface IDiscordHelper {
-        Task SendMessage(MessageType type, string message, ISequenceEntity sequenceItem, CancellationToken cancelToken, ISavedImageContainer lastSavedImage = null, BitmapSource attachedImage = null, Exception exception = null);
+        Task SendMessage(MessageType type, string message, ISequenceEntity sequenceItem, CancellationToken cancelToken, DiscordImageDetails image = null, Exception exception = null);
     }
 }

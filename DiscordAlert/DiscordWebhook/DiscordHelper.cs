@@ -12,7 +12,7 @@ using System.IO;
 
 namespace NINA.DiscordAlert.DiscordWebhook {
     public class DiscordHelper : IDiscordHelper {
-        public async Task SendMessage(MessageType type, string message, ISequenceEntity sequenceItem, CancellationToken cancelToken, ISavedImageContainer lastSavedImage = null, BitmapSource attachedImage = null, Exception exception = null) {
+        public async Task SendMessage(MessageType type, string message, ISequenceEntity sequenceItem, CancellationToken cancelToken, DiscordImageDetails discordImage = null, Exception exception = null) {
 
             Logger.Debug($"Type={type} Message={message} Entity={sequenceItem}");
 
@@ -24,8 +24,8 @@ namespace NINA.DiscordAlert.DiscordWebhook {
 
             var embed = new EmbedBuilder();
 
-            if (lastSavedImage != null) {
-                message = lastSavedImage.FillPlaceholders(message);
+            if (discordImage?.ImagePatterns != null) {
+                message = discordImage?.ImagePatterns.GetImageFileString(message);
                 Logger.Debug($"Message converted to={message}");
 
             } else {
@@ -63,8 +63,8 @@ namespace NINA.DiscordAlert.DiscordWebhook {
             if (cancelToken.IsCancellationRequested)
                 return;
 
-            if (attachedImage != null) {
-                using (var tempFile = new TemporaryImageFile(attachedImage)) {
+            if (discordImage?.Image != null) {
+                using (var tempFile = new TemporaryImageFileWriter(discordImage.Image)) {
                     embed.ImageUrl = $"attachment://{Path.GetFileName(tempFile.Filename)}";
                     var embeds = new List<Embed> { embed.Build() };
                     await client.SendFileAsync(tempFile.Filename, text: message, embeds: embeds);
