@@ -9,10 +9,11 @@ using NINA.Core.Utility;
 using NINA.DiscordAlert.Images;
 using System.Windows.Media.Imaging;
 using System.IO;
+using NINA.Core.Model;
 
 namespace NINA.DiscordAlert.DiscordWebhook {
     public class DiscordHelper : IDiscordHelper {
-        public async Task SendMessage(MessageType type, string message, ISequenceEntity sequenceItem, CancellationToken cancelToken, DiscordImageDetails discordImage = null, Exception exception = null) {
+        public async Task SendMessage(MessageType type, string message, ISequenceEntity sequenceItem, CancellationToken cancelToken, ImagePatterns templateValues = null, BitmapSource attachedImage = null, Exception exception = null) {
 
             Logger.Debug($"Type={type} Message={message} Entity={sequenceItem}");
 
@@ -24,20 +25,20 @@ namespace NINA.DiscordAlert.DiscordWebhook {
 
             var embed = new EmbedBuilder();
 
-            if (discordImage?.ImagePatterns != null) {
-                message = discordImage?.ImagePatterns.GetImageFileString(message);
+            if (templateValues != null) {
+                message = templateValues.GetImageFileString(message);
                 Logger.Debug($"Message converted to={message}");
 
             } else {
                 Logger.Debug("No image");
             }
 
-            var target = sequenceItem.TargetContainer();
+            var target = sequenceItem.GetDSOContainer();
             if (target?.Target?.TargetName != null) {
                 embed.AddField("Target", target.Target.TargetName);
             }
 
-            var sequence = sequenceItem.RootContainer();
+            var sequence = sequenceItem.GetRootContainer();
             if (sequence?.Name != null) {
                 embed.AddField("Sequence Name", sequence.Name);
             }
@@ -63,8 +64,8 @@ namespace NINA.DiscordAlert.DiscordWebhook {
             if (cancelToken.IsCancellationRequested)
                 return;
 
-            if (discordImage?.Image != null) {
-                using (var tempFile = new TemporaryImageFileWriter(discordImage.Image)) {
+            if (attachedImage != null) {
+                using (var tempFile = new TemporaryImageFileWriter(attachedImage)) {
                     embed.ImageUrl = $"attachment://{Path.GetFileName(tempFile.Filename)}";
                     var embeds = new List<Embed> { embed.Build() };
                     await client.SendFileAsync(tempFile.Filename, text: message, embeds: embeds);

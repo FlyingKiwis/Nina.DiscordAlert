@@ -12,6 +12,7 @@ using NINA.DiscordAlert.Util;
 using NINA.DiscordAlert.SequenceFailureMonitor;
 using NINA.DiscordAlert.DiscordWebhook;
 using System.Diagnostics.CodeAnalysis;
+using NINA.Profile.Interfaces;
 
 namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
     /// <summary>
@@ -26,18 +27,22 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
     public class DiscordAlertOnErrorTrigger : SequenceTrigger {
 
         [ImportingConstructor]
-        public DiscordAlertOnErrorTrigger() {
+        public DiscordAlertOnErrorTrigger(IProfileService profileService) {
+            _profileService = profileService;
         }
 
         [JsonProperty]
         public string Text { get; set; } = "@everyone";
 
         private ISequenceFailureMonitor _failureMonitor;
+        private IProfileService _profileService;
 
         private async void FailureMonitor_OnFailure(object sender, SequenceFailureEventArgs e) {
             try {
                 Logger.Debug($"Entity={e.Entity} Exception={e.Exception}");
-                await Helpers.Discord.SendMessage(MessageType.Error, Text, e.Entity, CancellationToken.None, exception: e.Exception);
+
+                var templateValues = Helpers.Template.GetSequenceTemplateValues(e.Entity, _profileService);
+                await Helpers.Discord.SendMessage(MessageType.Error, Text, e.Entity, CancellationToken.None, exception: e.Exception, templateValues: templateValues);
             } catch (Exception ex) {
                 Logger.Error(ex);
             }
@@ -70,7 +75,7 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
 
         [ExcludeFromCodeCoverage]
         public override object Clone() {
-            return new DiscordAlertOnErrorTrigger() {
+            return new DiscordAlertOnErrorTrigger(_profileService) {
                 Icon = Icon,
                 Name = Name,
                 Category = Category,

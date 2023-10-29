@@ -12,9 +12,23 @@ namespace NINA.DiscordAlert.Util {
             }
         }
 
+        private static ITemplateHelper _templateHelper;
+        public static ITemplateHelper Template {
+            get {
+                if(_templateHelper == null) {
+                    _templateHelper = new TemplaterHelper();
+                }
+                return _templateHelper;
+            }
+        }
+
         public static void SetDiscordHelper(IDiscordHelper discordHelper)
         {
             _discordHelper = discordHelper;
+        }
+
+        public static void SetTemplateHelper(ITemplateHelper templateHelper) {
+            _templateHelper = templateHelper;
         }
     }
 }

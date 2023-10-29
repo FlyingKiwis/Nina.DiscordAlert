@@ -87,7 +87,6 @@ namespace DiscordAlert.Tests.DiscordSequenceItems {
             var imagedSaveArgs = ImageTestUtility.GenerateImageSavedEventArgs(savedImageMock.Object);
             imagingMediatorMock.Setup(o => o.PrepareImage(imageDataMock.Object, It.IsAny<PrepareImageParameters>(), It.IsAny<CancellationToken>())).ReturnsAsync(renderedImageMock.Object);
             renderedImageMock.Setup(o => o.Image).Returns(bitmap);
-            var discordImage = new DiscordImageDetails(bitmap, null);
             Helpers.SetDiscordHelper(discordHelperMock.Object);
 
             var discordMessageAfterImage = new DiscordMessageAfterImageTrigger(imageSaveMediator.Object, imagingMediatorMock.Object, imageDataFactoryMock.Object, profileServiceMock.Object);
@@ -96,7 +95,7 @@ namespace DiscordAlert.Tests.DiscordSequenceItems {
             await discordMessageAfterImage.Execute(Mock.Of<ISequenceContainer>(), Mock.Of<IProgress<ApplicationStatus>>(), cancelTokenSource.Token);
             imageSaveMediator.Raise(o => o.ImageSaved += null, imagedSaveArgs);
 
-            discordHelperMock.Verify(o => o.SendMessage(NINA.DiscordAlert.DiscordWebhook.MessageType.Information, It.IsAny<string>(), It.IsAny<ISequenceItem>(), It.IsAny<CancellationToken>(), It.Is<DiscordImageDetails>(o => o.Image == bitmap), null), Times.Once);
+            discordHelperMock.Verify(o => o.SendMessage(NINA.DiscordAlert.DiscordWebhook.MessageType.Information, It.IsAny<string>(), It.IsAny<ISequenceItem>(), It.IsAny<CancellationToken>(), null, bitmap, null), Times.Once);
         }
 
         [Test]

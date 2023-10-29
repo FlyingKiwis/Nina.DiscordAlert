@@ -91,15 +91,9 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
                 try {
                     var render = await RenderImage(e.ToContainer(), new PrepareImageParameters(autoStretch: true, detectStars: false));
                     var image = render.Image.Resize(2560);
-                    
-                    ImagePatterns patterns = null;
-                    if(render.RawImageData is BaseImageData imageData) {
-                        patterns = imageData.GetImagePatterns();
-                    }
+                    var templateValues = Helpers.Template.GetImageTemplateValues(render);
 
-                    var discordImage = new DiscordImageDetails(image, patterns);  
-
-                    await Helpers.Discord.SendMessage(MessageType.Information, Text, executeDetails.Context, executeDetails.Token, image: discordImage);
+                    await Helpers.Discord.SendMessage(MessageType.Information, Text, executeDetails.Context, executeDetails.Token, templateValues: templateValues, attachedImage: image);
                 } catch (Exception ex) {
                     Logger.Error(ex);
                 }

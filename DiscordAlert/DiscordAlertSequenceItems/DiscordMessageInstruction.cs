@@ -8,6 +8,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using NINA.DiscordAlert.DiscordWebhook;
 using NINA.DiscordAlert.Util;
+using NINA.Profile.Interfaces;
+using System.Diagnostics.CodeAnalysis;
 
 namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
     /// <summary>
@@ -21,13 +23,16 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
     [JsonObject(MemberSerialization.OptIn)]
     public class DiscordMessageInstruction : SequenceItem {
 
+        private readonly IProfileService _profileService;
 
         [ImportingConstructor]
-        public DiscordMessageInstruction() 
+        public DiscordMessageInstruction(IProfileService profileService) 
         {
-        
+            _profileService = profileService;
         }
-        public DiscordMessageInstruction(DiscordMessageInstruction copyMe) : this() {
+
+        [ExcludeFromCodeCoverage]
+        public DiscordMessageInstruction(DiscordMessageInstruction copyMe) : this(copyMe._profileService) {
             CopyMetaData(copyMe);
         }
 
@@ -38,12 +43,14 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
             try {
                 
                 Logger.Debug($"Sending Message - Text={Text}  Entity={this}");
-                await Helpers.Discord.SendMessage(MessageType.Information, Text, this, token);
+                var templateValues = Helpers.Template.GetSequenceTemplateValues(this, _profileService);
+                await Helpers.Discord.SendMessage(MessageType.Information, Text, this, token, templateValues: templateValues);
             } catch (Exception ex) {
                 Logger.Error(ex);
             }
         }
 
+        [ExcludeFromCodeCoverage]
         public override object Clone() {
             return new DiscordMessageInstruction(this) {
                 Icon = Icon,
@@ -54,6 +61,7 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
             };
         }
 
+        [ExcludeFromCodeCoverage]
         public override string ToString() {
             return $"Category: {Category}, Item: {nameof(DiscordMessageInstruction)}, Text: {Text}";
         }
