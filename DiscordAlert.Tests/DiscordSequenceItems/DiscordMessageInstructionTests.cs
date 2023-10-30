@@ -3,6 +3,7 @@ using NINA.Core.Model;
 using NINA.DiscordAlert.DiscordAlertSequenceItems;
 using NINA.DiscordAlert.DiscordWebhook;
 using NINA.DiscordAlert.Util;
+using NINA.Equipment.Interfaces.Mediator;
 using NINA.Profile.Interfaces;
 using NINA.Sequencer;
 using NUnit.Framework;
@@ -23,10 +24,14 @@ namespace DiscordAlert.Tests.DiscordSequenceItems {
             Helpers.SetDiscordHelper(discordHelperMock.Object);
             var templateHelperMock = new Mock<ITemplateHelper>();
             Helpers.SetTemplateHelper(templateHelperMock.Object);
-            var profileServiceMock = new Mock<IProfileService>();
+            var cameraMediatorMock = new Mock<ICameraMediator>();
+            var telescopeMediatorMock = new Mock<ITelescopeMediator>();
+            var focuserMediatorMock = new Mock<IFocuserMediator>();
+            var filterWheelMediatorMock = new Mock<IFilterWheelMediator>();
+            var rotatorMediatorMock = new Mock<IRotatorMediator>();
             var imagePatterns = new ImagePatterns();
-            var discordMessageInstruction = new DiscordMessageInstruction(profileServiceMock.Object);
-            templateHelperMock.Setup(o => o.GetSequenceTemplateValues(discordMessageInstruction, profileServiceMock.Object)).Returns(imagePatterns);
+            var discordMessageInstruction = new DiscordMessageInstruction(cameraMediatorMock.Object, telescopeMediatorMock.Object, filterWheelMediatorMock.Object, focuserMediatorMock.Object, rotatorMediatorMock.Object);
+            templateHelperMock.Setup(o => o.GetSequenceTemplateValues(discordMessageInstruction, telescopeMediatorMock.Object, cameraMediatorMock.Object, filterWheelMediatorMock.Object, focuserMediatorMock.Object, rotatorMediatorMock.Object)).Returns(imagePatterns);
             var cancelationTokenSource = new CancellationTokenSource();
 
             discordMessageInstruction.Text = expectedMessage;
@@ -42,10 +47,14 @@ namespace DiscordAlert.Tests.DiscordSequenceItems {
             Helpers.SetDiscordHelper(discordHelperMock.Object);
             var templateHelperMock = new Mock<ITemplateHelper>();
             Helpers.SetTemplateHelper(templateHelperMock.Object);
-            var profileServiceMock = new Mock<IProfileService>();
+            var cameraMediatorMock = new Mock<ICameraMediator>();
+            var telescopeMediatorMock = new Mock<ITelescopeMediator>();
+            var focuserMediatorMock = new Mock<IFocuserMediator>();
+            var filterWheelMediatorMock = new Mock<IFilterWheelMediator>();
+            var rotatorMediatorMock = new Mock<IRotatorMediator>();
             var imagePatterns = new ImagePatterns();
-            var discordMessageInstruction = new DiscordMessageInstruction(profileServiceMock.Object);
-            templateHelperMock.Setup(o => o.GetSequenceTemplateValues(discordMessageInstruction, profileServiceMock.Object)).Throws(new Exception());
+            var discordMessageInstruction = new DiscordMessageInstruction(cameraMediatorMock.Object, telescopeMediatorMock.Object, filterWheelMediatorMock.Object, focuserMediatorMock.Object, rotatorMediatorMock.Object);
+            templateHelperMock.Setup(o => o.GetSequenceTemplateValues(discordMessageInstruction, telescopeMediatorMock.Object, cameraMediatorMock.Object, filterWheelMediatorMock.Object, focuserMediatorMock.Object, rotatorMediatorMock.Object)).Throws(new Exception());
             var cancelationTokenSource = new CancellationTokenSource();
 
             discordMessageInstruction.Text = expectedMessage;

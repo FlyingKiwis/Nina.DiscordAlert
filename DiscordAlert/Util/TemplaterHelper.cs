@@ -1,10 +1,13 @@
-﻿using NINA.Core.Model;
+﻿using Discord;
+using NINA.Core.Model;
 using NINA.Core.Utility;
+using NINA.Equipment.Interfaces.Mediator;
 using NINA.Image.ImageData;
 using NINA.Image.Interfaces;
 using NINA.Profile.Interfaces;
 using NINA.Sequencer;
 using System;
+using System.Linq;
 
 namespace NINA.DiscordAlert.Util {
     public class TemplaterHelper : ITemplateHelper {
@@ -15,7 +18,7 @@ namespace NINA.DiscordAlert.Util {
             return imageData.GetImagePatterns();
         }
 
-        public ImagePatterns GetSequenceTemplateValues(ISequenceEntity sequenceEntity, IProfileService profileService) {
+        public ImagePatterns GetSequenceTemplateValues(ISequenceEntity sequenceEntity, ITelescopeMediator telescopeMediator, ICameraMediator cameraMediator, IFilterWheelMediator filterWheelMediator, IFocuserMediator focuserMediator, IRotatorMediator rotatorMediator) {
             ImagePatterns imagePatterns = new ImagePatterns();
 
             //Time
@@ -41,15 +44,53 @@ namespace NINA.DiscordAlert.Util {
                 imagePatterns.Set(ImagePatternKeys.SequenceTitle, sequenceTitle);                
             }
 
-            //Equipment
-            var telescopeName = profileService?.ActiveProfile?.TelescopeSettings?.Name;
+            //Telescope
+            var telescopeInfo = telescopeMediator?.GetInfo();
+            var telescopeName = telescopeInfo?.Name;
             if(telescopeName != null) {
                 imagePatterns.Set(ImagePatternKeys.Telescope, telescopeName);
             }
 
-            var cameraName = profileService?.ActiveProfile?.CameraSettings?.Id;
-            if(cameraName != null) {
-                imagePatterns.Set(ImagePatternKeys.Camera, cameraName);
+            //Camera
+            var cameraInfo = cameraMediator?.GetInfo();
+            if (cameraInfo != null) {
+                var cameraName = cameraInfo?.Name;
+                if (cameraName != null) {
+                    imagePatterns.Set(ImagePatternKeys.Camera, cameraName);
+                }
+
+                imagePatterns.Set(ImagePatternKeys.Binning, $"{cameraInfo.BinX}x{cameraInfo.BinY}");
+                imagePatterns.Set(ImagePatternKeys.Gain, cameraInfo.Gain);
+                imagePatterns.Set(ImagePatternKeys.Offset, cameraInfo.Offset);
+
+                var cameraReadoutMode = cameraInfo.ReadoutMode;
+                var cameraReadoutModes = cameraInfo.ReadoutModes;
+                if (cameraReadoutModes != null && cameraReadoutModes.Count() > cameraReadoutMode) {
+                    imagePatterns.Set(ImagePatternKeys.ReadoutMode, cameraReadoutModes.ToArray()[cameraReadoutMode]);
+                }
+
+                imagePatterns.Set(ImagePatternKeys.SensorTemp, cameraInfo.Temperature);
+                imagePatterns.Set(ImagePatternKeys.TemperatureSetPoint, cameraInfo.TemperatureSetPoint);
+                imagePatterns.Set(ImagePatternKeys.USBLimit, cameraInfo.USBLimit);
+            }
+
+            //Filter wheel
+            var filterName = filterWheelMediator?.GetInfo()?.SelectedFilter?.Name;
+            if (filterName != null) {
+                imagePatterns.Set(ImagePatternKeys.Filter, filterName);                
+            }
+
+            //Focuser
+            var focuserInfo = focuserMediator?.GetInfo();
+            if (focuserInfo != null) {
+                imagePatterns.Set(ImagePatternKeys.FocuserPosition, focuserInfo.Position);
+                imagePatterns.Set(ImagePatternKeys.FocuserTemp, focuserInfo.Temperature);
+            }
+
+            //Rotator
+            var rotationAngle = rotatorMediator?.GetInfo()?.Position;
+            if (rotationAngle.HasValue) {
+                imagePatterns.Set(ImagePatternKeys.RotatorAngle, rotationAngle.Value);
             }
 
             return imagePatterns;

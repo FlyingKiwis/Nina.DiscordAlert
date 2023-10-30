@@ -13,6 +13,7 @@ using NINA.DiscordAlert.SequenceFailureMonitor;
 using NINA.DiscordAlert.DiscordWebhook;
 using System.Diagnostics.CodeAnalysis;
 using NINA.Profile.Interfaces;
+using NINA.Equipment.Interfaces.Mediator;
 
 namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
     /// <summary>
@@ -27,21 +28,31 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
     public class DiscordAlertOnErrorTrigger : SequenceTrigger {
 
         [ImportingConstructor]
-        public DiscordAlertOnErrorTrigger(IProfileService profileService) {
-            _profileService = profileService;
+        public DiscordAlertOnErrorTrigger(ICameraMediator cameraMediator, ITelescopeMediator telescopeMediator, IFilterWheelMediator filterWheelMediator, IFocuserMediator focuserMediator, IRotatorMediator rotatorMediator) {
+            _cameraMediator = cameraMediator;
+            _telescopeMediator = telescopeMediator;
+            _filterWheelMediator = filterWheelMediator;
+            _focuserMediator = focuserMediator;
+            _rotatorMediator = rotatorMediator;
         }
 
         [JsonProperty]
         public string Text { get; set; } = "@everyone";
 
+        private readonly ICameraMediator _cameraMediator;
+        private readonly ITelescopeMediator _telescopeMediator;
+        private readonly IFilterWheelMediator _filterWheelMediator;
+        private readonly IFocuserMediator _focuserMediator;
+        private readonly IRotatorMediator _rotatorMediator;
+
         private ISequenceFailureMonitor _failureMonitor;
-        private IProfileService _profileService;
+        
 
         private async void FailureMonitor_OnFailure(object sender, SequenceFailureEventArgs e) {
             try {
                 Logger.Debug($"Entity={e.Entity} Exception={e.Exception}");
 
-                var templateValues = Helpers.Template.GetSequenceTemplateValues(e.Entity, _profileService);
+                var templateValues = Helpers.Template.GetSequenceTemplateValues(e.Entity, _telescopeMediator, _cameraMediator, _filterWheelMediator, _focuserMediator, _rotatorMediator);
                 await Helpers.Discord.SendMessage(MessageType.Error, Text, e.Entity, CancellationToken.None, exception: e.Exception, templateValues: templateValues);
             } catch (Exception ex) {
                 Logger.Error(ex);
@@ -75,7 +86,7 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
 
         [ExcludeFromCodeCoverage]
         public override object Clone() {
-            return new DiscordAlertOnErrorTrigger(_profileService) {
+            return new DiscordAlertOnErrorTrigger(_cameraMediator, _telescopeMediator, _filterWheelMediator, _focuserMediator, _rotatorMediator) {
                 Icon = Icon,
                 Name = Name,
                 Category = Category,
