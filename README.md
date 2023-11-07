@@ -24,7 +24,7 @@ Users and Roles require the ID in order to mention them, are a couple of ways to
 
 ### Method 1: Do a backslah mention
 
-In the server you want to mention the user or role type \@mention (where mention would be the user/role name) for example if I have a group called NINA I would type \@NINA.
+In the server you want to mention the user or role type \\@mention (where mention would be the user/role name) for example if I have a group called NINA I would type \\@NINA.
 This will output a line of text that will look like <@0000000000> or <@&0000000000>, copy that whole line and put it in the message text box and that will mention the user / group
 
 ### Method 2: Dev mode
