@@ -35,7 +35,7 @@ This will output a line of text that will look like <@0000000000> or <@&00000000
     - For users: `<@[ID]>`
     - For roles: `<@&[ID]>`
 
-# Pstterns
+# Patterns
 
 You can use the NINA patterns in your messages, simply use the dolar sign notation in your message (For example: "`Using telescope $$TELESCOPE$$`").  You can find examples of these in NINA by going to Options > Imaging and look at the patterns on the left column.
 See the below table for support:
