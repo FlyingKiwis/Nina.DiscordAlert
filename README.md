@@ -37,22 +37,22 @@ This will output a line of text that will look like <@0000000000> or <@&00000000
 
 # Pstterns
 
-You can use the NINA patterns in your messages, simply use the dolar sign notation in your message (For example: "Using telescope $$TELESCOPE$$").  You can find examples of these in NINA by going to Options > Imaging and look at the patterns on the left column.
+You can use the NINA patterns in your messages, simply use the dolar sign notation in your message (For example: "`Using telescope $$TELESCOPE$$`").  You can find examples of these in NINA by going to Options > Imaging and look at the patterns on the left column.
 See the below table for support:
 
 | Pattern | Send after image | Send message / Send after failure |
 |-------------:|------------------|-----------------------------------|
 |Time Category|✅|✅|
 |Camera Category|✅|✅|
-|$$SEQUENCETITLE$$|✅|✅|
-|$$TARGETNAME$$|✅|✅|
+|`$$SEQUENCETITLE$$`|✅|✅|
+|`$$TARGETNAME$$`|✅|✅|
 |Others in Image Category|✅|❌|
-|$$$FILTER$$|✅|✅|
+|`$$FILTER$$`|✅|✅|
 |Focuser Category|✅|✅|
 |Guider Category|✅|❌|
-|$$ROTATORANGLE$$|✅|✅|
-|$$SQM$$|✅|❌|
-|$$TELESCOPE$$|✅|✅|
+|`$$ROTATORANGLE$$`|✅|✅|
+|`$$SQM$$`|✅|❌|
+|`$$TELESCOPE$$`|✅|✅|
 |Placeholders added by other plugins|✅|❌|
 
 # Suggestion Welcome
