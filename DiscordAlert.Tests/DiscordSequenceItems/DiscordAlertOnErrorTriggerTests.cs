@@ -3,17 +3,12 @@ using Moq;
 using NINA.Sequencer.SequenceItem;
 using NINA.DiscordAlert.DiscordAlertSequenceItems;
 using NINA.DiscordAlert.Util;
-using System.Collections.Generic;
-using Discord;
 using NINA.Sequencer;
 using System;
 using NINA.DiscordAlert.SequenceFailureMonitor;
 using NINA.DiscordAlert.DiscordWebhook;
 using MessageType = NINA.DiscordAlert.DiscordWebhook.MessageType;
 using System.Threading;
-using NINA.DiscordAlert.Images;
-using System.Windows.Media.Imaging;
-using NINA.Profile.Interfaces;
 using NINA.Core.Model;
 using NINA.Equipment.Interfaces.Mediator;
 

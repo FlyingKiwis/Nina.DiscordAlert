@@ -1,15 +1,17 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Windows.Media.Imaging;
 
 namespace NINA.DiscordAlert.Images {
-    public class TemporaryImageFileWriter : IDisposable {
-        public string Filename { get; }
 
-        public TemporaryImageFileWriter(BitmapSource image) 
-        {
+    [ExcludeFromCodeCoverage]
+    public class TemporaryImageFileWriter : ITemporaryImageFileWriter {
+
+        public TemporaryImageFileWriter(BitmapSource image) {
+            _image = image;
             var encoder = new PngBitmapEncoder();
-            encoder.Frames.Add(BitmapFrame.Create(image));
+            encoder.Frames.Add(BitmapFrame.Create(_image));
             Filename = GenerateFilename();
 
             using (var fileStream = new FileStream(Filename, FileMode.Create)) {
@@ -17,9 +19,13 @@ namespace NINA.DiscordAlert.Images {
             }
         }
 
+        public string Filename { get; private set; }
+
+        private readonly BitmapSource _image;
+
         public void Dispose() {
-            if (File.Exists(Filename)) { 
-                File.Delete(Filename); 
+            if (Filename != null && File.Exists(Filename)) {
+                File.Delete(Filename);
             }
         }
 

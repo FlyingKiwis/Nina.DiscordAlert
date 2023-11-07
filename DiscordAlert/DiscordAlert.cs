@@ -3,6 +3,7 @@ using NINA.Plugin;
 using NINA.Plugin.Interfaces;
 using System.ComponentModel;
 using System.ComponentModel.Composition;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Settings = NINA.DiscordAlert.Properties.Settings;
@@ -23,6 +24,7 @@ namespace NINA.DiscordAlert {
             }
         }
 
+        [ExcludeFromCodeCoverage]
         public override Task Teardown() {
             return base.Teardown();
         }

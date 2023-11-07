@@ -1,8 +1,10 @@
 ﻿using NINA.Sequencer;
 using NINA.Sequencer.Container;
 using NINA.Sequencer.SequenceItem;
+using System.Diagnostics.CodeAnalysis;
 
 namespace NINA.DiscordAlert.SequenceFailureMonitor {
+    [ExcludeFromCodeCoverage]
     public class SequenceFailureMonitorFactory : ISequenceFailureMonitorFactory {
         public ISequenceFailureMonitor Create(ISequenceRootContainer container) {
             return new SequenceFailureMonitor(container);

@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.Composition;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 
 namespace NINA.DiscordAlert {
 
     [Export(typeof(ResourceDictionary))]
+    [ExcludeFromCodeCoverage]
     partial class Options : ResourceDictionary {
 
         public Options() {

@@ -2,6 +2,7 @@
 using NINA.Sequencer.SequenceItem;
 using System;
 using System.ComponentModel.Composition;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,6 +17,7 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
     //[ExportMetadata("Category", "Discord Alert")]
     //[Export(typeof(ISequenceItem))]
     //[JsonObject(MemberSerialization.OptIn)]
+    [ExcludeFromCodeCoverage]
     public class Error : SequenceItem {
 
         [ImportingConstructor]

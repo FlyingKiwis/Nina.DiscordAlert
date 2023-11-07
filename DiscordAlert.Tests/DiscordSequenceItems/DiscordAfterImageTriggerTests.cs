@@ -1,5 +1,4 @@
-﻿using Discord;
-using DiscordAlert.Tests.Utility;
+﻿using DiscordAlert.Tests.Utility;
 using Moq;
 using NINA.Core.Model;
 using NINA.Core.Utility;

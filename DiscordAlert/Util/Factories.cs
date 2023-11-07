@@ -6,7 +6,7 @@ using NINA.DiscordAlert.Images;
 namespace NINA.DiscordAlert.Util {
     public static class Factories 
     {
-        public static IDiscordWebhookClientFactory DiscordClientFactory { 
+        public static IDiscordWebhookClientFactory DiscordClient { 
             get 
             {
                 if(_discordClientFactory == null) {
@@ -18,7 +18,7 @@ namespace NINA.DiscordAlert.Util {
             } 
         }
 
-        public static ISequenceFailureMonitorFactory SequenceFailureMonitorFactory {
+        public static ISequenceFailureMonitorFactory SequenceFailureMonitor {
             get {
                 if (_failureMonitorFactory == null) {
                     Logger.Debug("Create failure monitor");
@@ -29,8 +29,20 @@ namespace NINA.DiscordAlert.Util {
             }
         }
 
+        public static ITemporaryImageFileWriterFactory TemporaryImageFileWriter {
+            get {
+                if (_temporaryImageFileWriterFactory == null) {
+                    Logger.Debug("Create temp image writer");
+                    _temporaryImageFileWriterFactory = new TemporaryImageFileWriterFactory();
+                }
+
+                return _temporaryImageFileWriterFactory;
+            }
+        }
+
         private static IDiscordWebhookClientFactory _discordClientFactory;
         private static ISequenceFailureMonitorFactory _failureMonitorFactory;
+        private static ITemporaryImageFileWriterFactory _temporaryImageFileWriterFactory;
 
         public static void SetDiscordClientFactory(IDiscordWebhookClientFactory discordClientFactory) {
             Logger.Debug(string.Empty);
@@ -40,6 +52,11 @@ namespace NINA.DiscordAlert.Util {
         public static void SetSequenceFailureMonitorFactory(ISequenceFailureMonitorFactory failureMonitor) {
             Logger.Debug(string.Empty);
             _failureMonitorFactory = failureMonitor;
+        }
+
+        public static void SetTemporaryImageFileWriterFactory(ITemporaryImageFileWriterFactory tempImageFactory) {
+            Logger.Debug(string.Empty);
+            _temporaryImageFileWriterFactory = tempImageFactory;
         }
     }
 }

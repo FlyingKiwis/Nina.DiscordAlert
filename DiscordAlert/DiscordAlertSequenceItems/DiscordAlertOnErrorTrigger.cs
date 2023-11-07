@@ -61,7 +61,7 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
 
         public override void SequenceBlockInitialize() {
             
-            _failureMonitor = Factories.SequenceFailureMonitorFactory.Create(this);
+            _failureMonitor = Factories.SequenceFailureMonitor.Create(this);
             if (_failureMonitor != null) {
                 _failureMonitor.OnFailure += FailureMonitor_OnFailure;
                 Logger.Info("Attached Failure Monitor");
