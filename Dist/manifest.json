@@ -3,7 +3,7 @@
     "Identifier": "bbca7e0a-b89f-4e7c-92f1-0d5b24db6911",
     "Version": {
         "Major": "2",
-        "Minor": "0",
+        "Minor": "1",
         "Patch": "0",
         "Build": "0"
     },
@@ -28,15 +28,15 @@
     },
     "Descriptions": {
         "ShortDescription": "Sends alerts to discord",
-        "LongDescription": "# Discord Alert\n\nThis is a plugin for [NINA](https://nighttime-imaging.eu) to allow for in-sequence messages sent to a discord server via webhook\n\nSee more about [Discord's Webhooks here](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)\n\n# Added sequence items\n\n- Discord message - Will send a message when that point in the sequence is reached\n- Send after failure - Triggered action, send a discord message after a detected failure.\n\n# Suggestion Welcome\n\nI'm open to suggestions, please submit one via [GitHub's issue tracker](https://github.com/FlyingKiwis/Nina.DiscordAlert/issues).\n\n# Contact\n\nI'm in the NINA discord server as Kiwi🥝\n\n# 3rd Party Licences\n\n- [Discord.Net](https://github.com/discord-net/Discord.Net/blob/dev/LICENSE) is licensed under the MIT license",
+        "LongDescription": "# Discord Alert\n\nThis is a to allow for in-sequence messages sent to a discord server via webhook.\n\nSee more about [Discord's Webhooks here](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)\r\n\r\nFor more information please see [the readme](https://github.com/FlyingKiwis/Nina.DiscordAlert/blob/main/README.md)\n\n# Suggestion Welcome\n\nI'm open to suggestions, please submit one via [GitHub's issue tracker](https://github.com/FlyingKiwis/Nina.DiscordAlert/issues).\n\n# Contact\n\nI'm in the NINA discord server as Kiwi🥝\n\n# 3rd Party Licences\n\n- [Discord.Net](https://github.com/discord-net/Discord.Net/blob/dev/LICENSE) is licensed under the MIT license",
         "FeaturedImageURL": "",
         "ScreenshotURL": "",
         "AltScreenshotURL": ""
     },
     "Installer": {
-        "URL": "https://github.com/FlyingKiwis/Nina.DiscordAlert/releases/download/v2.0.0/Discord.Alert.2.0.0.0.zip",
+        "URL": "https://github.com/FlyingKiwis/Nina.DiscordAlert/releases/download/v2.1.0/Discord.Alert.2.1.0.0.zip",
         "Type": "ARCHIVE",
-        "Checksum": "025B868AECB4008FEAA829721AEF53DA35F42ACD412EFC842E357E9F0641D4E3",
+        "Checksum": "FBFE1108789BA69C5840B123306FE9B49D0E29375CD66F0709E4EEE589C07C75",
         "ChecksumType": "SHA256"
     }
 }
