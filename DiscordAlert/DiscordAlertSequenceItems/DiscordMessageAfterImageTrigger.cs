@@ -19,6 +19,7 @@ using NINA.Equipment.Interfaces.Mediator;
 using NINA.Profile.Interfaces;
 using System.Diagnostics.CodeAnalysis;
 using NINA.Image.ImageData;
+using System.IO;
 
 namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
     /// <summary>
@@ -108,7 +109,12 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
         }
 
         private async Task<IRenderedImage> RenderImage(ISavedImageContainer image, PrepareImageParameters imageParameters) {
-            var imageData = await _imageDataFactory.CreateFromFile(image.PathToImage.AbsolutePath, (int)_profileService.ActiveProfile.CameraSettings.BitDepth, image.IsBayered, _profileService.ActiveProfile.CameraSettings.RawConverter);
+            var filename = Uri.UnescapeDataString(image.PathToImage.AbsolutePath);
+            Logger.Debug($"Path to image={filename}");
+            if(!Path.Exists(filename)) {
+                throw new FileNotFoundException("Image does not exist at the provided path", filename);
+            }
+            var imageData = await _imageDataFactory.CreateFromFile(filename, (int)_profileService.ActiveProfile.CameraSettings.BitDepth, image.IsBayered, _profileService.ActiveProfile.CameraSettings.RawConverter);
             imageData.SetImageStatistics(image.Statistics);
             imageData.StarDetectionAnalysis = image.StarDetectionAnalysis;
             
