@@ -7,8 +7,8 @@ using System.Runtime.InteropServices;
 
 // [MANDATORY] The assembly versioning
 //Should be incremented for each new release build of a plugin
-[assembly: AssemblyVersion("2.0.0.0")]
-[assembly: AssemblyFileVersion("2.0.0.0")]
+[assembly: AssemblyVersion("2.1.0.0")]
+[assembly: AssemblyFileVersion("2.1.0.0")]
 
 // [MANDATORY] The name of your plugin
 [assembly: AssemblyTitle("Discord Alert")]
@@ -53,14 +53,11 @@ using System.Runtime.InteropServices;
 //[Optional] An in-depth description of your plugin
 [assembly: AssemblyMetadata("LongDescription", @"# Discord Alert
 
-This is a plugin for [NINA](https://nighttime-imaging.eu) to allow for in-sequence messages sent to a discord server via webhook
+This is a to allow for in-sequence messages sent to a discord server via webhook.
 
 See more about [Discord's Webhooks here](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)
 
-# Added sequence items
-
-- Discord message - Will send a message when that point in the sequence is reached
-- Send after failure - Triggered action, send a discord message after a detected failure.
+For more information please see [the readme](https://github.com/FlyingKiwis/Nina.DiscordAlert/blob/main/README.md)
 
 # Suggestion Welcome
 
