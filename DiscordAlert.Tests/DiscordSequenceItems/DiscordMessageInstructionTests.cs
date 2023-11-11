@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 namespace DiscordAlert.Tests.DiscordSequenceItems {
 
     [TestFixture]
-    public class DiscordMessageInstructionTests {
+    public class DiscordMessageInstructionTests : BaseTextFixture {
         [Test]
         public async Task Execute_GoodMessage_MessageSentToDiscord() {
             var expectedMessage = "some text";
@@ -58,7 +58,7 @@ namespace DiscordAlert.Tests.DiscordSequenceItems {
             discordMessageInstruction.Text = expectedMessage;
             Assert.DoesNotThrowAsync(async () => await discordMessageInstruction.Execute(Mock.Of<IProgress<ApplicationStatus>>(), cancelationTokenSource.Token));
 
-            discordHelperMock.Verify(o => o.SendMessage(It.IsAny<MessageType>(), It.IsAny<string>(), It.IsAny<ISequenceEntity>(), It.IsAny<CancellationToken>(), It.IsAny<ImagePatterns>(), It.IsAny<BitmapSource>(), It.IsAny<Exception>()), Times.Never);
+            discordHelperMock.Verify(o => o.SendMessage(It.IsAny<MessageType>(), It.IsAny<string>(), It.IsAny<ISequenceEntity>(), It.IsAny<CancellationToken>(), It.IsAny<ImagePatterns>(), It.IsAny<String>(), It.IsAny<Exception>()), Times.Never);
         }
     }
 }

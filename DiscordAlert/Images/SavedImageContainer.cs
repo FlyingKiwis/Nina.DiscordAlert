@@ -13,17 +13,7 @@ namespace NINA.DiscordAlert.Images {
         public Uri PathToImage { get; }
         public bool IsBayered { get; }
 
-        public SavedImageContainer(ImageMetaData imageMetaData, BitmapSource bitmapSource, IImageStatistics imageStatistics, IStarDetectionAnalysis starDetectionAnalysis, Uri pathToImage, bool isBayered) 
-        {
-            MetaData = imageMetaData;
-            Image = bitmapSource;
-            Statistics = imageStatistics;
-            StarDetectionAnalysis = starDetectionAnalysis;
-            PathToImage = pathToImage;
-            IsBayered = isBayered;
-        }
-
-        public SavedImageContainer(WPF.Base.Interfaces.Mediator.ImageSavedEventArgs args) 
+        public SavedImageContainer(ImageSavedEventArgs args) 
         {
             MetaData = args.MetaData;
             Image = args.Image;

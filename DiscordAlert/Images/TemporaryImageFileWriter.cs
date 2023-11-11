@@ -1,43 +1,40 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
+﻿using NINA.Core.Utility;
+using NINA.DiscordAlert.Util;
+using NINA.Profile.Interfaces;
+using System;
 using System.Windows.Media.Imaging;
 
 namespace NINA.DiscordAlert.Images {
 
-    [ExcludeFromCodeCoverage]
     public class TemporaryImageFileWriter : ITemporaryImageFileWriter {
 
-        public TemporaryImageFileWriter(BitmapSource image) {
-            _image = image;
+        public TemporaryImageFileWriter(IProfile profile, BitmapSource image) {
             var encoder = new PngBitmapEncoder();
-            encoder.Frames.Add(BitmapFrame.Create(_image));
-            Filename = GenerateFilename();
-
-            using (var fileStream = new FileStream(Filename, FileMode.Create)) {
-                encoder.Save(fileStream);
-            }
+            encoder.Frames.Add(BitmapFrame.Create(image));
+            Filename = GenerateFilename(profile.ImageFileSettings.FilePath);
+            Helpers.File.WriteImageToFile(Filename, encoder);
         }
 
         public string Filename { get; private set; }
 
-        private readonly BitmapSource _image;
-
         public void Dispose() {
-            if (Filename != null && File.Exists(Filename)) {
-                File.Delete(Filename);
+            if (Filename != null && Helpers.File.Exists(Filename)) {
+                Helpers.File.Delete(Filename);
             }
         }
 
-        private static string GenerateFilename() {
-            var basePath = Path.GetTempPath();
+        private static string GenerateFilename(string basePath) {
+            var maxAttempts = 20;
 
-            while (true) {
-                var filename = Path.Combine(basePath, $"{Guid.NewGuid()}.png");
-                if (!File.Exists(filename)) {
+            for (var i = 0; i < maxAttempts; i++ ) {
+                var filename = Helpers.File.Combine(basePath, $"discordAttachment-{Guid.NewGuid()}.png");
+                Logger.Trace($"Checking filename: {filename}");
+                if (!Helpers.File.Exists(filename)) {
                     return filename;
                 }
             }
+
+            throw new Exception($"Could not create an avaliable filename after {maxAttempts} attemps");
         }
     }
 }

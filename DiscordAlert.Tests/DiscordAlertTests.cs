@@ -3,7 +3,7 @@
 namespace DiscordAlert.Tests {
 
     [TestFixture]
-    public class DiscordAlertTests {
+    public class DiscordAlertTests : BaseTextFixture {
         [Test]
         public void DiscordWebhookURL_SetThenGet_ReturnsSetValue() {
             var expected = "expected URL";

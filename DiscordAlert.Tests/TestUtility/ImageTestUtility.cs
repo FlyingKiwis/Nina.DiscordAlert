@@ -2,9 +2,8 @@
 using NINA.DiscordAlert.Images;
 using NINA.WPF.Base.Interfaces.Mediator;
 
-namespace DiscordAlert.Tests.Utility {
-    public class ImageTestUtility 
-    {
+namespace DiscordAlert.Tests.TestUtility {
+    public class ImageTestUtility : BaseTextFixture {
         public static ImageSavedEventArgs GenerateImageSavedEventArgs(ISavedImageContainer container) 
         {
             var imageSavedEventArgs = new ImageSavedEventArgs() {

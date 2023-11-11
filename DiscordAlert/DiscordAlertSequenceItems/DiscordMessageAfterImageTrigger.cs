@@ -18,7 +18,6 @@ using System.Collections.Concurrent;
 using NINA.Equipment.Interfaces.Mediator;
 using NINA.Profile.Interfaces;
 using System.Diagnostics.CodeAnalysis;
-using NINA.Image.ImageData;
 using System.IO;
 
 namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
@@ -94,7 +93,9 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
                     var image = render.Image.Resize(2560);
                     var templateValues = Helpers.Template.GetImageTemplateValues(render);
 
-                    await Helpers.Discord.SendMessage(MessageType.Information, Text, executeDetails.Context, executeDetails.Token, templateValues: templateValues, attachedImage: image);
+                    using(var tempFileWriter = Factories.TemporaryImageFileWriter.Create(_profileService.ActiveProfile, image)) {
+                        await Helpers.Discord.SendMessage(MessageType.Information, Text, executeDetails.Context, executeDetails.Token, templateValues: templateValues, attachedFilename: tempFileWriter.Filename);
+                    }     
                 } catch (Exception ex) {
                     Logger.Error(ex);
                 }
@@ -110,8 +111,8 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
 
         private async Task<IRenderedImage> RenderImage(ISavedImageContainer image, PrepareImageParameters imageParameters) {
             var filename = Uri.UnescapeDataString(image.PathToImage.AbsolutePath);
-            Logger.Debug($"Path to image={filename}");
-            if(!Path.Exists(filename)) {
+            Logger.Info($"Path to image={filename}");
+            if(!Helpers.File.Exists(filename)) {
                 throw new FileNotFoundException("Image does not exist at the provided path", filename);
             }
             var imageData = await _imageDataFactory.CreateFromFile(filename, (int)_profileService.ActiveProfile.CameraSettings.BitDepth, image.IsBayered, _profileService.ActiveProfile.CameraSettings.RawConverter);

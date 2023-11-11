@@ -58,5 +58,11 @@ namespace NINA.DiscordAlert.Util {
             Logger.Debug(string.Empty);
             _temporaryImageFileWriterFactory = tempImageFactory;
         }
+
+        public static void ClearFactories() {
+            _failureMonitorFactory = null;
+            _discordClientFactory = null;
+            _temporaryImageFileWriterFactory = null;
+        }
     }
 }

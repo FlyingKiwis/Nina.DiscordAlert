@@ -8,6 +8,6 @@ using NINA.Core.Model;
 
 namespace NINA.DiscordAlert.DiscordWebhook {
     public interface IDiscordHelper {
-        Task SendMessage(MessageType type, string message, ISequenceEntity sequenceItem, CancellationToken cancelToken, ImagePatterns templateValues = null, BitmapSource attachedImage = null, Exception exception = null);
+        Task SendMessage(MessageType type, string message, ISequenceEntity sequenceItem, CancellationToken cancelToken, ImagePatterns templateValues = null, string attachedFilename = null, Exception exception = null);
     }
 }

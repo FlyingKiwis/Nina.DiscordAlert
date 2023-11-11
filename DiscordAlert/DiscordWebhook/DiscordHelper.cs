@@ -7,12 +7,11 @@ using NINA.Sequencer;
 using NINA.DiscordAlert.Util;
 using NINA.Core.Utility;
 using System.Windows.Media.Imaging;
-using System.IO;
 using NINA.Core.Model;
 
 namespace NINA.DiscordAlert.DiscordWebhook {
     public class DiscordHelper : IDiscordHelper {
-        public async Task SendMessage(MessageType type, string message, ISequenceEntity sequenceItem, CancellationToken cancelToken, ImagePatterns templateValues = null, BitmapSource attachedImage = null, Exception exception = null) {
+        public async Task SendMessage(MessageType type, string message, ISequenceEntity sequenceItem, CancellationToken cancelToken, ImagePatterns templateValues = null, string attachedFilename = null, Exception exception = null) {
 
             Logger.Debug($"Type={type} Message={message} Entity={sequenceItem}");
 
@@ -63,12 +62,10 @@ namespace NINA.DiscordAlert.DiscordWebhook {
                 if (cancelToken.IsCancellationRequested)
                     return;
 
-                if (attachedImage != null) {
-                    using (var tempFile = Factories.TemporaryImageFileWriter.Create(attachedImage)) {
-                        embed.ImageUrl = $"attachment://{Path.GetFileName(tempFile.Filename)}";
-                        var embeds = new List<Embed> { embed.Build() };
-                        await client.SendFileAsync(tempFile.Filename, text: message, embeds: embeds);
-                    }
+                if (attachedFilename != null) {
+                    embed.ImageUrl = $"attachment://{Helpers.File.GetFileName(attachedFilename)}";
+                    var embeds = new List<Embed> { embed.Build() };
+                    await client.SendFileAsync(attachedFilename, text: message, embeds: embeds);
                 } else {
                     var embeds = new List<Embed> { embed.Build() };
                     await client.SendMessageAsync(text: message, embeds: embeds);

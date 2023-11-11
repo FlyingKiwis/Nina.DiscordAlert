@@ -14,8 +14,7 @@ using NINA.Equipment.Interfaces.Mediator;
 
 namespace DiscordAlert.Tests.DiscordSequenceItems {
     [TestFixture]
-    public class DiscordAlertOnErrorTriggerTests
-    {
+    public class DiscordAlertOnErrorTriggerTests : BaseTextFixture {
         [Test]
         public void OnFailureFired_GivenFailedItem_SendsDiscordMessage() {
             var mockFailureFactory = new Mock<ISequenceFailureMonitorFactory>();

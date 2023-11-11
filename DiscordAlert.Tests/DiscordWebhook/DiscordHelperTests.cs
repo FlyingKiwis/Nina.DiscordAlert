@@ -17,12 +17,10 @@ using System;
 using System.Linq;
 using NINA.Sequencer.Container;
 using NINA.Astrometry;
-using System.Drawing;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace DiscordAlert.Tests.DiscordWebhook {
     [TestFixture]
-    public class DiscordHelperTests {
+    public class DiscordHelperTests : BaseTextFixture {
         [Test]
         public async Task SendMessage_InfoMessageWithImage_SendsCorrectly() 
         {
@@ -44,14 +42,6 @@ namespace DiscordAlert.Tests.DiscordWebhook {
             dsoContainer.Setup(o => o.Target).Returns(target);
             var expectedSequenceName = "I'm a sequence";
             dsoContainer.Setup(o => o.Name).Returns(expectedSequenceName);
-            var pixelFormat = new PixelFormat();
-            pixelFormat = PixelFormats.Pbgra32;
-            var bitmap = new WriteableBitmap(100, 100, 10, 10, pixelFormat, new BitmapPalette(new List<Color>() { Color.FromArgb(0, 0, 0, 0) }));
-            var temporaryImageWriterFactoryMock = new Mock<ITemporaryImageFileWriterFactory>();
-            var temporaryImageWriterMock = new Mock<ITemporaryImageFileWriter>();
-            temporaryImageWriterFactoryMock.Setup(o => o.Create(bitmap)).Returns(temporaryImageWriterMock.Object);
-            temporaryImageWriterMock.SetupGet(o => o.Filename).Returns(filename);
-            Factories.SetTemporaryImageFileWriterFactory(temporaryImageWriterFactoryMock.Object);
             var discordClientFactoryMock = new Mock<IDiscordWebhookClientFactory>();
             var discordClientMock = new Mock<IDiscordWebhookClient>();
             discordClientFactoryMock.Setup(o => o.Create()).Returns(discordClientMock.Object);
@@ -83,7 +73,7 @@ namespace DiscordAlert.Tests.DiscordWebhook {
             Factories.SetDiscordClientFactory(discordClientFactoryMock.Object);
 
             var discordHelper = new DiscordHelper();
-            await discordHelper.SendMessage(MessageType.Information, expectedMessage, sequenceItemMock.Object, cancelTokenSource.Token, attachedImage: bitmap, templateValues: templatePatterns);
+            await discordHelper.SendMessage(MessageType.Information, expectedMessage, sequenceItemMock.Object, cancelTokenSource.Token, attachedFilename: filename, templateValues: templatePatterns);
         
             Assert.IsTrue(mre.WaitOne(TimeSpan.FromSeconds(5)));
         }
