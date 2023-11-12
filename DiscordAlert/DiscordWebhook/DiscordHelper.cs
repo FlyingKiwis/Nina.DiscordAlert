@@ -24,8 +24,7 @@ namespace NINA.DiscordAlert.DiscordWebhook {
                 var embed = new EmbedBuilder();
 
                 if (templateValues != null) {
-                    message = templateValues.GetImageFileString(message);
-                    Logger.Debug($"Message converted to={message}");
+                    message = Helpers.Template.ReplaceTemplate(message, templateValues);
 
                 } else {
                     Logger.Debug("No template replacement set");

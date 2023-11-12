@@ -19,6 +19,8 @@ using NINA.Equipment.Interfaces.Mediator;
 using NINA.Profile.Interfaces;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Diagnostics;
+using System.Windows.Media.Imaging;
 
 namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
     /// <summary>
@@ -52,7 +54,7 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
         public override void SequenceBlockInitialize() {
             Logger.Debug(string.Empty);
 
-            _imageSaveMediator.ImageSaved -= ImageMonitor_ImageSaved;
+            _imageSaveMediator.ImageSaved -= ImageMonitor_ImageSaved;        
             _imageSaveMediator.ImageSaved += ImageMonitor_ImageSaved;
             base.SequenceBlockInitialize();
         }
@@ -82,20 +84,17 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
             }
         }
 
-        private async void ImageMonitor_ImageSaved(object sender, ImageSavedEventArgs e) 
+        private void ImageMonitor_ImageSaved(object sender, ImageSavedEventArgs e) 
         {
             if(_triggerQueue.TryDequeue(out var executeDetails)) 
             {
                 if (executeDetails.Token.IsCancellationRequested)
                     return;
                 try {
-                    var render = await RenderImage(e.ToContainer(), new PrepareImageParameters(autoStretch: true, detectStars: false));
-                    var image = render.Image.Resize(2560);
-                    var templateValues = Helpers.Template.GetImageTemplateValues(render);
-
-                    using(var tempFileWriter = Factories.TemporaryImageFileWriter.Create(_profileService.ActiveProfile, image)) {
-                        await Helpers.Discord.SendMessage(MessageType.Information, Text, executeDetails.Context, executeDetails.Token, templateValues: templateValues, attachedFilename: tempFileWriter.Filename);
-                    }     
+                    var image = e.Image.Clone();
+                    image.Freeze();
+                    var saveImageContainer = new SavedImageContainer(e.MetaData, image, e.Statistics, e.StarDetectionAnalysis, e.PathToImage, e.IsBayered);
+                    _ = Task.Run(() => SendMessageAsync(executeDetails, saveImageContainer));      
                 } catch (Exception ex) {
                     Logger.Error(ex);
                 }
@@ -109,18 +108,19 @@ namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
             }
         }
 
-        private async Task<IRenderedImage> RenderImage(ISavedImageContainer image, PrepareImageParameters imageParameters) {
-            var filename = Uri.UnescapeDataString(image.PathToImage.AbsolutePath);
-            Logger.Info($"Path to image={filename}");
-            if(!Helpers.File.Exists(filename)) {
-                throw new FileNotFoundException("Image does not exist at the provided path", filename);
+        private async void SendMessageAsync(ExecuteDetails executeDetails, ISavedImageContainer imageArgs)  {
+            var renderStopwatch = new Stopwatch();
+            var sendStopwatch = new Stopwatch();
+            renderStopwatch.Start();
+            var resizedImage = imageArgs.Image.Resize(2560);
+            var templateValues = Helpers.Template.GetImageTemplateValues(imageArgs.MetaData, imageArgs.StarDetectionAnalysis);
+            renderStopwatch.Stop();
+            sendStopwatch.Start();
+            using (var tempFileWriter = Factories.TemporaryImageFileWriter.Create(_profileService.ActiveProfile, resizedImage)) {
+                await Helpers.Discord.SendMessage(MessageType.Information, Text, executeDetails.Context, executeDetails.Token, templateValues: templateValues, attachedFilename: tempFileWriter.Filename);
             }
-            var imageData = await _imageDataFactory.CreateFromFile(filename, (int)_profileService.ActiveProfile.CameraSettings.BitDepth, image.IsBayered, _profileService.ActiveProfile.CameraSettings.RawConverter);
-            imageData.SetImageStatistics(image.Statistics);
-            imageData.StarDetectionAnalysis = image.StarDetectionAnalysis;
-            
-            var rendered = await _imagingMediator.PrepareImage(imageData, imageParameters, CancellationToken.None);
-            return rendered;
+            sendStopwatch.Stop();
+            Logger.Info($"Render time={renderStopwatch.ElapsedMilliseconds}ms send time={sendStopwatch.ElapsedMilliseconds}ms");
         }
 
         [ExcludeFromCodeCoverage]

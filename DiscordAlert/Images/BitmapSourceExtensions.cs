@@ -5,7 +5,7 @@ using System.Windows.Media.Imaging;
 namespace NINA.DiscordAlert.Images {
     public static class BitmapSourceExtensions 
         {
-        public static BitmapSource Resize(this BitmapSource image, int maxDimension) 
+        public static BitmapSource Resize(this BitmapSource image, double maxDimension) 
         {
             var width = image.Width;
             var height = image.Height;

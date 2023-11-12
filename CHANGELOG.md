@@ -33,4 +33,8 @@
 - Stability improvements
 
 ## 2.0.0
-- Update to use .NET 7.0 for Nina 3.0 (note: NINA 2.X versions of this plugin will only recieve bug fixes)
+- Update to use .NET 7.0 for Nina 3.0
+
+## 2.1.2
+- Fix for hang after image
+- Fix for placeholers causing mentions to fail

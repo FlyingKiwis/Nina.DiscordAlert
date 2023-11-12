@@ -53,7 +53,7 @@ See the below table for support:
 |`$$ROTATORANGLE$$`|✅|✅|
 |`$$SQM$$`|✅|❌|
 |`$$TELESCOPE$$`|✅|✅|
-|Placeholders added by other plugins|✅|❌|
+|Placeholders added by other plugins|❌|❌|
 
 # Suggestion Welcome
 

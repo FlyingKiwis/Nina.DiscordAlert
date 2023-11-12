@@ -21,6 +21,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using Color = System.Windows.Media.Color;
+using ImageMetadata = NINA.Image.ImageData.ImageMetaData;
 using NINA.Sequencer;
 
 namespace DiscordAlert.Tests.DiscordSequenceItems {
@@ -58,7 +59,7 @@ namespace DiscordAlert.Tests.DiscordSequenceItems {
 
         [Test]
         public async Task ImageMonitorImageSaved_AfterEnabled_SendsADiscordMessage() {
-
+            var mre = new ManualResetEvent(false);
             var cancelTokenSource = new CancellationTokenSource();
             var pathToImage = "C:/test/path.png";
             var expectedText = "This is a test";
@@ -70,7 +71,7 @@ namespace DiscordAlert.Tests.DiscordSequenceItems {
             var imagePatterns = new ImagePatterns();
             var imageSaveMediator = new Mock<IImageSaveMediator>();
             var imageDataFactoryMock = new Mock<IImageDataFactory>();
-            var imagingMediatorMock = new Mock<IImagingMediator>(); 
+            var imagingMediatorMock = new Mock<IImagingMediator>();
             var discordClientFactory = new Mock<IDiscordWebhookClientFactory>();
             var profileServiceMock = new Mock<IProfileService>();
             var activeProfileMock = new Mock<IProfile>();
@@ -85,17 +86,18 @@ namespace DiscordAlert.Tests.DiscordSequenceItems {
             fileHelperMock.Setup(o => o.Exists(pathToImage)).Returns(true);
             Helpers.SetFileHelper(fileHelperMock.Object);
             var templateHelperMock = new Mock<ITemplateHelper>();
-            templateHelperMock.Setup(o => o.GetImageTemplateValues(It.IsAny<IRenderedImage>())).Returns(imagePatterns);
+            templateHelperMock.Setup(o => o.GetImageTemplateValues(It.IsAny<ImageMetadata>(), It.IsAny<IStarDetectionAnalysis>())).Returns(imagePatterns);
             Helpers.SetTemplateHelper(templateHelperMock.Object);
             discordClientFactory.Setup(o => o.Create()).Returns(discordClient.Object);
             Factories.SetDiscordClientFactory(discordClientFactory.Object);
             var tempImageWriterMock = new Mock<ITemporaryImageFileWriter>();
             tempImageWriterMock.SetupGet(o => o.Filename).Returns(expectedTempPath);
             var tempImageWriterFactoryMock = new Mock<ITemporaryImageFileWriterFactory>();
-            tempImageWriterFactoryMock.Setup(o => o.Create(activeProfileMock.Object, bitmap)).Returns(tempImageWriterMock.Object);
-            Factories.SetTemporaryImageFileWriterFactory(tempImageWriterFactoryMock.Object);            
+            tempImageWriterFactoryMock.Setup(o => o.Create(activeProfileMock.Object, It.IsAny<BitmapSource>())).Returns(tempImageWriterMock.Object);
+            Factories.SetTemporaryImageFileWriterFactory(tempImageWriterFactoryMock.Object);
             savedImageMock.Setup(o => o.PathToImage).Returns(new Uri(pathToImage));
             savedImageMock.Setup(o => o.IsBayered).Returns(true);
+            savedImageMock.Setup(o => o.Image).Returns(bitmap);
             activeProfileMock.Setup(o => o.CameraSettings).Returns(cameraSettingsMock.Object);
             cameraSettingsMock.Setup(o => o.BitDepth).Returns(42);
             cameraSettingsMock.Setup(o => o.RawConverter).Returns(NINA.Core.Enum.RawConverterEnum.FREEIMAGE);
@@ -104,6 +106,10 @@ namespace DiscordAlert.Tests.DiscordSequenceItems {
             imagingMediatorMock.Setup(o => o.PrepareImage(imageDataMock.Object, It.IsAny<PrepareImageParameters>(), It.IsAny<CancellationToken>())).ReturnsAsync(renderedImageMock.Object);
             renderedImageMock.Setup(o => o.Image).Returns(bitmap);
             Helpers.SetDiscordHelper(discordHelperMock.Object);
+            discordHelperMock.Setup(o => o.SendMessage(MessageType.Information, expectedText, expectedContainer, cancelTokenSource.Token, imagePatterns, expectedTempPath, null)).Callback(() => { 
+                mre.Set(); 
+            });
+
 
             var discordMessageAfterImage = new DiscordMessageAfterImageTrigger(imageSaveMediator.Object, imagingMediatorMock.Object, imageDataFactoryMock.Object, profileServiceMock.Object) {
                 Text = expectedText
@@ -113,7 +119,7 @@ namespace DiscordAlert.Tests.DiscordSequenceItems {
             await discordMessageAfterImage.Execute(expectedContainer, Mock.Of<IProgress<ApplicationStatus>>(), cancelTokenSource.Token);
             imageSaveMediator.Raise(o => o.ImageSaved += null, imagedSaveArgs);
 
-            discordHelperMock.Verify(o => o.SendMessage(MessageType.Information, expectedText, expectedContainer, cancelTokenSource.Token, imagePatterns, expectedTempPath, null), Times.Once);
+            Assert.IsTrue(mre.WaitOne(TimeSpan.FromSeconds(5)));
         }
 
         [Test]
@@ -136,6 +142,7 @@ namespace DiscordAlert.Tests.DiscordSequenceItems {
 
         [Test]
         public async Task ImageMonitorImageSaved_DiscordHelperException_Handled() {
+            var mre = new ManualResetEvent(false);
             var cancelTokenSource = new CancellationTokenSource();
             var pathToImage = "C:/test/path.png";
             var expectedText = "This is a test";
@@ -161,17 +168,18 @@ namespace DiscordAlert.Tests.DiscordSequenceItems {
             fileHelperMock.Setup(o => o.Exists(pathToImage)).Returns(true);
             Helpers.SetFileHelper(fileHelperMock.Object);
             var templateHelperMock = new Mock<ITemplateHelper>();
-            templateHelperMock.Setup(o => o.GetImageTemplateValues(It.IsAny<IRenderedImage>())).Returns(imagePatterns);
+            templateHelperMock.Setup(o => o.GetImageTemplateValues(It.IsAny<ImageMetadata>(), It.IsAny<IStarDetectionAnalysis>())).Returns(imagePatterns);
             Helpers.SetTemplateHelper(templateHelperMock.Object);
             discordClientFactory.Setup(o => o.Create()).Returns(discordClient.Object);
             Factories.SetDiscordClientFactory(discordClientFactory.Object);
             var tempImageWriterMock = new Mock<ITemporaryImageFileWriter>();
             tempImageWriterMock.SetupGet(o => o.Filename).Returns(expectedTempPath);
             var tempImageWriterFactoryMock = new Mock<ITemporaryImageFileWriterFactory>();
-            tempImageWriterFactoryMock.Setup(o => o.Create(activeProfileMock.Object, bitmap)).Returns(tempImageWriterMock.Object);
+            tempImageWriterFactoryMock.Setup(o => o.Create(activeProfileMock.Object, It.IsAny<BitmapSource>())).Returns(tempImageWriterMock.Object);
             Factories.SetTemporaryImageFileWriterFactory(tempImageWriterFactoryMock.Object);
             savedImageMock.Setup(o => o.PathToImage).Returns(new Uri(pathToImage));
             savedImageMock.Setup(o => o.IsBayered).Returns(true);
+            savedImageMock.Setup(o => o.Image).Returns(bitmap);
             profileServiceMock.Setup(o => o.ActiveProfile).Returns(activeProfileMock.Object);
             activeProfileMock.Setup(o => o.CameraSettings).Returns(cameraSettingsMock.Object);
             cameraSettingsMock.Setup(o => o.BitDepth).Returns(42);
@@ -181,6 +189,9 @@ namespace DiscordAlert.Tests.DiscordSequenceItems {
             imagingMediatorMock.Setup(o => o.PrepareImage(imageDataMock.Object, It.IsAny<PrepareImageParameters>(), It.IsAny<CancellationToken>())).ReturnsAsync(renderedImageMock.Object);
             renderedImageMock.Setup(o => o.Image).Returns(bitmap);
             discordHelperMock.Setup(o => o.SendMessage(It.IsAny<MessageType>(), It.IsAny<string>(), It.IsAny<ISequenceEntity>(), It.IsAny<CancellationToken>(), It.IsAny<ImagePatterns>(), It.IsAny<string>(), It.IsAny<Exception>()))
+                .Callback(() => {
+                    mre.Set();
+                })
                 .Throws(new Exception());
             Helpers.SetDiscordHelper(discordHelperMock.Object);
 
@@ -192,6 +203,7 @@ namespace DiscordAlert.Tests.DiscordSequenceItems {
             await discordMessageAfterImage.Execute(expectedContainer, Mock.Of<IProgress<ApplicationStatus>>(), cancelTokenSource.Token);
             Assert.DoesNotThrow(() => imageSaveMediator.Raise(o => o.ImageSaved += null, imagedSaveArgs));
 
+            Assert.IsTrue(mre.WaitOne(TimeSpan.FromSeconds(5)));
             discordHelperMock.Verify(o => o.SendMessage(MessageType.Information, expectedText, expectedContainer, cancelTokenSource.Token, imagePatterns, expectedTempPath, null), Times.Once);
 
         }

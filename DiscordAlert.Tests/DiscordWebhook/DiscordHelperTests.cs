@@ -82,7 +82,7 @@ namespace DiscordAlert.Tests.DiscordWebhook {
         public async Task SendMessage_InfoMessageWithoutImage_SendsCorrectly() 
         {
             var mre = new ManualResetEvent(false);
-            var expectedMessage = "This is the expected message $$TEST$$";
+            var expectedMessage = "This is the expected @<mention> message $$TEST$$ ?!*#$$";
             var expectedResult = expectedMessage.Replace("$$TEST$$", "with replacement");
             var cancelTokenSource = new CancellationTokenSource();
             var templatePatterns = new ImagePatterns();
