@@ -35,6 +35,10 @@
 ## 2.0.0
 - Update to use .NET 7.0 for Nina 3.0
 
+## 2.1.0
+- Added "After image" trigger which will send a message after an image is captured
+- Added support for placeholders in text
+
 ## 2.1.2
 - Fix for hang after image
 - Fix for placeholers causing mentions to fail
