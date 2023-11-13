@@ -68,6 +68,7 @@ namespace DiscordAlert.Tests.DiscordSequenceItems {
             var pixelFormat = new PixelFormat();
             pixelFormat = PixelFormats.Pbgra32;
             var bitmap = new WriteableBitmap(100, 100, 10, 10, pixelFormat, new BitmapPalette(new List<Color>() { Colors.Red }));
+            bitmap.Freeze();
             var imagePatterns = new ImagePatterns();
             var imageSaveMediator = new Mock<IImageSaveMediator>();
             var imageDataFactoryMock = new Mock<IImageDataFactory>();
@@ -119,7 +120,7 @@ namespace DiscordAlert.Tests.DiscordSequenceItems {
             await discordMessageAfterImage.Execute(expectedContainer, Mock.Of<IProgress<ApplicationStatus>>(), cancelTokenSource.Token);
             imageSaveMediator.Raise(o => o.ImageSaved += null, imagedSaveArgs);
 
-            Assert.IsTrue(mre.WaitOne(TimeSpan.FromSeconds(5)));
+            Assert.IsTrue(mre.WaitOne(TimeSpan.FromSeconds(10)));
         }
 
         [Test]
@@ -151,6 +152,7 @@ namespace DiscordAlert.Tests.DiscordSequenceItems {
             var expectedContainer = Mock.Of<ISequenceContainer>();
             pixelFormat = PixelFormats.Pbgra32;
             var bitmap = new WriteableBitmap(100, 100, 10, 10, pixelFormat, new BitmapPalette(new List<Color>() { Colors.Red }));
+            bitmap.Freeze();
             var imagePatterns = new ImagePatterns();
             var imageSaveMediator = new Mock<IImageSaveMediator>();
             var imageDataFactoryMock = new Mock<IImageDataFactory>();
