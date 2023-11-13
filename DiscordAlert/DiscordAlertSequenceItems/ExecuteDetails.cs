@@ -1,11 +1,7 @@
 ﻿using NINA.Core.Model;
 using NINA.Sequencer.Container;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace NINA.DiscordAlert.DiscordAlertSequenceItems {
     public class ExecuteDetails 

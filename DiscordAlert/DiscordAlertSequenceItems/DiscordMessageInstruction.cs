@@ -8,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using NINA.DiscordAlert.DiscordWebhook;
 using NINA.DiscordAlert.Util;
-using NINA.Profile.Interfaces;
 using System.Diagnostics.CodeAnalysis;
 using NINA.Equipment.Interfaces.Mediator;
 

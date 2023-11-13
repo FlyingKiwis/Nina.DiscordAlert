@@ -9,7 +9,6 @@ using NUnit.Framework;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
 
 namespace DiscordAlert.Tests.DiscordSequenceItems {
 

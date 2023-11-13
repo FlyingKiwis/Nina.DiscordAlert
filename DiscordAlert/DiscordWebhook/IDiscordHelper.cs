@@ -1,8 +1,6 @@
-﻿using NINA.DiscordAlert.Images;
-using NINA.Sequencer;
+﻿using NINA.Sequencer;
 using System.Threading.Tasks;
 using System.Threading;
-using System.Windows.Media.Imaging;
 using System;
 using NINA.Core.Model;
 

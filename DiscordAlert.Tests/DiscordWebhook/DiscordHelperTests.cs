@@ -1,11 +1,7 @@
 ﻿using Discord;
 using Moq;
-using NINA.DiscordAlert.Images;
 using NUnit.Framework;
 using System.Collections.Generic;
-using System.Windows.Media.Imaging;
-using System.Windows.Media;
-using Color = System.Windows.Media.Color;
 using NINA.DiscordAlert.DiscordWebhook;
 using NINA.DiscordAlert.Util;
 using NINA.Sequencer;

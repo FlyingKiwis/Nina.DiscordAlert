@@ -12,7 +12,6 @@ using NINA.DiscordAlert.Util;
 using NINA.DiscordAlert.SequenceFailureMonitor;
 using NINA.DiscordAlert.DiscordWebhook;
 using System.Diagnostics.CodeAnalysis;
-using NINA.Profile.Interfaces;
 using NINA.Equipment.Interfaces.Mediator;
 
 namespace NINA.DiscordAlert.DiscordAlertSequenceItems {

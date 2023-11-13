@@ -6,7 +6,6 @@ using System;
 using NINA.Sequencer;
 using NINA.DiscordAlert.Util;
 using NINA.Core.Utility;
-using System.Windows.Media.Imaging;
 using NINA.Core.Model;
 
 namespace NINA.DiscordAlert.DiscordWebhook {

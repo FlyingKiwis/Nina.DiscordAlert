@@ -1,5 +1,4 @@
-﻿using Moq;
-using NINA.DiscordAlert.Images;
+﻿using NINA.DiscordAlert.Images;
 using NINA.WPF.Base.Interfaces.Mediator;
 
 namespace DiscordAlert.Tests.TestUtility {

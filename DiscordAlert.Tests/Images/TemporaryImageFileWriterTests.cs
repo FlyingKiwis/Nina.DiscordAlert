@@ -5,7 +5,6 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
-using System.IO;
 using System.Threading;
 using System;
 using System.Threading.Tasks;
