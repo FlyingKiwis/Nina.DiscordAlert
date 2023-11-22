@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <OutputType>Library</OutputType>
     <RootNamespace>NINA.DiscordAlert</RootNamespace>
     <AssemblyName>Discord Alert</AssemblyName>
@@ -10,8 +10,8 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Discord.Net.Webhook" Version="3.12.0" />
-    <PackageReference Include="NINA.Plugin" Version="3.0.0.1056-nightly" />
+    <PackageReference Include="Discord.Net.Webhook" Version="3.13.0" />
+    <PackageReference Include="NINA.Plugin" Version="3.0.0.1085-nightly" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ReachFramework" />
@@ -22,6 +22,6 @@
   </ItemGroup>
   <PropertyGroup />
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec IgnoreExitCode="true" Command="if $(ConfigurationName) == Debug (&#xD;&#xA;  &#xD;&#xA; &#xD;&#xA;&#xD;&#xA;if not exist &quot;%25localappdata%25\NINA\Plugins&quot; (&#xD;&#xA;    echo &quot;Creating Plugins %25localappdata%25\NINA\Plugins folder&quot;&#xD;&#xA;    mkdir  &quot;%25localappdata%25\NINA\Plugins&quot;&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;if exist &quot;%25localappdata%25\NINA\Plugins\$(TargetName)&quot; (&#xD;&#xA;    echo &quot; folder cleanup&quot;&#xD;&#xA;    rmdir &quot;%25localappdata%25\NINA\Plugins\$(TargetName)&quot; /S /Q&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;if not exist &quot;%25localappdata%25\NINA\Plugins\$(TargetName)&quot; (&#xD;&#xA;    echo &quot;Creating %25localappdata%25\NINA\Plugin\$(TargetName) folder&quot;&#xD;&#xA;    mkdir  &quot;%25localappdata%25\NINA\Plugins\$(TargetName)&#xD;&#xA;)&#xD;&#xA;echo &quot;Copying $(TargetDir)$(TargetFileName)&quot;&#xD;&#xA;copy &quot;$(TargetDir)$(TargetFileName)&quot; &quot;%25localappdata%25\NINA\Plugins\$(TargetName)\$(TargetFileName)&quot; /Y&#xD;&#xA;&#xD;&#xA;echo &quot;Copying $(TargetDir)Discord.Net.Core.dll&quot;&#xD;&#xA;copy &quot;$(TargetDir)Discord.Net.Core.dll&quot; &quot;%25localappdata%25\NINA\Plugins\$(TargetName)\Discord.Net.Core.dll&quot; /Y&#xD;&#xA;&#xD;&#xA;echo &quot;Copying $(TargetDir)Discord.Net.Webhook.dll&quot;&#xD;&#xA;copy &quot;$(TargetDir)Discord.Net.Webhook.dll&quot; &quot;%25localappdata%25\NINA\Plugins\$(TargetName)\Discord.Net.Webhook.dll&quot; /Y&#xD;&#xA;&#xD;&#xA;echo &quot;Copying $(TargetDir)Discord.Net.Rest.dll&quot;&#xD;&#xA;copy &quot;$(TargetDir)Discord.Net.Rest.dll&quot; &quot;%25localappdata%25\NINA\Plugins\$(TargetName)\Discord.Net.Rest.dll&quot; /Y&#xD;&#xA;&#xD;&#xA;)" />
+    <Exec IgnoreExitCode="true" Command="if $(ConfigurationName) == Debug (&#xD;&#xA;  &#xD;&#xA; &#xD;&#xA;&#xD;&#xA;if not exist &quot;%25localappdata%25\NINA\Plugins&quot; (&#xD;&#xA;    echo &quot;Creating Plugins %25localappdata%25\NINA\Plugins folder&quot;&#xD;&#xA;    mkdir  &quot;%25localappdata%25\NINA\Plugins&quot;&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;if not exist &quot;%25localappdata%25\NINA\Plugins\3.0.0&quot; (&#xD;&#xA;  echo &quot;Creating $(PlatformName) Plugins Version folder&quot;&#xD;&#xA;  mkdir &quot;%25localappdata%25\NINA\Plugins&quot;&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;if exist &quot;%25localappdata%25\NINA\Plugins\3.0.0\$(TargetName)&quot; (&#xD;&#xA;    echo &quot; folder cleanup&quot;&#xD;&#xA;    rmdir &quot;%25localappdata%25\NINA\Plugins\3.0.0\$(TargetName)&quot; /S /Q&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;if not exist &quot;%25localappdata%25\NINA\Plugins\3.0.0\$(TargetName)&quot; (&#xD;&#xA;    echo &quot;Creating %25localappdata%25\NINA\Plugins\3.0.0\$(TargetName) folder&quot;&#xD;&#xA;    mkdir  &quot;%25localappdata%25\NINA\Plugins\3.0.0\$(TargetName)&#xD;&#xA;)&#xD;&#xA;echo &quot;Copying $(TargetDir)$(TargetFileName)&quot;&#xD;&#xA;copy &quot;$(TargetDir)$(TargetFileName)&quot; &quot;%25localappdata%25\NINA\Plugins\3.0.0\$(TargetName)\$(TargetFileName)&quot; /Y&#xD;&#xA;&#xD;&#xA;echo &quot;Copying $(TargetDir)Discord.Net.Core.dll&quot;&#xD;&#xA;copy &quot;$(TargetDir)Discord.Net.Core.dll&quot; &quot;%25localappdata%25\NINA\Plugins\3.0.0\$(TargetName)\Discord.Net.Core.dll&quot; /Y&#xD;&#xA;&#xD;&#xA;echo &quot;Copying $(TargetDir)Discord.Net.Webhook.dll&quot;&#xD;&#xA;copy &quot;$(TargetDir)Discord.Net.Webhook.dll&quot; &quot;%25localappdata%25\NINA\Plugins\3.0.0\$(TargetName)\Discord.Net.Webhook.dll&quot; /Y&#xD;&#xA;&#xD;&#xA;echo &quot;Copying $(TargetDir)Discord.Net.Rest.dll&quot;&#xD;&#xA;copy &quot;$(TargetDir)Discord.Net.Rest.dll&quot; &quot;%25localappdata%25\NINA\Plugins\3.0.0\$(TargetName)\Discord.Net.Rest.dll&quot; /Y&#xD;&#xA;&#xD;&#xA;)" />
   </Target>
 </Project>

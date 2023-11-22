@@ -39,6 +39,9 @@
 - Added "After image" trigger which will send a message after an image is captured
 - Added support for placeholders in text
 
-## 2.1.2
+## 2.1.3
 - Fix for hang after image
 - Fix for placeholers causing mentions to fail
+
+## 2.2.0
+- Update to use .NET 8.0
