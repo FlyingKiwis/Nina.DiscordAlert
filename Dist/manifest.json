@@ -3,8 +3,8 @@
     "Identifier": "bbca7e0a-b89f-4e7c-92f1-0d5b24db6911",
     "Version": {
         "Major": "2",
-        "Minor": "1",
-        "Patch": "3",
+        "Minor": "2",
+        "Patch": "0",
         "Build": "0"
     },
     "Author": "Drew McDermott",
@@ -24,7 +24,7 @@
         "Major": "3",
         "Minor": "0",
         "Patch": "0",
-        "Build": "1062"
+        "Build": "1080"
     },
     "Descriptions": {
         "ShortDescription": "Sends alerts to discord",
@@ -34,9 +34,9 @@
         "AltScreenshotURL": ""
     },
     "Installer": {
-        "URL": "https://github.com/FlyingKiwis/Nina.DiscordAlert/releases/download/v2.1.3/Discord.Alert.2.1.3.0.zip",
+        "URL": "https://github.com/FlyingKiwis/Nina.DiscordAlert/releases/download/v2.2.0/Discord.Alert.2.2.0.0.zip",
         "Type": "ARCHIVE",
-        "Checksum": "177D34F4737BDA65098EB9EF3B1895B6CF8236F5E65CFD6F6121FEB44AA2B9ED",
+        "Checksum": "FA6EF25BBCC2ED29CC0F656F8F2C71E81BDA5B7F5CCCF966668EF32CA26BE340",
         "ChecksumType": "SHA256"
     }
 }

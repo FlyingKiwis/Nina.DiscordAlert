@@ -2,7 +2,7 @@
 # Set paths
 #
 
-$file = "$env:USERPROFILE\AppData\Local\NINA\Plugins\Discord Alert\Discord Alert.dll";
+$file = "$env:USERPROFILE\AppData\Local\NINA\Plugins\3.0.0\Discord Alert\Discord Alert.dll";
 $createArchive = 1;
 $includeAll = 1;
 $appendVersionToArchive = 1;
